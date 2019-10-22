@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interior", "Interior\Interior.csproj", "{BE486CCF-53E0-4574-B675-DCF03FE19D23}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Interior", "Interior\Interior.csproj", "{BE486CCF-53E0-4574-B675-DCF03FE19D23}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interior.Enums", "Interior.Enums\Interior.Enums.csproj", "{DC71204F-A4E6-4A35-8A9F-403EEEE83811}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{BE486CCF-53E0-4574-B675-DCF03FE19D23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE486CCF-53E0-4574-B675-DCF03FE19D23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE486CCF-53E0-4574-B675-DCF03FE19D23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC71204F-A4E6-4A35-8A9F-403EEEE83811}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC71204F-A4E6-4A35-8A9F-403EEEE83811}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC71204F-A4E6-4A35-8A9F-403EEEE83811}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC71204F-A4E6-4A35-8A9F-403EEEE83811}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

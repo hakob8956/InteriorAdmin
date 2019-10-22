@@ -5,18 +5,13 @@ using System.Threading.Tasks;
 
 namespace Interior.Models.Entities
 {
-    public class Brand
+    public class Language
     {
         public int Id { get; set; }
-        public int NameId { get; set; }
-        public Content Name { get; set; }
-
-        public string ImageHref { get; set; }
+        public string Name { get; set; }
         public ICollection<Content> Contents { get; set; }
-        public ICollection<Interior> Interiors { get; set; }
-        public ICollection<Recommendation> Recommendations { get; set; }
         public DateTime CreatedDate { get; set; }
-        public Brand()
+        public Language()
         {
             this.CreatedDate = DateTime.UtcNow;
         }

@@ -5,22 +5,25 @@ using System.Threading.Tasks;
 
 namespace Interior.Models.Entities
 {
-    public class Brand
+    public class Recommendation
     {
         public int Id { get; set; }
         public int NameId { get; set; }
         public Content Name { get; set; }
-
-        public string ImageHref { get; set; }
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
+        public int BrandId { get; set; }
+        public Brand Brand { get; set; }
+        public int ShopId { get; set; }
+        public Shop Shop { get; set; }
         public ICollection<Content> Contents { get; set; }
-        public ICollection<Interior> Interiors { get; set; }
-        public ICollection<Recommendation> Recommendations { get; set; }
+
         public DateTime CreatedDate { get; set; }
-        public Brand()
+        public DateTime ModifiedDate { get; set; }
+        public Recommendation()
         {
             this.CreatedDate = DateTime.UtcNow;
         }
-
 
     }
 }
