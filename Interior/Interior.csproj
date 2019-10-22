@@ -26,6 +26,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove=".gitignore" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Models\ViewModels\" />
     <Folder Include="Models\Repositories\" />
   </ItemGroup>

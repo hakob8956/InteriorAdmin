@@ -6,8 +6,9 @@ using Interior.Models.Entities;
 using Interior.Models.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using Interior.Enums;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Interior.Controllers
 {
@@ -26,9 +27,9 @@ namespace Interior.Controllers
             var user = _userService.Authenticate(userParam.Username, userParam.Password);
 
             if (user == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
-
-            return Ok(user);
+                return BadRequest(ResponseError.Create("Username or password is incorrect"));
+ 
+            return Ok(ResponseSuccess.Create(user));
         }
 
         [Authorize(Roles = "admin")]
@@ -38,5 +39,15 @@ namespace Interior.Controllers
             var users = _userService.GetAll();
             return Ok(users);
         }
+        //private static string EncMD5(string password)
+        //{
+        //    MD5 md5 = new MD5CryptoServiceProvider();
+        //    UTF8Encoding encoder = new UTF8Encoding();
+        //    Byte[] originalBytes = encoder.GetBytes(password);
+        //    Byte[] encodedBytes = md5.ComputeHash(originalBytes);
+        //    password = BitConverter.ToString(encodedBytes).Replace("-", "");
+        //    var result = password.ToLower();
+        //    return result;
+        //}
     }
 }

@@ -1,4 +1,5 @@
-﻿using Interior.Models.Entities;
+﻿using Interior.Enums;
+using Interior.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,8 @@ namespace Interior.Models.Interface
 {
     public interface IUserService
     {
-        User Authenticate(string username, string password);
+        Task<ResultCode> Authenticate(string username, string password);
+        Task<ResultCode> CreateUserAsync(User user);
         IEnumerable<User> GetAll();
         User GetById(int id);
     }

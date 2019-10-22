@@ -1,7 +1,9 @@
-﻿using Interior.Helpers;
+﻿using Interior.Enums;
+using Interior.Helpers;
 using Interior.Models.EFContext;
 using Interior.Models.Entities;
 using Interior.Models.Interface;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -23,13 +25,35 @@ namespace Interior.Services
             _appSettings = appSettings.Value;
             _context = context;
         }
-        public User Authenticate(string username, string password)
+        public async Task<ResultCode> CreateUserAsync(User user)
         {
-            var user = _context.Users.SingleOrDefault(x => x.Username == username && x.Password == password);
+            try
+            {
+                var dbUser = await _context.Users
+                       .SingleOrDefaultAsync(x => x.Id == user.Id);
+                if (dbUser != null)
+                {
+                    _context.Users.Update(user);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    _context.Users.Add(user);
+                    await _context.SaveChangesAsync();
+                }
+                return ResultCode.Success;
+            }
+            catch (Exception)
+            {
+                return ResultCode.Error;
+            }
+        }
+        public async Task<ResultCode> Authenticate(string username, string password)
+        {
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == username && x.Password == password);
             if (user == null)
-                return null;
-
-            var roleName = _context.Roles.SingleOrDefault(x => x.Id == user.RoleId).Name;
+                return ResultCode.Error;
+            var roleName = (await _context.Roles.SingleOrDefaultAsync(x => x.Id == user.RoleId)).Name;
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -39,14 +63,14 @@ namespace Interior.Services
                     new Claim(ClaimTypes.Name, user.Id.ToString()),
                     new Claim(ClaimTypes.Role, roleName)
                 }),
-                Expires = DateTime.UtcNow.AddDays(7),
+                // Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             user.Token = tokenHandler.WriteToken(token);
             _context.SaveChanges();
-            user.Password = null;
-            return user;
+            //user.Password = null;
+            return ResultCode.Success;
         }
 
         public IEnumerable<User> GetAll()
@@ -58,5 +82,7 @@ namespace Interior.Services
         {
             throw new NotImplementedException();
         }
+
+  
     }
 }
