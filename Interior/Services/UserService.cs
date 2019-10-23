@@ -32,15 +32,11 @@ namespace Interior.Services
                 var dbUser = await _context.Users
                        .SingleOrDefaultAsync(x => x.Id == user.Id);
                 if (dbUser != null)
-                {
-                    _context.Users.Update(user);
-                    await _context.SaveChangesAsync();
-                }
-                else
-                {
-                    _context.Users.Add(user);
-                    await _context.SaveChangesAsync();
-                }
+                    return ResultCode.Error;
+
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+
                 return ResultCode.Success;
             }
             catch (Exception)
@@ -48,11 +44,11 @@ namespace Interior.Services
                 return ResultCode.Error;
             }
         }
-        public async Task<ResultCode> Authenticate(string username, string password)
+        public async Task<User> Authenticate(string username, string password)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == username && x.Password == password);
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == username);
             if (user == null)
-                return ResultCode.Error;
+                return null;
             var roleName = (await _context.Roles.SingleOrDefaultAsync(x => x.Id == user.RoleId)).Name;
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -68,21 +64,42 @@ namespace Interior.Services
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             user.Token = tokenHandler.WriteToken(token);
-            _context.SaveChanges();
-            //user.Password = null;
-            return ResultCode.Success;
+            await _context.SaveChangesAsync();
+            user.Password = null;
+            return user;
         }
 
-        public IEnumerable<User> GetAll()
+        public async Task<IEnumerable<User>> GetAllUsers()
         {
-            return _context.Users.ToList();
+            return await _context.Users.Where(r => r.Role.Name == "user").AsNoTracking().ToListAsync();
         }
+        public async Task<IEnumerable<User>> GetAllUsers(string roleName)
+        {
+            return await _context.Users.Where(r => r.Role.Name == roleName).AsNoTracking().ToListAsync();
+        }
+
 
         public User GetById(int id)
         {
             throw new NotImplementedException();
         }
 
-  
+        public async Task<ResultCode> UpdateUserAsync(User user)
+        {
+            try
+            {
+                var dbUser = await _context.Users
+                       .SingleOrDefaultAsync(x => x.Id == user.Id);
+                if (dbUser == null)
+                    return ResultCode.Error;
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+                return ResultCode.Success;
+            }
+            catch (Exception)
+            {
+                return ResultCode.Error;
+            }
+        }
     }
 }

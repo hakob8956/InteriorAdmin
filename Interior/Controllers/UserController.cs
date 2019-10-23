@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Interior.Enums;
 using System.Security.Cryptography;
 using System.Text;
+using Interior.Models.ViewModels;
+using AutoMapper;
 
 namespace Interior.Controllers
 {
@@ -16,10 +18,34 @@ namespace Interior.Controllers
     public class UserController : Controller
     {
         private IUserService _userService;
-        public UserController(IUserService userService)
+        private IInteriorService _interiorService;
+        private ICategoryService _categoryService;
+        private IContentService _contentService;
+        private readonly IMapper _mapper;
+        public UserController(IUserService userService, ICategoryService categoryService, IInteriorService interiorService, IContentService contentService,IMapper mapper)
         {
             _userService = userService;
+            _interiorService = interiorService;
+            _categoryService = categoryService;
+            _contentService = contentService;
+            _mapper = mapper;
         }
+
+        public async Task<IActionResult> CreateUser([FromBody]UserRegisterViewModel userModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = _mapper.Map<UserRegisterViewModel, User>(userModel);
+                dynamic result =await _userService.CreateUserAsync(user);
+                if (userModel.IsRemember)
+                {
+                    result = await _userService.Authenticate(userModel.Username, userModel.Password);
+                }
+                return Ok(ResponseSuccess.Create(result));
+            }
+            return BadRequest(ResponseError.Create("InValid data"));
+        }
+
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]User userParam)
@@ -28,17 +54,19 @@ namespace Interior.Controllers
 
             if (user == null)
                 return BadRequest(ResponseError.Create("Username or password is incorrect"));
- 
+
             return Ok(ResponseSuccess.Create(user));
         }
 
-        [Authorize(Roles = "admin")]
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            var users = _userService.GetAll();
-            return Ok(users);
-        }
+        //[Authorize(Roles = "admin")]
+        //[HttpGet]
+        //public IActionResult GetAll()
+        //{
+        //    var users = _userService.GetAllUsers();
+        //    return Ok(users);
+        //}
+
+
         //private static string EncMD5(string password)
         //{
         //    MD5 md5 = new MD5CryptoServiceProvider();

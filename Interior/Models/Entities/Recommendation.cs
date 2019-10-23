@@ -8,8 +8,7 @@ namespace Interior.Models.Entities
     public class Recommendation
     {
         public int Id { get; set; }
-        public int NameId { get; set; }
-        public Content Name { get; set; }
+
         public int CategoryId { get; set; }
         public Category Category { get; set; }
         public int BrandId { get; set; }

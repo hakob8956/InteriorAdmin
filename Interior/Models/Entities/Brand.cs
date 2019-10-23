@@ -8,8 +8,7 @@ namespace Interior.Models.Entities
     public class Brand
     {
         public int Id { get; set; }
-        public int NameId { get; set; }
-        public Content Name { get; set; }
+
 
         public string ImageHref { get; set; }
         public ICollection<Content> Contents { get; set; }

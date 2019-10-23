@@ -15,7 +15,7 @@ namespace Interior.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -29,11 +29,7 @@ namespace Interior.Migrations
 
                     b.Property<string>("ImageHref");
 
-                    b.Property<int>("NameId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("NameId");
 
                     b.ToTable("Brands");
                 });
@@ -48,11 +44,7 @@ namespace Interior.Migrations
 
                     b.Property<string>("ImageHref");
 
-                    b.Property<int>("NameId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("NameId");
 
                     b.ToTable("Categories");
                 });
@@ -106,11 +98,11 @@ namespace Interior.Migrations
 
                     b.Property<int>("BrandId");
 
+                    b.Property<int>("CategoryId");
+
                     b.Property<DateTime>("CreatedDate");
 
                     b.Property<string>("DeepLinkingUrl");
-
-                    b.Property<int>("DescriptionId");
 
                     b.Property<string>("GlbHref");
 
@@ -119,8 +111,6 @@ namespace Interior.Migrations
                     b.Property<string>("IosBundleHref");
 
                     b.Property<bool>("IsVisible");
-
-                    b.Property<int>("NameId");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(10,2)");
@@ -131,9 +121,7 @@ namespace Interior.Migrations
 
                     b.HasIndex("BrandId");
 
-                    b.HasIndex("DescriptionId");
-
-                    b.HasIndex("NameId");
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("ShopId");
 
@@ -152,7 +140,7 @@ namespace Interior.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Language");
+                    b.ToTable("Languages");
                 });
 
             modelBuilder.Entity("Interior.Models.Entities.Recommendation", b =>
@@ -171,8 +159,6 @@ namespace Interior.Migrations
 
                     b.Property<DateTime>("ModifiedDate");
 
-                    b.Property<int>("NameId");
-
                     b.Property<int>("ShopId");
 
                     b.HasKey("Id");
@@ -183,11 +169,9 @@ namespace Interior.Migrations
 
                     b.HasIndex("InteriorId");
 
-                    b.HasIndex("NameId");
-
                     b.HasIndex("ShopId");
 
-                    b.ToTable("Recommendation");
+                    b.ToTable("Recommendations");
                 });
 
             modelBuilder.Entity("Interior.Models.Entities.Role", b =>
@@ -215,11 +199,7 @@ namespace Interior.Migrations
 
                     b.Property<string>("ImageHref");
 
-                    b.Property<int>("NameId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("NameId");
 
                     b.ToTable("Shops");
                 });
@@ -251,53 +231,37 @@ namespace Interior.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Interior.Models.Entities.Brand", b =>
-                {
-                    b.HasOne("Interior.Models.Entities.Content", "Name")
-                        .WithMany("Brands")
-                        .HasForeignKey("NameId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("Interior.Models.Entities.Category", b =>
-                {
-                    b.HasOne("Interior.Models.Entities.Content", "Name")
-                        .WithMany("Categories")
-                        .HasForeignKey("NameId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
             modelBuilder.Entity("Interior.Models.Entities.Content", b =>
                 {
                     b.HasOne("Interior.Models.Entities.Brand", "Brand")
                         .WithMany("Contents")
                         .HasForeignKey("BrandId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Interior.Models.Entities.Category", "Category")
                         .WithMany("Contents")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Interior.Models.Entities.Interior", "Interior")
                         .WithMany("Contents")
                         .HasForeignKey("InteriorId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Interior.Models.Entities.Language", "Language")
                         .WithMany("Contents")
                         .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Interior.Models.Entities.Recommendation", "Recommendation")
                         .WithMany("Contents")
                         .HasForeignKey("RecommendationId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Interior.Models.Entities.Shop", "Shop")
                         .WithMany("Contents")
                         .HasForeignKey("ShopId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Interior.Models.Entities.Interior", b =>
@@ -307,14 +271,9 @@ namespace Interior.Migrations
                         .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Interior.Models.Entities.Content", "Description")
-                        .WithMany("InteriorsDescriptions")
-                        .HasForeignKey("DescriptionId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Interior.Models.Entities.Content", "Name")
-                        .WithMany("InteriorsNames")
-                        .HasForeignKey("NameId")
+                    b.HasOne("Interior.Models.Entities.Category", "Category")
+                        .WithMany("Interiors")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Interior.Models.Entities.Shop", "Shop")
@@ -339,22 +298,9 @@ namespace Interior.Migrations
                         .WithMany("Recommendations")
                         .HasForeignKey("InteriorId");
 
-                    b.HasOne("Interior.Models.Entities.Content", "Name")
-                        .WithMany("Recommendations")
-                        .HasForeignKey("NameId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Interior.Models.Entities.Shop", "Shop")
                         .WithMany("Recommendations")
                         .HasForeignKey("ShopId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("Interior.Models.Entities.Shop", b =>
-                {
-                    b.HasOne("Interior.Models.Entities.Content", "Name")
-                        .WithMany("Shops")
-                        .HasForeignKey("NameId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

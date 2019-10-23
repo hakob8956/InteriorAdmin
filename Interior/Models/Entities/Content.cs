@@ -23,15 +23,5 @@ namespace Interior.Models.Entities
         public int RecommendationId { get; set; }
         public Recommendation Recommendation { get; set; }
 
-        public ICollection<Interior> InteriorsNames { get; set; }
-        public ICollection<Interior> InteriorsDescriptions { get; set; }
-
-        public ICollection<Category> Categories { get; set; }
-        public ICollection<Brand> Brands { get; set; }
-        public ICollection<Shop> Shops { get; set; }
-        public ICollection<Recommendation> Recommendations { get; set; }
-
-
-
     }
 }

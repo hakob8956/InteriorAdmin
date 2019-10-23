@@ -42,6 +42,13 @@ namespace Interior
             var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
 
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ILanguageService, LanguageService>();
+            services.AddScoped<IInteriorService, InteriorService>();
+            services.AddScoped<IContentService, ContentService>();
+
+
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -59,7 +66,7 @@ namespace Interior
                 };
             });
 
-            services.AddScoped<IUserService, UserService>();
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });

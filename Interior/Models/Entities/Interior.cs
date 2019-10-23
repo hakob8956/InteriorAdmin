@@ -9,10 +9,7 @@ namespace Interior.Models.Entities
     public class Interior
     {
         public int Id { get; set; }
-        public int NameId { get; set; }
-        public Content Name { get; set; }
-        public int DescriptionId { get; set; }
-        public Content Description { get; set; }
+
         public string DeepLinkingUrl { get; set; }
         [Column(TypeName = "decimal(10,2)")]
         public decimal Price { get; set; }
@@ -29,8 +26,8 @@ namespace Interior.Models.Entities
         public Brand Brand { get; set; }
         public int ShopId { get; set; }
         public Shop Shop { get; set; }
-        //public int CategoryId { get; set; }
-        //public Category Category { get; set; }
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
 
         public ICollection<Content> Contents { get; set; }
         public ICollection<Recommendation> Recommendations { get; set; }
