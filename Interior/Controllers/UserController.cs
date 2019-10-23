@@ -18,16 +18,10 @@ namespace Interior.Controllers
     public class UserController : Controller
     {
         private IUserService _userService;
-        private IInteriorService _interiorService;
-        private ICategoryService _categoryService;
-        private IContentService _contentService;
         private readonly IMapper _mapper;
-        public UserController(IUserService userService, ICategoryService categoryService, IInteriorService interiorService, IContentService contentService, IMapper mapper)
+        public UserController(IUserService userService,IMapper mapper)
         {
             _userService = userService;
-            _interiorService = interiorService;
-            _categoryService = categoryService;
-            _contentService = contentService;
             _mapper = mapper;
         }
         [HttpPost("Register")]
@@ -66,16 +60,6 @@ namespace Interior.Controllers
 
             return Ok(ResponseSuccess.Create(user));
         }
-
-        //[Authorize(Roles = "admin")]
-        //[HttpGet]
-        //public IActionResult GetAll()
-        //{
-        //    var users = _userService.GetAllUsers();
-        //    return Ok(users);
-        //}
-
-
         private string encMD5(string password)
         {
             MD5 md5 = new MD5CryptoServiceProvider();

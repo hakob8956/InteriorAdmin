@@ -79,7 +79,7 @@ namespace Interior.Services
         }
 
 
-        public async Task<User> GetByIdAsyn(int id)
+        public async Task<User> GetByIdAsync(int id)
         {
             return await _context.Users.SingleOrDefaultAsync(r => r.Id == id);
         }
