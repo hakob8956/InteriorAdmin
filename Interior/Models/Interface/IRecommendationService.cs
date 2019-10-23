@@ -9,9 +9,9 @@ namespace Interior.Models.Interface
 {
     public interface IRecommendationService
     {
-        Task<ResultCode> AddRecommendation(Recommendation recommendation);
-        Task<ResultCode> DeleteRecommendation(Recommendation recommendation);
-        Task<ResultCode> UpdateRecommendation(Recommendation recommendation);
-        Task<IEnumerable<Recommendation>> GetAllRecommendations();
+        Task<ResultCode> AddRecommendationAsync(Recommendation recommendation);
+        Task<ResultCode> DeleteRecommendationAsync(Recommendation recommendation);
+        Task<ResultCode> UpdateRecommendationAsync(Recommendation recommendation);
+        Task<IEnumerable<Recommendation>> GetAllRecommendationsAsync();
     }
 }

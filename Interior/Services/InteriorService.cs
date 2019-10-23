@@ -17,7 +17,7 @@ namespace Interior.Services
         {
             _context = context;
         }
-        public async Task<ResultCode> AddInterior(Models.Entities.Interior interior)
+        public async Task<ResultCode> AddInteriorAsync(Models.Entities.Interior interior)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace Interior.Services
             }
         }
 
-        public async Task<ResultCode> DeleteInterior(Models.Entities.Interior interior)
+        public async Task<ResultCode> DeleteInteriorAsync(Models.Entities.Interior interior)
         {
             try
             {
@@ -49,12 +49,12 @@ namespace Interior.Services
             }
         }
 
-        public async Task<IEnumerable<Models.Entities.Interior>> GetAllInteriors()
+        public async Task<IEnumerable<Models.Entities.Interior>> GetAllInteriorsAsync()
         {
             return await _context.Interiors.ToListAsync();
         }
 
-        public async Task<ResultCode> UpdateInterior(Models.Entities.Interior interior)
+        public async Task<ResultCode> UpdateInteriorAsync(Models.Entities.Interior interior)
         {
             try
             {

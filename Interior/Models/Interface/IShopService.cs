@@ -9,9 +9,9 @@ namespace Interior.Models.Interface
 {
     public interface IShopService
     {
-        Task<ResultCode> AddShop(Shop shop);
-        Task<ResultCode> DeleteShop(Shop shop);
-        Task<ResultCode> UpdateShop(Shop shop);
-        Task<IEnumerable<Shop>> GetAllShops();
+        Task<ResultCode> AddShopAsync(Shop shop);
+        Task<ResultCode> DeleteShopAsync(Shop shop);
+        Task<ResultCode> UpdateShopAsync(Shop shop);
+        Task<IEnumerable<Shop>> GetAllShopsAsync();
     }
 }

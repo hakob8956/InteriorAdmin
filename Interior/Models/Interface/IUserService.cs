@@ -9,11 +9,11 @@ namespace Interior.Models.Interface
 {
     public interface IUserService
     {
-        Task<User> Authenticate(string username, string password);
+        Task<User> AuthenticateAsync(string username, string password);
         Task<ResultCode> CreateUserAsync(User user);
         Task<ResultCode> UpdateUserAsync(User user);
-        Task<IEnumerable<User>> GetAllUsers();
-        Task<IEnumerable<User>> GetAllUsers(string roleName);
-        User GetById(int id);
+        Task<IEnumerable<User>> GetAllUsersAsync();
+        Task<IEnumerable<User>> GetAllUsersAsync(string roleName);
+        Task<User> GetByIdAsync(int id);
     }
 }

@@ -19,7 +19,7 @@ namespace Interior.Services
         {
             _context = context;
         }
-        public async Task<ResultCode> AddShop(Shop shop)
+        public async Task<ResultCode> AddShopAsync(Shop shop)
         {
             try
             {
@@ -34,7 +34,7 @@ namespace Interior.Services
             }
         }
 
-        public async Task<ResultCode> DeleteShop(Shop shop)
+        public async Task<ResultCode> DeleteShopAsync(Shop shop)
         {
             try
             {
@@ -51,12 +51,12 @@ namespace Interior.Services
             }
         }
 
-        public async Task<IEnumerable<Shop>> GetAllShops()
+        public async Task<IEnumerable<Shop>> GetAllShopsAsync()
         {
             return await _context.Shops.ToListAsync();
         }
 
-        public async Task<ResultCode> UpdateShop(Shop shop)
+        public async Task<ResultCode> UpdateShopAsync(Shop shop)
         {
             try
             {

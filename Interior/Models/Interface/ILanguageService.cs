@@ -9,10 +9,10 @@ namespace Interior.Models.Interface
 {
     public interface ILanguageService
     {
-        Task<ResultCode> AddLanguage(Language language);
-        Task<ResultCode> DeleteLanguage(Language language);
-        Task<ResultCode> UpdateLanguage(Language language);
-        Task<IEnumerable<Language>> GetAllLanguages();
+        Task<ResultCode> AddLanguageAsync(Language language);
+        Task<ResultCode> DeleteLanguageAsync(Language language);
+        Task<ResultCode> UpdateLanguageAsync(Language language);
+        Task<IEnumerable<Language>> GetAllLanguagesAsync();
        
     }
 }

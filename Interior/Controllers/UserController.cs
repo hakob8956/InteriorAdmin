@@ -22,7 +22,7 @@ namespace Interior.Controllers
         private ICategoryService _categoryService;
         private IContentService _contentService;
         private readonly IMapper _mapper;
-        public UserController(IUserService userService, ICategoryService categoryService, IInteriorService interiorService, IContentService contentService,IMapper mapper)
+        public UserController(IUserService userService, ICategoryService categoryService, IInteriorService interiorService, IContentService contentService, IMapper mapper)
         {
             _userService = userService;
             _interiorService = interiorService;
@@ -30,27 +30,36 @@ namespace Interior.Controllers
             _contentService = contentService;
             _mapper = mapper;
         }
-
-        public async Task<IActionResult> CreateUser([FromBody]UserRegisterViewModel userModel)
+        [HttpPost("Register")]
+        public async Task<IActionResult> CreateUser([FromForm]UserRegisterViewModel userModel)
         {
             if (ModelState.IsValid)
             {
+                userModel.Password = encMD5(userModel.Password);
                 var user = _mapper.Map<UserRegisterViewModel, User>(userModel);
-                dynamic result =await _userService.CreateUserAsync(user);
-                if (userModel.IsRemember)
+                var result = await _userService.CreateUserAsync(user);
+                if (result == ResultCode.Success)
                 {
-                    result = await _userService.Authenticate(userModel.Username, userModel.Password);
+                    if (userModel.IsRemember)
+                    {
+                        var resultUser = await _userService.AuthenticateAsync(userModel.Username, userModel.Password);
+                        if (resultUser == null)
+                            return BadRequest(ResponseError.Create("Authentication faild"));
+                        else
+                            return Ok(ResponseSuccess.Create(resultUser));
+                    }
+                    return Ok(ResponseSuccess.Create("Ok"));
                 }
-                return Ok(ResponseSuccess.Create(result));
             }
+
             return BadRequest(ResponseError.Create("InValid data"));
         }
 
-        [AllowAnonymous]
         [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody]User userParam)
+        public async Task<IActionResult> Authenticate([FromForm]UserLoginViewModel userLogin)
         {
-            var user = _userService.Authenticate(userParam.Username, userParam.Password);
+            userLogin.Password = encMD5(userLogin.Password);
+            var user = await _userService.AuthenticateAsync(userLogin.Username, userLogin.Password);
 
             if (user == null)
                 return BadRequest(ResponseError.Create("Username or password is incorrect"));
@@ -67,15 +76,15 @@ namespace Interior.Controllers
         //}
 
 
-        //private static string EncMD5(string password)
-        //{
-        //    MD5 md5 = new MD5CryptoServiceProvider();
-        //    UTF8Encoding encoder = new UTF8Encoding();
-        //    Byte[] originalBytes = encoder.GetBytes(password);
-        //    Byte[] encodedBytes = md5.ComputeHash(originalBytes);
-        //    password = BitConverter.ToString(encodedBytes).Replace("-", "");
-        //    var result = password.ToLower();
-        //    return result;
-        //}
+        private string encMD5(string password)
+        {
+            MD5 md5 = new MD5CryptoServiceProvider();
+            UTF8Encoding encoder = new UTF8Encoding();
+            Byte[] originalBytes = encoder.GetBytes(password);
+            Byte[] encodedBytes = md5.ComputeHash(originalBytes);
+            password = BitConverter.ToString(encodedBytes).Replace("-", "");
+            var result = password.ToLower();
+            return result;
+        }
     }
 }

@@ -9,9 +9,9 @@ namespace Interior.Models.Interface
 {
     public interface IRoleService
     {
-        Task<ResultCode> AddRole(Role role);
-        Task<ResultCode> DeleteRole(Role role);
-        Task<ResultCode> UpdateRole(Role role);
-        Task<IEnumerable<Role>> GetAllRoles();
+        Task<ResultCode> AddRoleAsync(Role role);
+        Task<ResultCode> DeleteRoleAsync(Role role);
+        Task<ResultCode> UpdateRoleAsync(Role role);
+        Task<IEnumerable<Role>> GetAllRolesAsync();
     }
 }

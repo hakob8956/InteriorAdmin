@@ -18,7 +18,7 @@ namespace Interior.Services
             _context = context;
         }
 
-        public async Task<ResultCode> AddTextToContent(Content content)
+        public async Task<ResultCode> AddTextToContentAsync(Content content)
         {
             try
             {

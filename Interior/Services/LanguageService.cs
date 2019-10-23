@@ -17,7 +17,7 @@ namespace Interior.Services
         {
             _context = context;
         }
-        public async Task<ResultCode> AddLanguage(Language language)
+        public async Task<ResultCode> AddLanguageAsync(Language language)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace Interior.Services
             }
         }
 
-        public async Task<ResultCode> DeleteLanguage(Language language)
+        public async Task<ResultCode> DeleteLanguageAsync(Language language)
         {
             try
             {
@@ -49,12 +49,12 @@ namespace Interior.Services
             }
         }
 
-        public async Task<IEnumerable<Language>> GetAllLanguages()
+        public async Task<IEnumerable<Language>> GetAllLanguagesAsync()
         {
             return await _context.Languages.ToListAsync();
         }
 
-        public async Task<ResultCode> UpdateLanguage(Language language)
+        public async Task<ResultCode> UpdateLanguageAsync(Language language)
         {
             try
             {

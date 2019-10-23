@@ -18,7 +18,7 @@ namespace Interior.Services
             _context = context;
         }
 
-        public async Task<ResultCode> AddBrand(Brand brand)
+        public async Task<ResultCode> AddBrandAsync(Brand brand)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace Interior.Services
             }
         }
 
-        public async Task<ResultCode> DeleteBrand(Brand brand)
+        public async Task<ResultCode> DeleteBrandAsync(Brand brand)
         {
             try
             {
@@ -50,12 +50,12 @@ namespace Interior.Services
             }
         }
 
-        public async Task<IEnumerable<Brand>> GetAllBrands()
+        public async Task<IEnumerable<Brand>> GetAllBrandsAsync()
         {
             return await _context.Brands.ToListAsync();
         }
 
-        public async Task<ResultCode> UpdateBrand(Brand brand)
+        public async Task<ResultCode> UpdateBrandAsync(Brand brand)
         {
             try
             {

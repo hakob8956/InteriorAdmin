@@ -9,9 +9,9 @@ namespace Interior.Models.Interface
 {
     public interface ICategoryService
     {
-        Task<ResultCode> AddCategory(Category category);
-        Task<ResultCode> DeleteCategory(Category category);
-        Task<ResultCode> UpdateCategory(Category category);
-        Task<IEnumerable<Category>> GetAllCategories();
+        Task<ResultCode> AddCategoryAsync(Category category);
+        Task<ResultCode> DeleteCategoryAsync(Category category);
+        Task<ResultCode> UpdateCategoryAsync(Category category);
+        Task<IEnumerable<Category>> GetAllCategoriesAsync();
     }
 }

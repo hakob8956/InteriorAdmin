@@ -18,7 +18,7 @@ namespace Interior.Services
             _context = context;
         }
 
-        public async Task<ResultCode> AddRecommendation(Recommendation recommendation)
+        public async Task<ResultCode> AddRecommendationAsync(Recommendation recommendation)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace Interior.Services
             }
         }
 
-        public async Task<ResultCode> DeleteRecommendation(Recommendation recommendation)
+        public async Task<ResultCode> DeleteRecommendationAsync(Recommendation recommendation)
         {
             try
             {
@@ -50,12 +50,12 @@ namespace Interior.Services
             }
         }
 
-        public async Task<IEnumerable<Recommendation>> GetAllRecommendations()
+        public async Task<IEnumerable<Recommendation>> GetAllRecommendationsAsync()
         {
             return await _context.Recommendations.ToListAsync();
         }
 
-        public async Task<ResultCode> UpdateRecommendation(Recommendation recommendation)
+        public async Task<ResultCode> UpdateRecommendationAsync(Recommendation recommendation)
         {
             try
             {

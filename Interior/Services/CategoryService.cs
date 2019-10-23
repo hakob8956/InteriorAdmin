@@ -18,7 +18,7 @@ namespace Interior.Services
             _context = context;
         }
 
-        public async Task<ResultCode> AddCategory(Category category)
+        public async Task<ResultCode> AddCategoryAsync(Category category)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace Interior.Services
             }
         }
 
-        public async Task<ResultCode> DeleteCategory(Category category)
+        public async Task<ResultCode> DeleteCategoryAsync(Category category)
         {
             try
             {
@@ -50,12 +50,12 @@ namespace Interior.Services
             }
         }
 
-        public async Task<IEnumerable<Category>> GetAllCategories()
+        public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
         {
             return await _context.Categories.ToListAsync();
         }
 
-        public async Task<ResultCode> UpdateCategory(Category category)
+        public async Task<ResultCode> UpdateCategoryAsync(Category category)
         {
             try
             {

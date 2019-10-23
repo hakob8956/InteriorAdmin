@@ -10,9 +10,9 @@ namespace Interior.Models.Interface
 {
     public interface IInteriorService
     {
-        Task<ResultCode> AddInterior(Interior.Models.Entities.Interior interior);
-        Task<ResultCode> DeleteInterior(Interior.Models.Entities.Interior interior);
-        Task<ResultCode> UpdateInterior(Interior.Models.Entities.Interior interior);
-        Task<IEnumerable<Interior.Models.Entities.Interior>> GetAllInteriors();
+        Task<ResultCode> AddInteriorAsync(Interior.Models.Entities.Interior interior);
+        Task<ResultCode> DeleteInteriorAsync(Interior.Models.Entities.Interior interior);
+        Task<ResultCode> UpdateInteriorAsync(Interior.Models.Entities.Interior interior);
+        Task<IEnumerable<Interior.Models.Entities.Interior>> GetAllInteriorsAsync();
     }
 }

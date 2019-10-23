@@ -18,7 +18,7 @@ namespace Interior.Services
             _context = context;
         }
 
-        public async Task<ResultCode> AddRole(Role role)
+        public async Task<ResultCode> AddRoleAsync(Role role)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace Interior.Services
 
             }
         }
-        public async Task<ResultCode> DeleteRole(Role role)
+        public async Task<ResultCode> DeleteRoleAsync(Role role)
         {
             try
             {
@@ -52,12 +52,12 @@ namespace Interior.Services
             }
         }
 
-        public async Task<IEnumerable<Role>> GetAllRoles()
+        public async Task<IEnumerable<Role>> GetAllRolesAsync()
         {
             return await _context.Roles.ToListAsync();
         }
 
-        public async Task<ResultCode> UpdateRole(Role role)
+        public async Task<ResultCode> UpdateRoleAsync(Role role)
         {
             try
             {

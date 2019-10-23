@@ -39,12 +39,12 @@ namespace Interior.Services
 
                 return ResultCode.Success;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return ResultCode.Error;
             }
         }
-        public async Task<User> Authenticate(string username, string password)
+        public async Task<User> AuthenticateAsync(string username, string password)
         {
             var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == username);
             if (user == null)
@@ -69,19 +69,19 @@ namespace Interior.Services
             return user;
         }
 
-        public async Task<IEnumerable<User>> GetAllUsers()
+        public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
             return await _context.Users.Where(r => r.Role.Name == "user").AsNoTracking().ToListAsync();
         }
-        public async Task<IEnumerable<User>> GetAllUsers(string roleName)
+        public async Task<IEnumerable<User>> GetAllUsersAsync(string roleName)
         {
             return await _context.Users.Where(r => r.Role.Name == roleName).AsNoTracking().ToListAsync();
         }
 
 
-        public User GetById(int id)
+        public async Task<User> GetByIdAsyn(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Users.SingleOrDefaultAsync(r => r.Id == id);
         }
 
         public async Task<ResultCode> UpdateUserAsync(User user)

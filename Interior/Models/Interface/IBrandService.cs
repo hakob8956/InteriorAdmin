@@ -9,9 +9,9 @@ namespace Interior.Models.Interface
 {
     public interface IBrandService
     {
-        Task<ResultCode> AddBrand(Brand brand);
-        Task<ResultCode> DeleteBrand(Brand brand);
-        Task<ResultCode> UpdateBrand(Brand brand);
-        Task<IEnumerable<Brand>> GetAllBrands();
+        Task<ResultCode> AddBrandAsync(Brand brand);
+        Task<ResultCode> DeleteBrandAsync(Brand brand);
+        Task<ResultCode> UpdateBrandAsync(Brand brand);
+        Task<IEnumerable<Brand>> GetAllBrandsAsync();
     }
 }

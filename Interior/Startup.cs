@@ -17,6 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 using Interior.Models.Interface;
 using Interior.Services;
 using Microsoft.IdentityModel.Logging;
+using Interior.Mapping;
 
 namespace Interior
 {
@@ -47,7 +48,7 @@ namespace Interior
             services.AddScoped<ILanguageService, LanguageService>();
             services.AddScoped<IInteriorService, InteriorService>();
             services.AddScoped<IContentService, ContentService>();
-
+            services.AddSingleton(MapperConfig.CreateMapper());
 
             services.AddAuthentication(x =>
             {

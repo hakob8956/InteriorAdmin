@@ -9,7 +9,7 @@ namespace Interior.Models.Interface
 {
     public interface IContentService
     {
-        Task<ResultCode> AddTextToContent(Content content);
+        Task<ResultCode> AddTextToContentAsync (Content content);
 
 
 
