@@ -71,7 +71,7 @@ namespace Interior.Services
 
         public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
-            return await _context.Users.Where(r => r.Role.Name == "user").AsNoTracking().ToListAsync();
+            return await _context.Users/*.Where(r => r.Role.Name == "user")*/.AsNoTracking().ToListAsync();
         }
         public async Task<IEnumerable<User>> GetAllUsersAsync(string roleName)
         {

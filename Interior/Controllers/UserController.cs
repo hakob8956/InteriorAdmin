@@ -60,6 +60,13 @@ namespace Interior.Controllers
 
             return Ok(ResponseSuccess.Create(user));
         }
+        [HttpGet("get-all-users")]
+        public async Task<IActionResult> GetAllUsers(int? skip, int? take)
+        {
+            var user = await _userService.GetAllUsersAsync();
+            var result = _mapper.Map<IEnumerable<User>, IEnumerable<UserShowTableViewModel>>(user.Skip((int)skip));
+            return  Ok(ResponseSuccess.Create(result));
+        }
         private string encMD5(string password)
         {
             MD5 md5 = new MD5CryptoServiceProvider();
