@@ -12,8 +12,8 @@ namespace Interior.Models.Interface
         Task<User> AuthenticateAsync(string username, string password);
         Task<ResultCode> CreateUserAsync(User user);
         Task<ResultCode> UpdateUserAsync(User user);
-        Task<IEnumerable<User>> GetAllUsersAsync();
-        Task<IEnumerable<User>> GetAllUsersAsync(string roleName);
+        Task<(IEnumerable<User>, int count)> GetAllUsersAsync(int? skip,int? take);
+        Task<(IEnumerable<User>, int count)> GetAllUsersAsync(int? skip, int? take,string roleName);
         Task<User> GetByIdAsync(int id);
     }
 }

@@ -2,23 +2,41 @@ import { map, tap, catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { throwError, Observable, BehaviorSubject } from 'rxjs';
 import { HttpErrorResponse,HttpClient } from '@angular/common/http';
-import { State } from '@progress/kendo-data-query';
+import { State, toODataString } from '@progress/kendo-data-query';
 import { GridDataResult } from '@progress/kendo-angular-grid';
-@Injectable()
-export class DataCenterService extends BehaviorSubject<GridDataResult>{
-    private BaseUrl = window.location.protocol + '//' + window.location.host;
-    constructor(private http: HttpClient) {super(null)}
 
-    public getUserReviewInfos(state:State){
-         return this.http.get(this.BaseUrl+'/api/User/get-users',
-         {params:{skip:String(state.skip),take:String(state.take)}})
-         .pipe(
-             map(response=> (<GridDataResult>{
-                data: response['data'],
-                total: 1
+export abstract class  DataCenterService extends BehaviorSubject<GridDataResult>{
+    public loading:boolean;
+    private BASE_URL = 'https://localhost:44353';
+    constructor(
+        private http: HttpClient,
+        protected tableName: string
+    ) {
+        super(null);
+    }
+
+    public query(state: any): void {
+        this.fetch(this.tableName, state)
+            .subscribe(x => super.next(x));
+    }
+
+    protected fetch(tableName: string, state: any): Observable<GridDataResult> {
+        this.loading = true;
+        return this.http
+            .get(`${this.BASE_URL}/api/User/get-all-users`,{
+                params:{
+                    skip:state.skip,
+                    take:state.take
+                },
+            })
+            .pipe(
+                map(response => (<GridDataResult>{
+                    data: response['data'].data,
+                    total: parseInt(response['data'].lenght, 10),
                 })),
-            catchError(this.handleError)
-            ).subscribe(response=>super.next(response));
+                tap(() => this.loading = false),
+                catchError(this.handleError)
+            );
     }
 
 
@@ -34,5 +52,16 @@ export class DataCenterService extends BehaviorSubject<GridDataResult>{
         }
         console.error(errorMessage);
         return throwError(errorMessage);
+    }
+}
+@Injectable()
+export class AdminsService extends DataCenterService{
+    constructor(http:HttpClient){super(http,'Admins');}
+    queryAll(st?: any): Observable<GridDataResult> {
+        const state = Object.assign({}, st);
+        delete state.skip;
+        delete state.take;
+
+        return this.fetch(this.tableName, state);
     }
 }

@@ -36,6 +36,7 @@ namespace Interior.Controllers
                 {
                     if (userModel.IsRemember)
                     {
+                    
                         var resultUser = await _userService.AuthenticateAsync(userModel.Username, userModel.Password);
                         if (resultUser == null)
                             return BadRequest(ResponseError.Create("Authentication faild"));
@@ -63,8 +64,13 @@ namespace Interior.Controllers
         [HttpGet("get-all-users")]
         public async Task<IActionResult> GetAllUsers(int? skip, int? take)
         {
-            var user = await _userService.GetAllUsersAsync();
-            var result = _mapper.Map<IEnumerable<User>, IEnumerable<UserShowTableViewModel>>(user.Skip((int)skip));
+            var (data,lenght) = await _userService.GetAllUsersAsync(skip,take);
+            var newData = _mapper.Map<IEnumerable<User>, IEnumerable<UserShowTableViewModel>>(data);
+            var result = new
+            {
+                data=newData,
+                lenght=lenght
+            };
             return  Ok(ResponseSuccess.Create(result));
         }
         private string encMD5(string password)

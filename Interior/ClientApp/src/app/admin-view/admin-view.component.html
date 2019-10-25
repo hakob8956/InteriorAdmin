@@ -1,0 +1,41 @@
+<kendo-grid
+          [data]="view | async"
+          [loading]="view.loading"
+          [pageSize]="pageSize"
+          [skip]="skip"
+          [sort]="sort"
+          [sortable]="true"
+          [pageable]="true"
+          [scrollable]="'none'"
+          [filterable]="true"
+          (dataStateChange)="dataStateChange($event)"
+        >
+    
+        <kendo-grid-column field="UserInfo" width="130" [filterable]="false">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <div style="display: flex">
+                <!-- <img src="{{ 'assets/images/faces/face1.jpg' }}" 
+                        onerror=" this.src = 'assets/images/faces/face1.jpg' "
+                          alt="Patient Image" class="customer-photo"/>    -->   
+                 <p>{{dataItem.firstName}} {{dataItem.lastName}}</p>
+                </div>
+             </ng-template>
+        </kendo-grid-column> 
+        <kendo-grid-column field="Id" [filterable]="false"> 
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <div style="display: flex">      
+                   <p>{{dataItem.id}}</p>
+                  </div>
+               </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="userName" > 
+          <ng-template kendoGridCellTemplate let-dataItem>
+              <div style="display: flex">      
+                 <p >{{dataItem.username}}</p>
+                </div>
+             </ng-template>
+      </kendo-grid-column>
+      
+
+
+      </kendo-grid>
