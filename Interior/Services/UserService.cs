@@ -76,8 +76,8 @@ namespace Interior.Services
 
                 var lenght = await _context.Users.CountAsync();
                 List<User> data = null;
-                if (skip == null || take == null)
-                    data = await _context.Users.Take((int)take).Skip((int)skip).AsNoTracking().ToListAsync();
+                if (skip != null || take != null)
+                    data = await _context.Users.Skip((int)skip).Take((int)take).AsNoTracking().ToListAsync();
                 else
                     data = await _context.Users.AsNoTracking().ToListAsync();
 
@@ -94,10 +94,10 @@ namespace Interior.Services
             {
                 var lenght = await _context.Users.CountAsync();
                 List<User> data = null;
-                if (skip == null || take == null)
+                if (skip != null || take != null)
                     data = await _context.Users.Where(r=>r.Role.Name==roleName).Take((int)take).Skip((int)skip).AsNoTracking().ToListAsync();
                 else
-                    data = await _context.Users.AsNoTracking().ToListAsync();
+                    data = await _context.Users.Where(r=>r.Role.Name==roleName).AsNoTracking().ToListAsync();
                 return (data, lenght);
             }
             catch (Exception)

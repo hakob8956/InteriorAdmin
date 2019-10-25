@@ -13,7 +13,7 @@ export class AdminViewComponent implements OnInit {
 
   public view: Observable<GridDataResult>;
   public sort:Array<SortDescriptor>=[];
-  public pageSize=10;
+  public pageSize=5;
   public skip=0;
   // public state: State = {
   //     skip: 0,
@@ -30,7 +30,7 @@ export class AdminViewComponent implements OnInit {
       this.skip=skip;
       this.pageSize=take;
       this.sort=sort;
-      
+      console.log(sort)
       this.loadData();
   }
   private loadData():void{
