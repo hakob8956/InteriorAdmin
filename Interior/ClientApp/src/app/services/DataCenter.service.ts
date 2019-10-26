@@ -22,11 +22,22 @@ export abstract class  DataCenterService extends BehaviorSubject<GridDataResult>
 
     protected fetch(tableName: string, state: any): Observable<GridDataResult> {
         this.loading = true;
+        console.log(state.sort)
+        var dir = "";
+        var field = "";
+        if(state.sort.length > 0){
+             dir=state.sort[0]["dir"];
+             field=state.sort[0]["field"];
+        }
+        console.log(dir)
+        
         return this.http
             .get(`${this.BASE_URL}/api/User/get-all-users`,{
                 params:{
                     skip:state.skip,
-                    take:state.take
+                    take:state.take,
+                    dir:dir,
+                    field:field
                 },
             })
             .pipe(

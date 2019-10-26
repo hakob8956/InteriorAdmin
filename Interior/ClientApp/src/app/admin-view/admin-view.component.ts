@@ -30,7 +30,7 @@ export class AdminViewComponent implements OnInit {
       this.skip=skip;
       this.pageSize=take;
       this.sort=sort;
-      console.log(sort)
+      //console.log(sort)
       this.loadData();
   }
   private loadData():void{

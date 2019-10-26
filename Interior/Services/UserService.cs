@@ -69,11 +69,9 @@ namespace Interior.Services
             return user;
         }
 
-        public async Task<(IEnumerable<User>, int count)> GetAllUsersAsync(int? skip, int? take)
+        public async Task<(IEnumerable<User>, int count)> GetAllUsersAsync(int? skip, int? take, bool? desc, string columnName)
         {
-            try
-            {
-
+            try { 
                 var lenght = await _context.Users.CountAsync();
                 List<User> data = null;
                 if (skip != null || take != null)
@@ -81,9 +79,30 @@ namespace Interior.Services
                 else
                     data = await _context.Users.AsNoTracking().ToListAsync();
 
+                if (desc!=null && columnName!=null)
+                {
+                    switch (columnName)
+                    {
+                        case "userName":
+                            if ((bool)desc)
+                                data.OrderBy(x => x.Username);
+                            else
+                                data.OrderByDescending(x => x.Username);
+                            break;
+                        case "Id":
+                            if ((bool)desc)
+                                data = data.OrderBy(x => x.Id).ToList();
+                            else
+                                data = data.OrderByDescending(x => x.Id).ToList();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
                 return (data, lenght);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return (null, 0);
             }

@@ -17,7 +17,8 @@ import { GridModule } from '@progress/kendo-angular-grid';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { InfoDetailComponent } from './info-detail/info-detail.component';
-
+import { ButtonsModule } from '@progress/kendo-angular-buttons';
+import { AdminEditComponent } from './admin-edit/admin-edit.component';
 
 
 
@@ -29,7 +30,8 @@ import { InfoDetailComponent } from './info-detail/info-detail.component';
     DashboardComponent,
     AdminViewComponent,
     FooterComponent,
-    InfoDetailComponent
+    InfoDetailComponent,
+    AdminEditComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +41,8 @@ import { InfoDetailComponent } from './info-detail/info-detail.component';
     NgbModule.forRoot(),
     GridModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ButtonsModule
   ],
   providers: [AdminsService],
   bootstrap: [AppComponent]

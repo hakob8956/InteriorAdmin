@@ -62,9 +62,12 @@ namespace Interior.Controllers
             return Ok(ResponseSuccess.Create(user));
         }
         [HttpGet("get-all-users")]
-        public async Task<IActionResult> GetAllUsers(int? skip, int? take)
+        public async Task<IActionResult> GetAllUsers(int? skip, int? take,string dir,string field)
         {
-            var (data,lenght) = await _userService.GetAllUsersAsync(skip,take);
+            bool? desc = null;
+            if (!string.IsNullOrEmpty(dir) && dir!= "undefined")
+                desc = dir == "asc" ? false : true;
+            var (data,lenght) = await _userService.GetAllUsersAsync(skip,take,desc, field);
             var newData = _mapper.Map<IEnumerable<User>, IEnumerable<UserShowTableViewModel>>(data);
             var result = new
             {

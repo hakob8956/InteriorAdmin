@@ -7,11 +7,11 @@
           [sortable]="true"
           [pageable]="true"
           [scrollable]="'none'"
-          [filterable]="true"
+          [filterable]="false"
           (dataStateChange)="dataStateChange($event)"
         >
     
-        <kendo-grid-column field="UserInfo" width="130" [filterable]="false">
+        <kendo-grid-column field="UserInfo" width="130">
             <ng-template kendoGridCellTemplate let-dataItem>
               <div style="display: flex">
                 <!-- <img src="{{ 'assets/images/faces/face1.jpg' }}" 
@@ -21,7 +21,7 @@
                 </div>
              </ng-template>
         </kendo-grid-column> 
-        <kendo-grid-column field="Id" [filterable]="false"> 
+        <kendo-grid-column field="Id"> 
             <ng-template kendoGridCellTemplate let-dataItem>
                 <div style="display: flex">      
                    <p>{{dataItem.id}}</p>
@@ -35,6 +35,13 @@
                 </div>
              </ng-template>
       </kendo-grid-column>
+      <kendo-grid-column field="Actions" title="Actions" width="120">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <button>{{dataItem.Id}}</button>
+
+
+        </ng-template>
+    </kendo-grid-column>
       
 
 
