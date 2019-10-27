@@ -22,6 +22,8 @@ namespace Interior.Models.EFContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>().HasIndex(u =>new {u.Username,u.Email }).IsUnique();
+               
             modelBuilder.Entity<User>()
                 .HasOne<Role>(s => s.Role)
                 .WithMany(s => s.Users)

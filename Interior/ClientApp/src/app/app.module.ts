@@ -1,8 +1,8 @@
-import { AdminsService } from './services/DataCenter.service';
+import { UserDataService } from './services/KendoCenter.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -42,9 +42,11 @@ import { AdminEditComponent } from './admin-edit/admin-edit.component';
     GridModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    ButtonsModule
+    ButtonsModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
-  providers: [AdminsService],
+  providers: [UserDataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,3 +1,107 @@
-<p>
-  admin-edit works!
-</p>
+<div class="col-md-6 grid-margin stretch-card">
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Basic form</h4>
+      <p class="card-description">
+        Basic form elements
+      </p>
+      <form [formGroup]="form" (ngSubmit)="submitForm()" class="forms-sample">
+        <div class="form-group">
+          <label for="exampleInputName1">First Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="exampleInputName1"
+            placeholder="First Name"
+            formControlName="fName"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="exampleInputName1">Last Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="exampleInputName2"
+            placeholder="Last Name"
+            formControlName="lName"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail3">Email address</label>
+          <input
+            type="email"
+            class="form-control"
+            id="exampleInputEmail3"
+            placeholder="Email"
+            formControlName="email"
+            required
+          />
+        </div>
+        <div class="form-group">
+            <label for="exampleInputUserName">User Name</label>
+            <input
+              type="email"
+              class="form-control"
+              id="exampleInputUserName"
+              placeholder="UserName"
+              formControlName="userName"
+              required
+            />
+          </div>
+
+        <ng-container *ngIf="!userCreate; else elseTemplate">
+          <ngb-accordion
+            [closeOthers]="true"
+            activeIds="static-1"
+            class="accordion"
+          >
+            <ngb-panel id="static-1">
+              <ng-template ngbPanelTitle>
+                <h6 class="mb-0">
+                  Change Password?
+                </h6>
+              </ng-template>
+              <ng-template ngbPanelContent>
+                <div class="form-group">
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="exampleInputPassword4"
+                    placeholder="Password"
+                    formControlName="password"
+                    required
+                  />
+                </div>
+              </ng-template>
+            </ngb-panel>
+          </ngb-accordion>
+        </ng-container>
+        <ng-template #elseTemplate>
+          <div class="form-group">
+            <label for="exampleInputEmail3">Password</label>
+
+            <input
+              type="password"
+              class="form-control"
+              id="exampleInputPassword4"
+              placeholder="Password"
+              formControlName="password"
+              required
+            />
+          </div>
+        </ng-template>
+
+        <button
+          type="submit"
+          class="btn btn-success mr-2"
+          [disabled]="form.invalid"
+        >
+          Submit
+        </button>
+        <button class="btn btn-light" (click)="cancelButton()">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>

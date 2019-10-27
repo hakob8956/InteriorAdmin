@@ -1,4 +1,5 @@
-import { AdminsService } from './../services/DataCenter.service';
+import { Router } from '@angular/router';
+import { UserDataService } from './../services/KendoCenter.service';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GridDataResult, DataStateChangeEvent } from '@progress/kendo-angular-grid';
@@ -20,7 +21,7 @@ export class AdminViewComponent implements OnInit {
   //     take: 5  
   // };
 
-  constructor(private service:AdminsService) {}
+  constructor(private service:UserDataService,private router:Router) {}
   ngOnInit():void {
     this.view=this.service;
     this.loadData();
@@ -34,10 +35,11 @@ export class AdminViewComponent implements OnInit {
       this.loadData();
   }
   private loadData():void{
-    //this.service.query({skip:this.state.skip,take:this.state.take,sort:this.state.sort});
-   // console.log(this.state + '  ' + this.state.take);
     this.service.query({skip:this.skip,take:this.pageSize,sort:this.sort});
-    //console.log(this.dataCenter);
+  }
+   editButtonClick(id:any){
+       console.log(id);
+      this.router.navigate(['/adminEdit',id]);
   }
 
 }

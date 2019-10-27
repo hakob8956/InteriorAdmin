@@ -14,8 +14,11 @@ namespace Interior.Mapping
         {
             var mapperConfig = new MapperConfiguration(conf =>
             {
-                conf.CreateMap<UserRegisterViewModel, User>();
-                conf.CreateMap<UserRegisterViewModel, User>().ReverseMap();
+                conf.CreateMap<UserRegisterByAdminViewModel, User>();
+                conf.CreateMap<UserRegisterByAdminViewModel, User>().ReverseMap();
+
+                conf.CreateMap<UserRegisterByUserViewModel, User>();
+                conf.CreateMap<UserRegisterByUserViewModel, User>().ReverseMap();
 
                 conf.CreateMap<UserShowTableViewModel, User>();
                 conf.CreateMap<UserShowTableViewModel, User>().ReverseMap();

@@ -24,13 +24,13 @@ namespace Interior.Controllers
             _userService = userService;
             _mapper = mapper;
         }
-        [HttpPost("Register")]
-        public async Task<IActionResult> CreateUser([FromForm]UserRegisterViewModel userModel)
+        [HttpPost("register")]
+        public async Task<IActionResult> CreateUser([FromForm]UserRegisterByUserViewModel userModel)
         {
             if (ModelState.IsValid)
             {
                 userModel.Password = encMD5(userModel.Password);
-                var user = _mapper.Map<UserRegisterViewModel, User>(userModel);
+                var user = _mapper.Map<UserRegisterByUserViewModel, User>(userModel);
                 var result = await _userService.CreateUserAsync(user);
                 if (result == ResultCode.Success)
                 {
@@ -61,7 +61,7 @@ namespace Interior.Controllers
 
             return Ok(ResponseSuccess.Create(user));
         }
-        [HttpGet("get-all-users")]
+        [HttpGet("get-all")]
         public async Task<IActionResult> GetAllUsers(int? skip, int? take,string dir,string field)
         {
             bool? desc = null;
@@ -85,6 +85,39 @@ namespace Interior.Controllers
             password = BitConverter.ToString(encodedBytes).Replace("-", "");
             var result = password.ToLower();
             return result;
+        }
+
+        [HttpGet("get-byId/{id}")]
+        public async Task<IActionResult> GetUserById(int id)
+        {
+            var user = await _userService.GetByIdAsync(id);
+            if (user!=null)
+            {
+                user.Password = null;
+                user.Token = null;
+                return Ok(ResponseSuccess.Create(user));
+            }
+            return Ok(ResponseError.Create("User not found"));
+        }
+        
+        [HttpPost("create-user")]
+        public async Task<IActionResult> CreateUserByAdmin([FromBody]UserRegisterByAdminViewModel userRegister)
+        {
+            var result = ResultCode.Error;
+            if (ModelState.IsValid)
+            {
+                var userModel = _mapper.Map<UserRegisterByAdminViewModel, User>(userRegister);
+                if (userRegister.Id == 0)
+                    result = await _userService.CreateUserAsync(userModel);
+                else if(userRegister.Id > 0)
+                    result = await _userService.UpdateUserAsync(userModel);
+            }
+            //TODO horrible
+            if (result==ResultCode.Error)
+                return Ok(ResponseSuccess.Create("Ok"));
+            else
+                return Ok(ResponseError.Create("Error"));
+
         }
     }
 }
