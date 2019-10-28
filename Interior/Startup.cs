@@ -48,6 +48,7 @@ namespace Interior
             services.AddScoped<ILanguageService, LanguageService>();
             services.AddScoped<IInteriorService, InteriorService>();
             services.AddScoped<IContentService, ContentService>();
+            services.AddScoped<IRoleService, RoleService>();
             services.AddSingleton(MapperConfig.CreateMapper());
 
             services.AddAuthentication(x =>

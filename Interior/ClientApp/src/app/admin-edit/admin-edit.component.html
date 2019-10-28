@@ -14,7 +14,6 @@
             id="exampleInputName1"
             placeholder="First Name"
             formControlName="fName"
-            required
           />
         </div>
         <div class="form-group">
@@ -25,7 +24,6 @@
             id="exampleInputName2"
             placeholder="Last Name"
             formControlName="lName"
-            required
           />
         </div>
         <div class="form-group">
@@ -51,6 +49,14 @@
             />
           </div>
 
+          <div class="form-group">
+            <label>Role</label><br>
+            <select formControlName="roles" class="browser-default custom-select" style="margin-bottom:15px;height: 30px;padding: 5px;width: 100px;">
+              <option *ngFor="let item of roles" [value]="item.name">{{item.name}}</option>     
+            </select>
+          </div>
+         
+
         <ng-container *ngIf="!userCreate; else elseTemplate">
           <ngb-accordion
             [closeOthers]="true"
@@ -71,7 +77,6 @@
                     id="exampleInputPassword4"
                     placeholder="Password"
                     formControlName="password"
-                    required
                   />
                 </div>
               </ng-template>

@@ -19,10 +19,12 @@ namespace Interior.Controllers
     {
         private IUserService _userService;
         private readonly IMapper _mapper;
-        public UserController(IUserService userService,IMapper mapper)
+        private readonly IRoleService _roleService;
+        public UserController(IUserService userService, IMapper mapper,IRoleService roleService)
         {
             _userService = userService;
             _mapper = mapper;
+            _roleService = roleService;
         }
         [HttpPost("register")]
         public async Task<IActionResult> CreateUser([FromForm]UserRegisterByUserViewModel userModel)
@@ -36,7 +38,7 @@ namespace Interior.Controllers
                 {
                     if (userModel.IsRemember)
                     {
-                    
+
                         var resultUser = await _userService.AuthenticateAsync(userModel.Username, userModel.Password);
                         if (resultUser == null)
                             return BadRequest(ResponseError.Create("Authentication faild"));
@@ -62,19 +64,25 @@ namespace Interior.Controllers
             return Ok(ResponseSuccess.Create(user));
         }
         [HttpGet("get-all")]
-        public async Task<IActionResult> GetAllUsers(int? skip, int? take,string dir,string field)
+        public async Task<IActionResult> GetAllUsers(int? skip, int? take, string dir, string field, string roleName)
         {
             bool? desc = null;
-            if (!string.IsNullOrEmpty(dir) && dir!= "undefined")
+            if (!string.IsNullOrEmpty(dir) && dir != "undefined")
                 desc = dir == "asc" ? false : true;
-            var (data,lenght) = await _userService.GetAllUsersAsync(skip,take,desc, field);
-            var newData = _mapper.Map<IEnumerable<User>, IEnumerable<UserShowTableViewModel>>(data);
+
+            (IEnumerable<User>, int count) tuple = (null, 0);
+            if (roleName == null)
+                tuple = await _userService.GetAllUsersAsync(skip, take, desc, field);
+            else
+                tuple = await _userService.GetAllUsersAsync(skip, take, desc, field, roleName);
+
+            var newData = _mapper.Map<IEnumerable<User>, IEnumerable<UserShowTableViewModel>>(tuple.Item1);
             var result = new
             {
-                data=newData,
-                lenght=lenght
+                data = newData,
+                lenght = tuple.count
             };
-            return  Ok(ResponseSuccess.Create(result));
+            return Ok(ResponseSuccess.Create(result));
         }
         private string encMD5(string password)
         {
@@ -91,29 +99,33 @@ namespace Interior.Controllers
         public async Task<IActionResult> GetUserById(int id)
         {
             var user = await _userService.GetByIdAsync(id);
-            if (user!=null)
+            if (user != null)
             {
-                user.Password = null;
-                user.Token = null;
-                return Ok(ResponseSuccess.Create(user));
+                var result = _mapper.Map<User, UserRegisterByAdminViewModel>(user);
+
+                result.Password = null;
+                result.RoleName = user.Role.Name;
+                return Ok(ResponseSuccess.Create(result));
             }
             return Ok(ResponseError.Create("User not found"));
         }
-        
+
         [HttpPost("create-user")]
         public async Task<IActionResult> CreateUserByAdmin([FromBody]UserRegisterByAdminViewModel userRegister)
         {
             var result = ResultCode.Error;
-            if (ModelState.IsValid)
+            var userModel = _mapper.Map<UserRegisterByAdminViewModel, User>(userRegister);
+            if (userRegister.Id == 0)
             {
-                var userModel = _mapper.Map<UserRegisterByAdminViewModel, User>(userRegister);
-                if (userRegister.Id == 0)
-                    result = await _userService.CreateUserAsync(userModel);
-                else if(userRegister.Id > 0)
-                    result = await _userService.UpdateUserAsync(userModel);
+                result = await _userService.CreateUserAsync(userModel);
             }
+            else if (userRegister.Id > 0)
+            {
+                result = await _userService.UpdateUserAsync(userModel);
+            }
+
             //TODO horrible
-            if (result==ResultCode.Error)
+            if (result == ResultCode.Error)
                 return Ok(ResponseSuccess.Create("Ok"));
             else
                 return Ok(ResponseError.Create("Error"));

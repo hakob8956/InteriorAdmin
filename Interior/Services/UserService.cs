@@ -68,56 +68,59 @@ namespace Interior.Services
             user.Password = null;
             return user;
         }
-
+        private IQueryable<User> OrderTable(IQueryable<User> data, string columnName, bool desc)
+        {
+            switch (columnName)
+            {
+                case "userName":
+                    if (desc)
+                        return data.OrderBy(x => x.Username);
+                    else
+                        return data.OrderByDescending(x => x.Username);
+                case "Id":
+                    if (desc)
+                        return data.OrderBy(x => x.Id);
+                    else
+                        return data.OrderByDescending(x => x.Id);
+                default:
+                    return null;
+            }
+        }
         public async Task<(IEnumerable<User>, int count)> GetAllUsersAsync(int? skip, int? take, bool? desc, string columnName)
         {
-            try { 
+            try
+            {
                 var lenght = await _context.Users.CountAsync();
-                List<User> data = null;
+                IQueryable<User> data = null;
                 if (skip != null || take != null)
-                    data = await _context.Users.Skip((int)skip).Take((int)take).AsNoTracking().ToListAsync();
+                    data = _context.Users.Skip((int)skip).Take((int)take);
                 else
-                    data = await _context.Users.AsNoTracking().ToListAsync();
+                    data = _context.Users;
+                if (desc != null && columnName != null)
+                    data = OrderTable(data, columnName, (bool)desc);
 
-                if (desc!=null && columnName!=null)
-                {
-                    switch (columnName)
-                    {
-                        case "userName":
-                            if ((bool)desc)
-                                data.OrderBy(x => x.Username);
-                            else
-                                data.OrderByDescending(x => x.Username);
-                            break;
-                        case "Id":
-                            if ((bool)desc)
-                                data = data.OrderBy(x => x.Id).ToList();
-                            else
-                                data = data.OrderByDescending(x => x.Id).ToList();
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-                return (data, lenght);
+                return (await data.AsNoTracking().ToListAsync(), lenght);
             }
             catch (Exception e)
             {
                 return (null, 0);
             }
         }
-        public async Task<(IEnumerable<User>, int count)> GetAllUsersAsync(int? skip, int? take,string roleName)
+        public async Task<(IEnumerable<User>, int count)> GetAllUsersAsync(int? skip, int? take, bool? desc, string columnName, string roleName)
         {
             try
             {
                 var lenght = await _context.Users.CountAsync();
-                List<User> data = null;
+                IQueryable<User> data = null;
                 if (skip != null || take != null)
-                    data = await _context.Users.Where(r=>r.Role.Name==roleName).Take((int)take).Skip((int)skip).AsNoTracking().ToListAsync();
+                    data = _context.Users.Where(r => r.Role.Name == roleName).Take((int)take).Skip((int)skip);
                 else
-                    data = await _context.Users.Where(r=>r.Role.Name==roleName).AsNoTracking().ToListAsync();
-                return (data, lenght);
+                    data = _context.Users.Where(r => r.Role.Name == roleName);
+
+                if (desc != null && columnName != null)
+                    data = OrderTable(data, columnName, (bool)desc);
+
+                return (await data.AsNoTracking().ToListAsync(), lenght);
             }
             catch (Exception)
             {
@@ -127,8 +130,8 @@ namespace Interior.Services
 
 
         public async Task<User> GetByIdAsync(int id)
-        {
-            return await _context.Users.SingleOrDefaultAsync(r => r.Id == id);
+        { 
+            return await _context.Users.Include(r=>r.Role).SingleOrDefaultAsync(r => r.Id == id);
         }
 
         public async Task<ResultCode> UpdateUserAsync(User user)

@@ -23,7 +23,7 @@ namespace Interior.Models.ViewModels
     }
     public class UserRegisterByAdminViewModel : UserBase
     {
-        public int RoleId { get; set; }
+        public string RoleName { get; set; }
     }
     public class UserRegisterByUserViewModel:UserBase
     {

@@ -5,7 +5,7 @@ export class RegisterUserModel
     firstName: string;
     lastName: string;
     password: string;
-    roleId: number;
+    roleName: string;
     email:string;
 }
 
@@ -13,6 +13,6 @@ export class LoginUserModel
 {
     Username: string;
     Password: string;
-    RoleId: number;
+    RoleName: string;
     Token: string;
 }

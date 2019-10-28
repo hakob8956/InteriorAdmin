@@ -13,7 +13,7 @@ namespace Interior.Models.Interface
         Task<ResultCode> CreateUserAsync(User user);
         Task<ResultCode> UpdateUserAsync(User user);
         Task<(IEnumerable<User>, int count)> GetAllUsersAsync(int? skip,int? take, bool? desc, string columnName);
-        Task<(IEnumerable<User>, int count)> GetAllUsersAsync(int? skip, int? take,string roleName);
+        Task<(IEnumerable<User>, int count)> GetAllUsersAsync(int? skip, int? take, bool? desc, string columnName, string roleName);
         Task<User> GetByIdAsync(int id);
     }
 }
