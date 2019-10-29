@@ -29,11 +29,16 @@ export class UserService extends BaseService {
        catchError(this.handleError)
      );
   }
-  public ChangeCreateUser(userModel:RegisterUserModel){
+  public CreateUser(userModel:RegisterUserModel){
          return this.http.post(`${this.BASE_URL}/User/create-user`,userModel).pipe(
           catchError(this.handleError)
         );
   }
+  public UpdateUser(userModel:RegisterUserModel){
+    return this.http.post(`${this.BASE_URL}/User/update-user`,userModel).pipe(
+       catchError(this.handleError)
+   );
+}
 
 }
 @Injectable()
@@ -47,4 +52,6 @@ export class RoleService extends BaseService {
       catchError(this.handleError)
     );
   }
+
+  
 }

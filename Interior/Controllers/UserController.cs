@@ -20,7 +20,7 @@ namespace Interior.Controllers
         private IUserService _userService;
         private readonly IMapper _mapper;
         private readonly IRoleService _roleService;
-        public UserController(IUserService userService, IMapper mapper,IRoleService roleService)
+        public UserController(IUserService userService, IMapper mapper, IRoleService roleService)
         {
             _userService = userService;
             _mapper = mapper;
@@ -115,21 +115,27 @@ namespace Interior.Controllers
         {
             var result = ResultCode.Error;
             var userModel = _mapper.Map<UserRegisterByAdminViewModel, User>(userRegister);
-            if (userRegister.Id == 0)
-            {
-                result = await _userService.CreateUserAsync(userModel);
-            }
-            else if (userRegister.Id > 0)
-            {
-                result = await _userService.UpdateUserAsync(userModel);
-            }
+            result = await _userService.CreateUserAsync(userModel);
 
-            //TODO horrible
             if (result == ResultCode.Error)
                 return Ok(ResponseSuccess.Create("Ok"));
             else
                 return Ok(ResponseError.Create("Error"));
+        }
+        [HttpPut("update-user")]
+        public async Task<IActionResult> UpdateUserByAdmin([FromBody]UserRegisterByAdminViewModel userRegister)
+        {
+            var result = ResultCode.Error;
+            var userModel = _mapper.Map<UserRegisterByAdminViewModel, User>(userRegister);
+            var user = await _userService.GetByIdAsync(userModel.Id);
+            if (userModel.Password == null)
+                userModel.Password = user.Password;
+            result = await _userService.UpdateUserAsync(userModel);
 
+            if (result == ResultCode.Error)
+                return Ok(ResponseSuccess.Create("Ok"));
+            else
+                return Ok(ResponseError.Create("Error"));
         }
     }
 }

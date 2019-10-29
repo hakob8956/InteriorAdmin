@@ -72,11 +72,13 @@ export class AdminEditComponent implements OnInit {
         firstName:this.form.get("fName").value,
         lastName:this.form.get("lName").value,
         password: this.form.get("password").value,
-        roleName:"2",
+        roleName:this.form.get("roles").value,
         email:this.form.get("email").value 
      }
-
-     this.userService.ChangeCreateUser(this.user).subscribe(response=>console.log(response));
+     if(this.userId == 0)
+        this.userService.CreateUser(this.user).subscribe(response=>console.log(response));
+     else
+        this.userService.UpdateUser(this.user)
   }
   cancelButton() {
     this.router.navigate(["/adminView"]);
