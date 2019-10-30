@@ -13,5 +13,6 @@ namespace Interior.Models.Interface
         Task<ResultCode> DeleteRoleAsync(Role role);
         Task<ResultCode> UpdateRoleAsync(Role role);
         Task<IEnumerable<Role>> GetAllRolesAsync();
+        Task<Role> GetRoleByName(string name);
     }
 }

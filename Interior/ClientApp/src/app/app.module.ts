@@ -19,6 +19,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { InfoDetailComponent } from './info-detail/info-detail.component';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { AdminEditComponent } from './admin-edit/admin-edit.component';
+import { AdminChangePasswordComponent } from './admin-change-password/admin-change-password.component';
 
 
 
@@ -31,7 +32,8 @@ import { AdminEditComponent } from './admin-edit/admin-edit.component';
     AdminViewComponent,
     FooterComponent,
     InfoDetailComponent,
-    AdminEditComponent
+    AdminEditComponent,
+    AdminChangePasswordComponent
   ],
   imports: [
     BrowserModule,

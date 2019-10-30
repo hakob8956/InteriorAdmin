@@ -26,7 +26,9 @@ namespace Interior.Mapping
 
                 conf.CreateMap<UserLoginViewModel, User>();
                 conf.CreateMap<UserLoginViewModel, User>().ReverseMap();
-   
+
+                conf.CreateMap<UserUpdateByAdminViewModel, User>();
+                conf.CreateMap<UserUpdateByAdminViewModel, User>().ReverseMap();
 
             });
 

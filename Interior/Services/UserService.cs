@@ -130,20 +130,43 @@ namespace Interior.Services
 
 
         public async Task<User> GetByIdAsync(int id)
-        { 
-            return await _context.Users.Include(r=>r.Role).SingleOrDefaultAsync(r => r.Id == id);
+        {
+            return await _context.Users.Include(r => r.Role).SingleOrDefaultAsync(r => r.Id == id);
         }
 
         public async Task<ResultCode> UpdateUserAsync(User user)
         {
             try
             {
-                var dbUser = await _context.Users
+                var dbUser = await _context.Users.AsNoTracking()
                        .SingleOrDefaultAsync(x => x.Id == user.Id);
                 if (dbUser == null)
                     return ResultCode.Error;
+
+                user.Token = dbUser.Token;
+                user.Password = dbUser.Password;
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
+                return ResultCode.Success;
+            }
+            catch (Exception e)
+            {
+                return ResultCode.Error;
+            }
+        }
+
+        public async Task<ResultCode> ChangeUserPasswordAsync(int id, string password)
+        {
+            try
+            {
+                var currentUser = await _context.Users.SingleOrDefaultAsync(u => u.Id == id);
+                if (currentUser != null)
+                {
+
+                    currentUser.Password = password;
+                    _context.Update(currentUser);
+                    await _context.SaveChangesAsync();
+                }
                 return ResultCode.Success;
             }
             catch (Exception)

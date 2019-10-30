@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { RegisterUserModel } from "./../models/User";
+import { UpdateUserModel,RegisterUserModel } from "./../models/User";
 import { UserService,RoleService } from "./../services/DataCenter.service";
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
@@ -21,8 +21,9 @@ export class AdminEditComponent implements OnInit {
   ) {}
   form: FormGroup;
   charLength = 4;
-  user: RegisterUserModel;
-  userCreate: boolean = true;
+  userUpdateModel: UpdateUserModel;
+  userCreateModel:RegisterUserModel;
+  isUserCreate: boolean = true;
   roles:any;
   ngOnInit() {
     this.form = new FormGroup({
@@ -30,17 +31,16 @@ export class AdminEditComponent implements OnInit {
       lName: new FormControl(""),
       email: new FormControl("", [Validators.required, Validators.email]),
       userName:new FormControl("",[Validators.required]),
-      password: new FormControl(""),
-      roles:new FormControl("",Validators.required)
+      roles:new FormControl("",Validators.required),
+      password:new FormControl("",Validators.required)
     });
-
     this.roleService.getRoles().subscribe(response=>this.roles=response);
     this.userId = +this.route.snapshot.params["id"];
     if (!Number.isNaN(this.userId) && this.userId > 0) {
-        this.userCreate = false;
+        this.isUserCreate = false;
         this.userService.getUserById(this.userId).subscribe(response => {
-        this.user = response["data"];
-        console.log(this.user)
+        this.userUpdateModel = response["data"];
+        console.log(this.userUpdateModel)
         this.initForm();
       });
     } else {
@@ -50,38 +50,73 @@ export class AdminEditComponent implements OnInit {
   initForm() {
     this.form
       .get("fName")
-      .setValue(this.user.firstName != null ? this.user.firstName : "");
+      .setValue(this.userUpdateModel.firstName != null ? this.userUpdateModel.firstName : "");
     this.form
       .get("lName")
-      .setValue(this.user.lastName != null ? this.user.lastName : "");
+      .setValue(this.userUpdateModel.lastName != null ? this.userUpdateModel.lastName : "");
     this.form
       .get("email")
-      .setValue(this.user.email != null ? this.user.email : "");
+      .setValue(this.userUpdateModel.email != null ? this.userUpdateModel.email : "");
       this.form
       .get("userName")
-      .setValue(this.user.username != null ? this.user.username : "");
+      .setValue(this.userUpdateModel.username != null ? this.userUpdateModel.username : "");
       this.form
       .get("roles")
-      .setValue(this.user.roleName != null ? this.user.roleName : "Error");
+      .setValue(this.userUpdateModel.roleId != null ? this.getRoleNameById(this.userUpdateModel.roleId) : "Error");
+      this.form.get("password").disable();
       
   }
   submitForm() {
-      this.user = {
+      this.userCreateModel = {
         id:this.userId,
         username:this.form.get("userName").value,
         firstName:this.form.get("fName").value,
         lastName:this.form.get("lName").value,
-        password: this.form.get("password").value,
-        roleName:this.form.get("roles").value,
-        email:this.form.get("email").value 
+        roleId: this.getRoleIdByName(this.form.get("roles").value),
+        email:this.form.get("email").value,
+        password:this.form.get("password").value,      
      }
-     if(this.userId == 0)
-        this.userService.CreateUser(this.user).subscribe(response=>console.log(response));
+     this.userUpdateModel = this.userCreateModel;  
+     if(this.isUserCreate)
+        this.userService.CreateUser(this.userCreateModel).subscribe(response=>{
+          this.checkValidRequest(response["success"])
+        });
      else
-        this.userService.UpdateUser(this.user)
+     {
+        this.userUpdateModel = this.userCreateModel; 
+        this.userService.UpdateUser(this.userUpdateModel).subscribe(response=>{
+          this.checkValidRequest(response["success"])
+        });
+     }
   }
   cancelButton() {
     this.router.navigate(["/adminView"]);
+  }
+
+  private checkValidRequest(success:Boolean){
+    if(success)
+      this.router.navigate(["/adminView"]);
+    else
+      alert("Error");
+
+  }
+  private getRoleIdByName(roleName:string):number {
+    console.log(this.roles)
+    for(var x in this.roles){
+      if(this.roles[x].name == roleName){
+          return this.roles[x].id;
+      }    
+    }
+    return -1;
+  }
+  private getRoleNameById(id:number):string {
+    console.log(this.roles)
+    for(var x in this.roles){
+      if(this.roles[x].id == id){
+          return this.roles[x].name;
+      }    
+    }
+    return "";
   }
   checkForLength(control: FormControl) {
     if (this.userId > 0 && control.value.length <= this.charLength) {

@@ -55,48 +55,17 @@
               <option *ngFor="let item of roles" [value]="item.name">{{item.name}}</option>     
             </select>
           </div>
-         
-
-        <ng-container *ngIf="!userCreate; else elseTemplate">
-          <ngb-accordion
-            [closeOthers]="true"
-            activeIds="static-1"
-            class="accordion"
-          >
-            <ngb-panel id="static-1">
-              <ng-template ngbPanelTitle>
-                <h6 class="mb-0">
-                  Change Password?
-                </h6>
-              </ng-template>
-              <ng-template ngbPanelContent>
-                <div class="form-group">
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="exampleInputPassword4"
-                    placeholder="Password"
-                    formControlName="password"
-                  />
-                </div>
-              </ng-template>
-            </ngb-panel>
-          </ngb-accordion>
-        </ng-container>
-        <ng-template #elseTemplate>
-          <div class="form-group">
-            <label for="exampleInputEmail3">Password</label>
-
+          <div class="form-group" *ngIf="isUserCreate">
+            <label for="exampleInputUserName">Password</label>
             <input
-              type="password"
+              type="email"
               class="form-control"
-              id="exampleInputPassword4"
+              id="passwordInput"
               placeholder="Password"
               formControlName="password"
               required
             />
           </div>
-        </ng-template>
 
         <button
           type="submit"

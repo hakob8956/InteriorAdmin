@@ -57,6 +57,11 @@ namespace Interior.Services
             return await _context.Roles.ToListAsync();
         }
 
+        public async Task<Role> GetRoleByName(string name)
+        {
+            return await _context.Roles.SingleOrDefaultAsync(n => n.Name == name);
+        }
+
         public async Task<ResultCode> UpdateRoleAsync(Role role)
         {
             try

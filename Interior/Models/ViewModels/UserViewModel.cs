@@ -16,17 +16,26 @@ namespace Interior.Models.ViewModels
         [Required]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
+        
+    }
+    public class UserRegisterByAdminViewModel : UserBase
+    {
         [Required(ErrorMessage = "Password is required")]
         [StringLength(18, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+        public int RoleId { get; set; }
     }
-    public class UserRegisterByAdminViewModel : UserBase
-    {
-        public string RoleName { get; set; }
+    public class UserUpdateByAdminViewModel : UserBase {
+        [Required]
+        public int RoleId { get; set; }
     }
     public class UserRegisterByUserViewModel:UserBase
     {
+        [Required(ErrorMessage = "Password is required")]
+        [StringLength(18, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
         [Required(ErrorMessage = "Confirm Password is required")]
         [StringLength(18, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]

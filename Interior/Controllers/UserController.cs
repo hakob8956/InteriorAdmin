@@ -104,10 +104,10 @@ namespace Interior.Controllers
                 var result = _mapper.Map<User, UserRegisterByAdminViewModel>(user);
 
                 result.Password = null;
-                result.RoleName = user.Role.Name;
+                result.RoleId = user.Role.Id;
                 return Ok(ResponseSuccess.Create(result));
             }
-            return Ok(ResponseError.Create("User not found"));
+            return BadRequest(ResponseError.Create("User not found"));
         }
 
         [HttpPost("create-user")]
@@ -117,25 +117,37 @@ namespace Interior.Controllers
             var userModel = _mapper.Map<UserRegisterByAdminViewModel, User>(userRegister);
             result = await _userService.CreateUserAsync(userModel);
 
-            if (result == ResultCode.Error)
+            if (result != ResultCode.Error)
                 return Ok(ResponseSuccess.Create("Ok"));
             else
-                return Ok(ResponseError.Create("Error"));
+                return BadRequest(ResponseError.Create("Error"));
         }
         [HttpPut("update-user")]
-        public async Task<IActionResult> UpdateUserByAdmin([FromBody]UserRegisterByAdminViewModel userRegister)
+        public async Task<IActionResult> UpdateUserByAdmin([FromBody]UserUpdateByAdminViewModel userUpdate)
         {
             var result = ResultCode.Error;
-            var userModel = _mapper.Map<UserRegisterByAdminViewModel, User>(userRegister);
-            var user = await _userService.GetByIdAsync(userModel.Id);
-            if (userModel.Password == null)
-                userModel.Password = user.Password;
+            var userModel = _mapper.Map<UserUpdateByAdminViewModel, User>(userUpdate);
+
             result = await _userService.UpdateUserAsync(userModel);
 
-            if (result == ResultCode.Error)
+            if (result != ResultCode.Error)
                 return Ok(ResponseSuccess.Create("Ok"));
             else
-                return Ok(ResponseError.Create("Error"));
+                return BadRequest(ResponseError.Create("Error"));
+        }
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePasswordByAdminAsync([FromBody] ChangePasswordByAdmin userPassModel)
+        {
+            var result = ResponseError.Create("Error");
+            if (ModelState.IsValid)
+            {
+                userPassModel.NewPassword = encMD5(userPassModel.NewPassword);
+                var  resultCode = await _userService.ChangeUserPasswordAsync(userPassModel.UserId, userPassModel.NewPassword);
+                if (resultCode == ResultCode.Success)
+                    return Ok("Password successfully changed");
+            }
+            return BadRequest(result); 
+            
         }
     }
 }

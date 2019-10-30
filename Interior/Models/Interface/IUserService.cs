@@ -14,6 +14,7 @@ namespace Interior.Models.Interface
         Task<ResultCode> UpdateUserAsync(User user);
         Task<(IEnumerable<User>, int count)> GetAllUsersAsync(int? skip,int? take, bool? desc, string columnName);
         Task<(IEnumerable<User>, int count)> GetAllUsersAsync(int? skip, int? take, bool? desc, string columnName, string roleName);
+        Task<ResultCode> ChangeUserPasswordAsync(int id,string password);
         Task<User> GetByIdAsync(int id);
     }
 }
