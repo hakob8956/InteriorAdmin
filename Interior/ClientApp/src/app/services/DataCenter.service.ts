@@ -1,4 +1,4 @@
-import { RegisterUserModel, UpdateUserModel } from './../models/User';
+import { RegisterUserModel, UpdateUserModel, ChangeUserPasswordModel } from './../models/User';
 import { map, tap, catchError } from "rxjs/operators";
 import { Injectable } from "@angular/core";
 import { throwError, Observable, BehaviorSubject } from "rxjs";
@@ -39,8 +39,10 @@ export class UserService extends BaseService {
        catchError(this.handleError)
    );
   }
-  public ChangePasswordUser(newPassword:string){
-    //return this.http.post()
+  public ChangePasswordUser(modelChange:ChangeUserPasswordModel){
+     return this.http.post(`${this.BASE_URL}/User/change-password`,modelChange).pipe(
+       catchError(this.handleError)
+     );
   }
 }
 @Injectable()

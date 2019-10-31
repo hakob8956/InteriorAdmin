@@ -1,0 +1,16 @@
+<div class="card">
+  <div class="card-body">
+    <div class="alert alert-fill-primary" role="alert"  *ngIf="messageBox.statusAlert == 0">
+      <i class="mdi mdi-alert-circle"></i>
+      {{messageBox.message}}
+    </div>
+    <div class="alert alert-fill-success" role="alert" *ngIf="messageBox.statusAlert == 1">
+      <i class="mdi mdi-alert-circle"></i>
+      {{messageBox.message}}
+    </div>
+    <div class="alert alert-fill-danger" role="alert" *ngIf="messageBox.statusAlert == -1">
+      <i class="mdi mdi-alert-circle"></i>
+      {{messageBox.message}}
+    </div>
+  </div>
+</div>

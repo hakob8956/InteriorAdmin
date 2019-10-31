@@ -1,3 +1,4 @@
+import { MessageBox } from './../models/MessageBox';
 import { Router } from '@angular/router';
 import { UserDataService } from './../services/KendoCenter.service';
 import { Component, OnInit } from '@angular/core';
@@ -16,6 +17,7 @@ export class AdminViewComponent implements OnInit {
   public sort:Array<SortDescriptor>=[];
   public pageSize=5;
   public skip=0;
+  public messageBox:MessageBox;
   // public state: State = {
   //     skip: 0,
   //     take: 5  
@@ -40,6 +42,10 @@ export class AdminViewComponent implements OnInit {
    editButtonClick(id:any){
        console.log(id);
       this.router.navigate(['/adminEdit',id]);
+  }
+  changePasswordButtonClick(id:any){
+    this.router.navigate(['/adminChangePassword',id]);
+
   }
 
 }

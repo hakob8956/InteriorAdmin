@@ -166,8 +166,9 @@ namespace Interior.Services
                     currentUser.Password = password;
                     _context.Update(currentUser);
                     await _context.SaveChangesAsync();
+                    return ResultCode.Success;
                 }
-                return ResultCode.Success;
+                return ResultCode.Error;                
             }
             catch (Exception)
             {

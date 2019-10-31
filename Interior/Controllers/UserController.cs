@@ -136,13 +136,13 @@ namespace Interior.Controllers
                 return BadRequest(ResponseError.Create("Error"));
         }
         [HttpPost("change-password")]
-        public async Task<IActionResult> ChangePasswordByAdminAsync([FromBody] ChangePasswordByAdmin userPassModel)
+        public async Task<IActionResult> ChangePasswordByAdminAsync([FromBody] ChangeUserPasswordByAdmin userPassModel)
         {
             var result = ResponseError.Create("Error");
             if (ModelState.IsValid)
             {
                 userPassModel.NewPassword = encMD5(userPassModel.NewPassword);
-                var  resultCode = await _userService.ChangeUserPasswordAsync(userPassModel.UserId, userPassModel.NewPassword);
+                var  resultCode = await _userService.ChangeUserPasswordAsync(userPassModel.Id, userPassModel.NewPassword);
                 if (resultCode == ResultCode.Success)
                     return Ok("Password successfully changed");
             }

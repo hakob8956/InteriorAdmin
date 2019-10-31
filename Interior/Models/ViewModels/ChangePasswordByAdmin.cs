@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Interior.Models.ViewModels
 {
-    public class ChangePasswordByAdmin
+    public class ChangeUserPasswordByAdmin
     {
-        public int UserId { get; set; }
+        public int Id { get; set; }
         [Required(ErrorMessage = "Password is required")]
         [StringLength(18, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
