@@ -49,9 +49,10 @@ namespace Interior.Services
             }
         }
 
-        public async Task<IEnumerable<Language>> GetAllLanguagesAsync()
+        public async Task<(IEnumerable<Language>, int count)> GetLanguagesAsync()
         {
-            return await _context.Languages.ToListAsync();
+            var model = await _context.Languages.AsNoTracking().ToListAsync();
+            return (model,model.Count);
         }
 
         public async Task<ResultCode> UpdateLanguageAsync(Language language)

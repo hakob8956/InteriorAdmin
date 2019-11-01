@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Interior.Models.ViewModels
 {
-    public class UserShowTableViewModel
+    public class UserShowViewModel
     {
         public int Id { get; set; }
         public string FirstName { get; set; }

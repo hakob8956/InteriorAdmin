@@ -12,7 +12,7 @@ namespace Interior.Models.Interface
         Task<ResultCode> AddLanguageAsync(Language language);
         Task<ResultCode> DeleteLanguageAsync(Language language);
         Task<ResultCode> UpdateLanguageAsync(Language language);
-        Task<IEnumerable<Language>> GetAllLanguagesAsync();
+        Task<(IEnumerable<Language>, int count)> GetLanguagesAsync();
        
     }
 }

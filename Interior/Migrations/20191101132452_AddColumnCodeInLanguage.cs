@@ -2,36 +2,33 @@
 
 namespace Interior.Migrations
 {
-    public partial class RequiredUserNameAndEmailInUser : Migration
+    public partial class AddColumnCodeInLanguage : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "Username",
-                table: "Users",
+                name: "Name",
+                table: "Languages",
                 nullable: false,
                 oldClrType: typeof(string),
                 oldNullable: true);
 
-            migrationBuilder.AlterColumn<string>(
-                name: "Email",
-                table: "Users",
+            migrationBuilder.AddColumn<string>(
+                name: "Code",
+                table: "Languages",
                 nullable: false,
-                oldClrType: typeof(string),
-                oldNullable: true);
+                defaultValue: "");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<string>(
-                name: "Username",
-                table: "Users",
-                nullable: true,
-                oldClrType: typeof(string));
+            migrationBuilder.DropColumn(
+                name: "Code",
+                table: "Languages");
 
             migrationBuilder.AlterColumn<string>(
-                name: "Email",
-                table: "Users",
+                name: "Name",
+                table: "Languages",
                 nullable: true,
                 oldClrType: typeof(string));
         }

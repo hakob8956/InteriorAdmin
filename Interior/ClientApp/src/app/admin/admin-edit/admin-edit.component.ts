@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
-import { UpdateUserModel,RegisterUserModel } from "./../models/User";
-import { UserService,RoleService } from "./../services/DataCenter.service";
+import { UpdateUserModel,RegisterUserModel } from "../../models/User";
+import { UserService,RoleService } from "../../services/DataCenter.service";
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router, ActivatedRoute } from "@angular/router";

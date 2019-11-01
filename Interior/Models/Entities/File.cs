@@ -6,21 +6,20 @@ using System.Threading.Tasks;
 
 namespace Interior.Models.Entities
 {
-    public class Category
+    public class File
     {
         [Key]
         public int Id { get; set; }
-        public int FileId { get; set; }
-        public File File { get; set; }
-        public ICollection<Content> Contents { get; set; }
+        [Required]
+        public string Name { get; set; }
+        [Required]
+        public string Path { get; set; }
+        public ICollection<Language> Languages { get; set; }
+        public ICollection<Category> Categories { get; set; }
+        public ICollection<Shop> Shops { get; set; }
+        public ICollection<Brand> Brands { get; set; }
         public ICollection<Interior> Interiors { get; set; }
         public ICollection<Recommendation> Recommendations { get; set; }
-
-        public DateTime CreatedDate { get; set; }
-        public Category()
-        {
-            this.CreatedDate = DateTime.UtcNow;
-        }
 
     }
 }

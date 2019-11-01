@@ -15,7 +15,7 @@ namespace Interior.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -27,9 +27,11 @@ namespace Interior.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<string>("ImageHref");
+                    b.Property<int>("FileId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FileId");
 
                     b.ToTable("Brands");
                 });
@@ -42,9 +44,11 @@ namespace Interior.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<string>("ImageHref");
+                    b.Property<int>("FileId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FileId");
 
                     b.ToTable("Categories");
                 });
@@ -86,6 +90,23 @@ namespace Interior.Migrations
                     b.ToTable("Contents");
                 });
 
+            modelBuilder.Entity("Interior.Models.Entities.File", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<string>("Path")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Files");
+                });
+
             modelBuilder.Entity("Interior.Models.Entities.Interior", b =>
                 {
                     b.Property<int>("Id")
@@ -104,9 +125,9 @@ namespace Interior.Migrations
 
                     b.Property<string>("DeepLinkingUrl");
 
-                    b.Property<string>("GlbHref");
+                    b.Property<int>("FileId");
 
-                    b.Property<string>("ImageHref");
+                    b.Property<string>("GlbHref");
 
                     b.Property<string>("IosBundleHref");
 
@@ -123,6 +144,8 @@ namespace Interior.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("FileId");
+
                     b.HasIndex("ShopId");
 
                     b.ToTable("Interiors");
@@ -134,11 +157,19 @@ namespace Interior.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Code")
+                        .IsRequired();
+
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<string>("Name");
+                    b.Property<int?>("FileId");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FileId");
 
                     b.ToTable("Languages");
                 });
@@ -155,6 +186,8 @@ namespace Interior.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
+                    b.Property<int>("FileId");
+
                     b.Property<int?>("InteriorId");
 
                     b.Property<DateTime>("ModifiedDate");
@@ -166,6 +199,8 @@ namespace Interior.Migrations
                     b.HasIndex("BrandId");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("FileId");
 
                     b.HasIndex("InteriorId");
 
@@ -197,9 +232,11 @@ namespace Interior.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<string>("ImageHref");
+                    b.Property<int>("FileId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FileId");
 
                     b.ToTable("Shops");
                 });
@@ -236,6 +273,22 @@ namespace Interior.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Interior.Models.Entities.Brand", b =>
+                {
+                    b.HasOne("Interior.Models.Entities.File", "File")
+                        .WithMany("Brands")
+                        .HasForeignKey("FileId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Interior.Models.Entities.Category", b =>
+                {
+                    b.HasOne("Interior.Models.Entities.File", "File")
+                        .WithMany("Categories")
+                        .HasForeignKey("FileId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Interior.Models.Entities.Content", b =>
@@ -283,9 +336,22 @@ namespace Interior.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("Interior.Models.Entities.File", "File")
+                        .WithMany("Interiors")
+                        .HasForeignKey("FileId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Interior.Models.Entities.Shop", "Shop")
                         .WithMany("Interiors")
                         .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Interior.Models.Entities.Language", b =>
+                {
+                    b.HasOne("Interior.Models.Entities.File", "File")
+                        .WithMany("Languages")
+                        .HasForeignKey("FileId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -301,6 +367,11 @@ namespace Interior.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("Interior.Models.Entities.File", "File")
+                        .WithMany("Recommendations")
+                        .HasForeignKey("FileId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Interior.Models.Entities.Interior")
                         .WithMany("Recommendations")
                         .HasForeignKey("InteriorId");
@@ -308,6 +379,14 @@ namespace Interior.Migrations
                     b.HasOne("Interior.Models.Entities.Shop", "Shop")
                         .WithMany("Recommendations")
                         .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Interior.Models.Entities.Shop", b =>
+                {
+                    b.HasOne("Interior.Models.Entities.File", "File")
+                        .WithMany("Shops")
+                        .HasForeignKey("FileId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

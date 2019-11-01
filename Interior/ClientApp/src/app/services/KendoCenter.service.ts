@@ -17,8 +17,14 @@ export abstract class  KendoCenterService extends BehaviorSubject<GridDataResult
     }
 
     public query(state: any): void {
-        this.fetch(this.tableName, state)
+        if(state==null){
+            this.fetchWithoutState(this.tableName)
             .subscribe(x => super.next(x));
+        }else{
+            this.fetch(this.tableName, state)
+            .subscribe(x => super.next(x));
+        }
+       
     }
 
     protected fetch(tableName: string, state: any): Observable<GridDataResult> {
@@ -47,7 +53,19 @@ export abstract class  KendoCenterService extends BehaviorSubject<GridDataResult
                 catchError(this.handleError)
             );
     }
-
+    protected fetchWithoutState(tableName: string): Observable<GridDataResult> {
+        this.loading = true;
+        return this.http
+            .get(`${this.BASE_URL}/${tableName}/get-all`)
+            .pipe(
+                map(response => (<GridDataResult>{
+                    data: response['data'].data,
+                    total: parseInt(response['data'].lenght, 10),
+                })),
+                tap(() => this.loading = false),
+                catchError(this.handleError)
+            );
+    }
 
     private handleError(err: HttpErrorResponse) {
  
@@ -75,3 +93,16 @@ export class UserDataService extends KendoCenterService{
     }
 
 }
+@Injectable()
+export class LanguageDataService extends KendoCenterService{
+    constructor(http:HttpClient){super(http,'Language');}
+    queryAll(st?: any): Observable<GridDataResult> {
+        const state = Object.assign({}, st);
+        delete state.skip;
+        delete state.take;
+        delete state.sort;
+        return this.fetch(this.tableName, state);
+    }
+
+}
+

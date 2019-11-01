@@ -20,8 +20,8 @@ namespace Interior.Mapping
                 conf.CreateMap<UserRegisterByUserViewModel, User>();
                 conf.CreateMap<UserRegisterByUserViewModel, User>().ReverseMap();
 
-                conf.CreateMap<UserShowTableViewModel, User>();
-                conf.CreateMap<UserShowTableViewModel, User>().ReverseMap();
+                conf.CreateMap<UserShowViewModel, User>();
+                conf.CreateMap<UserShowViewModel, User>().ReverseMap();
 
 
                 conf.CreateMap<UserLoginViewModel, User>();
@@ -29,6 +29,9 @@ namespace Interior.Mapping
 
                 conf.CreateMap<UserUpdateByAdminViewModel, User>();
                 conf.CreateMap<UserUpdateByAdminViewModel, User>().ReverseMap();
+
+                conf.CreateMap<LanguageShowViewModel, Language>();
+                conf.CreateMap<LanguageShowViewModel, Language>().ReverseMap();
 
             });
 

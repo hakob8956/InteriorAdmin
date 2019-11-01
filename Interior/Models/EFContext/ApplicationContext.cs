@@ -18,12 +18,46 @@ namespace Interior.Models.EFContext
         public DbSet<Shop> Shops { get; set; }
         public DbSet<Language> Languages { get; set; }
         public DbSet<Recommendation> Recommendations { get; set; }
+        public DbSet<File> Files { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasIndex(u =>new {u.Username,u.Email }).IsUnique();
-               
+            //File one to many 
+            modelBuilder.Entity<Brand>()
+                .HasOne<File>(s => s.File)
+                .WithMany(s => s.Brands)
+                .HasForeignKey(s => s.FileId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Category>()
+               .HasOne<File>(s => s.File)
+               .WithMany(s => s.Categories)
+               .HasForeignKey(s => s.FileId)
+               .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Interior.Models.Entities.Interior>()
+              .HasOne<File>(s => s.File)
+              .WithMany(s => s.Interiors)
+              .HasForeignKey(s => s.FileId)
+              .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Language>()
+              .HasOne<File>(s => s.File)
+              .WithMany(s => s.Languages)
+              .HasForeignKey(s => s.FileId)
+              .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Recommendation>()
+              .HasOne<File>(s => s.File)
+              .WithMany(s => s.Recommendations)
+              .HasForeignKey(s => s.FileId)
+              .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Shop>()
+              .HasOne<File>(s => s.File)
+              .WithMany(s => s.Shops)
+              .HasForeignKey(s => s.FileId)
+              .OnDelete(DeleteBehavior.Restrict);
+
+
             modelBuilder.Entity<User>()
                 .HasOne<Role>(s => s.Role)
                 .WithMany(s => s.Users)

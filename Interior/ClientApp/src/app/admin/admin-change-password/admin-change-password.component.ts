@@ -1,9 +1,9 @@
 import { Router } from '@angular/router';
-import { UserService } from './../services/DataCenter.service';
+import { UserService } from '../../services/DataCenter.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { ChangeUserPasswordModel } from '../models/User';
+import { ChangeUserPasswordModel } from '../../models/User';
 
 @Component({
   selector: 'app-admin-change-password',

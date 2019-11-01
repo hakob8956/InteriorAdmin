@@ -15,7 +15,7 @@ using AutoMapper;
 namespace Interior.Controllers
 {
     [Route("api/[controller]")]
-    public class UserController : Controller
+    public class UserController : ControllerBase
     {
         private IUserService _userService;
         private readonly IMapper _mapper;
@@ -76,7 +76,7 @@ namespace Interior.Controllers
             else
                 tuple = await _userService.GetAllUsersAsync(skip, take, desc, field, roleName);
 
-            var newData = _mapper.Map<IEnumerable<User>, IEnumerable<UserShowTableViewModel>>(tuple.Item1);
+            var newData = _mapper.Map<IEnumerable<User>, IEnumerable<UserShowViewModel>>(tuple.Item1);
             var result = new
             {
                 data = newData,

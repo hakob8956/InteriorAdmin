@@ -1,0 +1,32 @@
+<kendo-grid 
+[data]="view | async"
+[loading]="view.loading">
+  <!-- <app-show-message [statusAlert]="1" [message]="Hello"></app-show-message> -->
+  <kendo-grid-column field="Id">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <div style="display: flex">
+        <p>{{ dataItem.id }}</p>
+      </div>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="Name">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <div style="display: flex">
+        <p>{{ dataItem.name }}</p>
+      </div>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="Code">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <div style="display: flex">
+        <p>{{ dataItem.code }}</p>
+      </div>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="Actions" title="Actions" width="120">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <button (click)="editButtonClick(dataItem.id)">Edit</button>
+      <button (click)="deleteButtonClick(dataItem.id)">Delete</button>
+    </ng-template>
+  </kendo-grid-column>
+</kendo-grid>

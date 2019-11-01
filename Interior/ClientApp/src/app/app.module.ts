@@ -1,4 +1,4 @@
-import { UserDataService } from './services/KendoCenter.service';
+import { UserDataService, LanguageDataService } from './services/KendoCenter.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -11,16 +11,18 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { AdminViewComponent } from './admin-view/admin-view.component';
+import { AdminViewComponent } from './Admin/admin-view/admin-view.component';
 import { FooterComponent } from './footer/footer.component';
 import { GridModule } from '@progress/kendo-angular-grid';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { InfoDetailComponent } from './info-detail/info-detail.component';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
-import { AdminEditComponent } from './admin-edit/admin-edit.component';
-import { AdminChangePasswordComponent } from './admin-change-password/admin-change-password.component';
+import { AdminEditComponent } from './Admin/admin-edit/admin-edit.component';
+import { AdminChangePasswordComponent } from './Admin/admin-change-password/admin-change-password.component';
 import { ShowMessageComponent } from './show-message/show-message.component';
+import { LanguageEditComponent } from './Language/language-edit/language-edit.component';
+import { LanguageViewComponent } from './Language/language-view/language-view.component';
 
 
 
@@ -35,7 +37,9 @@ import { ShowMessageComponent } from './show-message/show-message.component';
     InfoDetailComponent,
     AdminEditComponent,
     AdminChangePasswordComponent,
-    ShowMessageComponent
+    ShowMessageComponent,
+    LanguageEditComponent,
+    LanguageViewComponent
   ],
   imports: [
     BrowserModule,
@@ -50,7 +54,7 @@ import { ShowMessageComponent } from './show-message/show-message.component';
     ReactiveFormsModule,
     FormsModule
   ],
-  providers: [UserDataService],
+  providers: [UserDataService,LanguageDataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

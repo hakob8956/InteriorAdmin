@@ -1,6 +1,6 @@
-import { MessageBox } from './../models/MessageBox';
+import { MessageBox } from '../../models/MessageBox';
 import { Router } from '@angular/router';
-import { UserDataService } from './../services/KendoCenter.service';
+import { UserDataService } from '../../services/KendoCenter.service';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GridDataResult, DataStateChangeEvent } from '@progress/kendo-angular-grid';
@@ -40,12 +40,14 @@ export class AdminViewComponent implements OnInit {
     this.service.query({skip:this.skip,take:this.pageSize,sort:this.sort});
   }
    editButtonClick(id:any){
-       console.log(id);
       this.router.navigate(['/adminEdit',id]);
   }
   changePasswordButtonClick(id:any){
     this.router.navigate(['/adminChangePassword',id]);
 
+  }
+  createButtonClick(){
+    this.router.navigate(['/adminEdit']);
   }
 
 }

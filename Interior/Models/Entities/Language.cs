@@ -10,9 +10,14 @@ namespace Interior.Models.Entities
     {
         [Key]
         public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
+        public string Code { get; set; }
         public ICollection<Content> Contents { get; set; }
         public DateTime CreatedDate { get; set; }
+        public int? FileId { get; set; }
+        public File File { get; set; }
         public Language()
         {
             this.CreatedDate = DateTime.UtcNow;

@@ -13,7 +13,6 @@ namespace Interior.Models.Entities
         public int LanguageId { get; set; }
         public Language Language { get; set; }
         public string Text { get; set; }
-
         public int CategoryId { get; set; }
         public Category Category { get; set; }
         public int BrandId { get; set; }

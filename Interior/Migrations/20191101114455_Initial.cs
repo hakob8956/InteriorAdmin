@@ -9,45 +9,17 @@ namespace Interior.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Brands",
+                name: "Files",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ImageHref = table.Column<string>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: false)
+                    Name = table.Column<string>(nullable: false),
+                    Path = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Brands", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Categories",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ImageHref = table.Column<string>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Languages",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Languages", x => x.Id);
+                    table.PrimaryKey("PK_Files", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -65,17 +37,84 @@ namespace Interior.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Brands",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    FileId = table.Column<int>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Brands", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Brands_Files_FileId",
+                        column: x => x.FileId,
+                        principalTable: "Files",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    FileId = table.Column<int>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Categories_Files_FileId",
+                        column: x => x.FileId,
+                        principalTable: "Files",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Languages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    FileId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Languages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Languages_Files_FileId",
+                        column: x => x.FileId,
+                        principalTable: "Files",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Shops",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ImageHref = table.Column<string>(nullable: true),
+                    FileId = table.Column<int>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Shops", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Shops_Files_FileId",
+                        column: x => x.FileId,
+                        principalTable: "Files",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -86,7 +125,8 @@ namespace Interior.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
-                    Username = table.Column<string>(nullable: true),
+                    Username = table.Column<string>(nullable: false),
+                    Email = table.Column<string>(nullable: false),
                     Password = table.Column<string>(nullable: true),
                     RoleId = table.Column<int>(nullable: false),
                     Token = table.Column<string>(nullable: true),
@@ -111,12 +151,12 @@ namespace Interior.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     DeepLinkingUrl = table.Column<string>(nullable: true),
                     Price = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    ImageHref = table.Column<string>(nullable: true),
                     IosBundleHref = table.Column<string>(nullable: true),
                     AndroidBundleHref = table.Column<string>(nullable: true),
                     GlbHref = table.Column<string>(nullable: true),
                     Avaiable = table.Column<bool>(nullable: false),
                     IsVisible = table.Column<bool>(nullable: false),
+                    FileId = table.Column<int>(nullable: false),
                     BrandId = table.Column<int>(nullable: false),
                     ShopId = table.Column<int>(nullable: false),
                     CategoryId = table.Column<int>(nullable: false),
@@ -138,6 +178,12 @@ namespace Interior.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
+                        name: "FK_Interiors_Files_FileId",
+                        column: x => x.FileId,
+                        principalTable: "Files",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Interiors_Shops_ShopId",
                         column: x => x.ShopId,
                         principalTable: "Shops",
@@ -151,6 +197,7 @@ namespace Interior.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    FileId = table.Column<int>(nullable: false),
                     CategoryId = table.Column<int>(nullable: false),
                     BrandId = table.Column<int>(nullable: false),
                     ShopId = table.Column<int>(nullable: false),
@@ -171,6 +218,12 @@ namespace Interior.Migrations
                         name: "FK_Recommendations_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Recommendations_Files_FileId",
+                        column: x => x.FileId,
+                        principalTable: "Files",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -243,6 +296,16 @@ namespace Interior.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Brands_FileId",
+                table: "Brands",
+                column: "FileId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Categories_FileId",
+                table: "Categories",
+                column: "FileId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Contents_BrandId",
                 table: "Contents",
                 column: "BrandId");
@@ -283,9 +346,19 @@ namespace Interior.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Interiors_FileId",
+                table: "Interiors",
+                column: "FileId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Interiors_ShopId",
                 table: "Interiors",
                 column: "ShopId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Languages_FileId",
+                table: "Languages",
+                column: "FileId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Recommendations_BrandId",
@@ -298,6 +371,11 @@ namespace Interior.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Recommendations_FileId",
+                table: "Recommendations",
+                column: "FileId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Recommendations_InteriorId",
                 table: "Recommendations",
                 column: "InteriorId");
@@ -308,9 +386,20 @@ namespace Interior.Migrations
                 column: "ShopId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Shops_FileId",
+                table: "Shops",
+                column: "FileId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_RoleId",
                 table: "Users",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Username_Email",
+                table: "Users",
+                columns: new[] { "Username", "Email" },
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -341,6 +430,9 @@ namespace Interior.Migrations
 
             migrationBuilder.DropTable(
                 name: "Shops");
+
+            migrationBuilder.DropTable(
+                name: "Files");
         }
     }
 }

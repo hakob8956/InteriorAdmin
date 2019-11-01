@@ -7,6 +7,7 @@ import { State, toODataString } from "@progress/kendo-data-query";
 
 export abstract class BaseService{
   constructor(){}
+  protected BASE_URL = "https://localhost:44353/api";
   protected handleError(err: HttpErrorResponse) {
     let errorMessage = "";
     if (err.error instanceof ErrorEvent) {
@@ -22,7 +23,6 @@ export abstract class BaseService{
 @Injectable()
 export class UserService extends BaseService {
   constructor(private http: HttpClient) {super()}
-  private BASE_URL = "https://localhost:44353/api";
 
   public getUserById(id: number) {
      return this.http.get(`${this.BASE_URL}/User/get-byId/${id}`).pipe(
@@ -48,14 +48,22 @@ export class UserService extends BaseService {
 @Injectable()
 export class RoleService extends BaseService {
   constructor(private http: HttpClient) {super()}
-  private BASE_URL = "https://localhost:44353/api";
 
-  public getRoles():Observable<Array<any>>{
+  public getRoles(){
     return this.http.get(`${this.BASE_URL}/Role/get-roles`).pipe(
       map(reponse=> reponse["data"]),
       catchError(this.handleError)
     );
-  }
-
-  
+  } 
 }
+@Injectable()
+export class LanguageService extends BaseService {
+  constructor(private http: HttpClient) {super()}
+  
+  public getLanguages(){
+    return this.http.get(`${this.BASE_URL}/Language/get-all`).pipe(
+      catchError(this.handleError)
+    );
+  } 
+}
+

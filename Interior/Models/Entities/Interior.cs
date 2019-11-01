@@ -15,15 +15,15 @@ namespace Interior.Models.Entities
         public string DeepLinkingUrl { get; set; }
         [Column(TypeName = "decimal(10,2)")]
         public decimal Price { get; set; }
-        public string ImageHref { get; set; }
         public string IosBundleHref { get; set; }
         public string AndroidBundleHref { get; set; }
         public string GlbHref { get; set; }
         public bool Avaiable { get; set; }
         public bool IsVisible { get; set; }
 
-     
 
+        public int FileId { get; set; }
+        public File File { get; set; }
         public int BrandId { get; set; }
         public Brand Brand { get; set; }
         public int ShopId { get; set; }
