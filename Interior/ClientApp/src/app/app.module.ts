@@ -21,8 +21,9 @@ import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { AdminEditComponent } from './Admin/admin-edit/admin-edit.component';
 import { AdminChangePasswordComponent } from './Admin/admin-change-password/admin-change-password.component';
 import { ShowMessageComponent } from './show-message/show-message.component';
-import { LanguageEditComponent } from './Language/language-edit/language-edit.component';
 import { LanguageViewComponent } from './Language/language-view/language-view.component';
+import { LanguageEditComponent } from './Language/language-edit/language-edit.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 
@@ -38,8 +39,8 @@ import { LanguageViewComponent } from './Language/language-view/language-view.co
     AdminEditComponent,
     AdminChangePasswordComponent,
     ShowMessageComponent,
-    LanguageEditComponent,
-    LanguageViewComponent
+    LanguageViewComponent,
+    LanguageEditComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +53,8 @@ import { LanguageViewComponent } from './Language/language-view/language-view.co
     BrowserAnimationsModule,
     ButtonsModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    FontAwesomeModule
   ],
   providers: [UserDataService,LanguageDataService],
   bootstrap: [AppComponent]

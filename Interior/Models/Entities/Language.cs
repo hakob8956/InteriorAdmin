@@ -17,7 +17,7 @@ namespace Interior.Models.Entities
         public ICollection<Content> Contents { get; set; }
         public DateTime CreatedDate { get; set; }
         public int? FileId { get; set; }
-        public File File { get; set; }
+        public FileStorage File { get; set; }
         public Language()
         {
             this.CreatedDate = DateTime.UtcNow;

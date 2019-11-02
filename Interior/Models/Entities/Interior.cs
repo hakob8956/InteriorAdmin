@@ -23,7 +23,7 @@ namespace Interior.Models.Entities
 
 
         public int FileId { get; set; }
-        public File File { get; set; }
+        public FileStorage File { get; set; }
         public int BrandId { get; set; }
         public Brand Brand { get; set; }
         public int ShopId { get; set; }

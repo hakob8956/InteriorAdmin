@@ -1,3 +1,5 @@
+import { LanguageEditModel } from 'src/app/models/Language';
+import { LanguageEditComponent } from './../Language/language-edit/language-edit.component';
 import { RegisterUserModel, UpdateUserModel, ChangeUserPasswordModel } from './../models/User';
 import { map, tap, catchError } from "rxjs/operators";
 import { Injectable } from "@angular/core";
@@ -60,8 +62,12 @@ export class RoleService extends BaseService {
 export class LanguageService extends BaseService {
   constructor(private http: HttpClient) {super()}
   
-  public getLanguages(){
-    return this.http.get(`${this.BASE_URL}/Language/get-all`).pipe(
+  public addLanguages(modelCreate:LanguageEditModel){
+    const formData:FormData = new FormData();
+    formData.append('File',modelCreate.file,modelCreate.file.name);
+    formData.append('Name',modelCreate.name);
+    formData.append('Code',modelCreate.code);
+    return this.http.post(`${this.BASE_URL}/Language/create-language`,formData).pipe(
       catchError(this.handleError)
     );
   } 

@@ -48,7 +48,7 @@
 
           <div class="form-group">
             <label>Role</label><br>
-            <select formControlName="roles" class="browser-default custom-select" style="margin-bottom:15px;height: 30px;padding: 5px;width: 100px;">
+            <select formControlName="roles" class="form-control border-primary" style="margin-bottom:15px;height: 30px;padding: 5px;width: 100px;">
               <option *ngFor="let item of roles" [value]="item.name">{{item.name}}</option>     
             </select>
           </div>

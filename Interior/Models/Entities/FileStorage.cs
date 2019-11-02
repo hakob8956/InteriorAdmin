@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Interior.Models.Entities
 {
-    public class File
+    public class FileStorage
     {
         [Key]
         public int Id { get; set; }

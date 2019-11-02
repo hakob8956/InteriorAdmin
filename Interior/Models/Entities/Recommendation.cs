@@ -12,7 +12,7 @@ namespace Interior.Models.Entities
         public int Id { get; set; }
 
         public int FileId { get; set; }
-        public File File { get; set; }
+        public FileStorage File { get; set; }
         public int CategoryId { get; set; }
         public Category Category { get; set; }
         public int BrandId { get; set; }
