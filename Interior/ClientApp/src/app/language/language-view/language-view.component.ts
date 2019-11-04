@@ -4,6 +4,7 @@ import { GridDataResult, DataStateChangeEvent } from '@progress/kendo-angular-gr
 import { State, SortDescriptor } from '@progress/kendo-data-query';
 import { Observable } from 'rxjs';
 import { LanguageDataService } from '../../services/KendoCenter.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-language-view',
@@ -15,7 +16,7 @@ export class LanguageViewComponent implements OnInit {
 
   public view: Observable<GridDataResult>;
 
-  constructor(private service:LanguageDataService) { }
+  constructor(private service:LanguageDataService,private router:Router) { }
 
   ngOnInit() {
     this.view=this.service;
@@ -26,4 +27,11 @@ export class LanguageViewComponent implements OnInit {
     this.service.query(null);
     
   }
+  editButtonClick(id:any){
+    this.router.navigate(['/languageEdit',id]);
+  }
+  createButtonClick(){
+    this.router.navigate(['/languageEdit']);
+  }
+
 }

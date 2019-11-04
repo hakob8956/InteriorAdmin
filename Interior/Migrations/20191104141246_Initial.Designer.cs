@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Interior.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20191101132452_AddColumnCodeInLanguage")]
-    partial class AddColumnCodeInLanguage
+    [Migration("20191104141246_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,7 +29,7 @@ namespace Interior.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<int>("FileId");
+                    b.Property<int?>("FileId");
 
                     b.HasKey("Id");
 
@@ -46,7 +46,7 @@ namespace Interior.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<int>("FileId");
+                    b.Property<int?>("FileId");
 
                     b.HasKey("Id");
 
@@ -92,7 +92,7 @@ namespace Interior.Migrations
                     b.ToTable("Contents");
                 });
 
-            modelBuilder.Entity("Interior.Models.Entities.File", b =>
+            modelBuilder.Entity("Interior.Models.Entities.FileStorage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -127,7 +127,7 @@ namespace Interior.Migrations
 
                     b.Property<string>("DeepLinkingUrl");
 
-                    b.Property<int>("FileId");
+                    b.Property<int?>("FileId");
 
                     b.Property<string>("GlbHref");
 
@@ -164,7 +164,7 @@ namespace Interior.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<int>("FileId");
+                    b.Property<int?>("FileId");
 
                     b.Property<string>("Name")
                         .IsRequired();
@@ -188,7 +188,7 @@ namespace Interior.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<int>("FileId");
+                    b.Property<int?>("FileId");
 
                     b.Property<int?>("InteriorId");
 
@@ -234,7 +234,7 @@ namespace Interior.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<int>("FileId");
+                    b.Property<int?>("FileId");
 
                     b.HasKey("Id");
 
@@ -279,18 +279,18 @@ namespace Interior.Migrations
 
             modelBuilder.Entity("Interior.Models.Entities.Brand", b =>
                 {
-                    b.HasOne("Interior.Models.Entities.File", "File")
+                    b.HasOne("Interior.Models.Entities.FileStorage", "File")
                         .WithMany("Brands")
                         .HasForeignKey("FileId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("Interior.Models.Entities.Category", b =>
                 {
-                    b.HasOne("Interior.Models.Entities.File", "File")
+                    b.HasOne("Interior.Models.Entities.FileStorage", "File")
                         .WithMany("Categories")
                         .HasForeignKey("FileId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("Interior.Models.Entities.Content", b =>
@@ -338,10 +338,10 @@ namespace Interior.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Interior.Models.Entities.File", "File")
+                    b.HasOne("Interior.Models.Entities.FileStorage", "File")
                         .WithMany("Interiors")
                         .HasForeignKey("FileId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Interior.Models.Entities.Shop", "Shop")
                         .WithMany("Interiors")
@@ -351,10 +351,10 @@ namespace Interior.Migrations
 
             modelBuilder.Entity("Interior.Models.Entities.Language", b =>
                 {
-                    b.HasOne("Interior.Models.Entities.File", "File")
+                    b.HasOne("Interior.Models.Entities.FileStorage", "File")
                         .WithMany("Languages")
                         .HasForeignKey("FileId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("Interior.Models.Entities.Recommendation", b =>
@@ -369,10 +369,10 @@ namespace Interior.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Interior.Models.Entities.File", "File")
+                    b.HasOne("Interior.Models.Entities.FileStorage", "File")
                         .WithMany("Recommendations")
                         .HasForeignKey("FileId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Interior.Models.Entities.Interior")
                         .WithMany("Recommendations")
@@ -386,10 +386,10 @@ namespace Interior.Migrations
 
             modelBuilder.Entity("Interior.Models.Entities.Shop", b =>
                 {
-                    b.HasOne("Interior.Models.Entities.File", "File")
+                    b.HasOne("Interior.Models.Entities.FileStorage", "File")
                         .WithMany("Shops")
                         .HasForeignKey("FileId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("Interior.Models.Entities.User", b =>

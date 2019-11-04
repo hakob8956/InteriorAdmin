@@ -67,9 +67,30 @@ export class LanguageService extends BaseService {
     formData.append('File',modelCreate.file,modelCreate.file.name);
     formData.append('Name',modelCreate.name);
     formData.append('Code',modelCreate.code);
+    formData.append('FileName',modelCreate.fileName);
+    formData.append('Id',modelCreate.id.toString());
+
     return this.http.post(`${this.BASE_URL}/Language/create-language`,formData).pipe(
       catchError(this.handleError)
     );
   } 
-}
+  public editLanguages(modelCreate:LanguageEditModel){
+    console.log(modelCreate)
+    const formData:FormData = new FormData();
+    if(modelCreate.file != null)
+        formData.append('File',modelCreate.file,modelCreate.file.name);
+    formData.append('Id',modelCreate.id.toString());
+    formData.append('Name',modelCreate.name);
+    formData.append('Code',modelCreate.code);
+    formData.append('FileName',modelCreate.fileName);
 
+    return this.http.post(`${this.BASE_URL}/Language/edit-language`,formData).pipe(
+      catchError(this.handleError)
+    );
+  } 
+  public getLanguage(id:number){
+    return this.http.get(`${this.BASE_URL}/Language/get-byId/${id}`).pipe(
+      catchError(this.handleError)
+    );
+  } 
+}

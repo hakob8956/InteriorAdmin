@@ -22,7 +22,7 @@ namespace Interior.Models.Entities
         public bool IsVisible { get; set; }
 
 
-        public int FileId { get; set; }
+        public int? FileId { get; set; }
         public FileStorage File { get; set; }
         public int BrandId { get; set; }
         public Brand Brand { get; set; }

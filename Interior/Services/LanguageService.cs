@@ -49,6 +49,11 @@ namespace Interior.Services
             }
         }
 
+        public async Task<Language> GetLanguageByIdAsync(int id)
+        {
+            return await _context.Languages.Include(s => s.File).AsNoTracking().SingleOrDefaultAsync(i => i.Id == id);
+        }
+
         public async Task<(IEnumerable<Language>, int count)> GetLanguagesAsync()
         {
             var model = await _context.Languages.AsNoTracking().ToListAsync();
@@ -59,14 +64,14 @@ namespace Interior.Services
         {
             try
             {
-                var currentLanguage = await _context.Languages.SingleOrDefaultAsync(n => n.Id == language.Id);
-                if (currentLanguage == null)
-                    return ResultCode.Error;
-                _context.Languages.Update(currentLanguage);
+                //var currentLanguage = await _context.Languages.AsNoTracking().SingleOrDefaultAsync(n => n.Id == language.Id);
+                //if (currentLanguage == null)
+                //    return ResultCode.Error;
+                _context.Languages.Update(language);
                 await _context.SaveChangesAsync();
                 return ResultCode.Success;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return ResultCode.Error;
             }

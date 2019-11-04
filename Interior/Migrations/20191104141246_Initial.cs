@@ -42,7 +42,7 @@ namespace Interior.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    FileId = table.Column<int>(nullable: false),
+                    FileId = table.Column<int>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -53,7 +53,7 @@ namespace Interior.Migrations
                         column: x => x.FileId,
                         principalTable: "Files",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -62,7 +62,7 @@ namespace Interior.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    FileId = table.Column<int>(nullable: false),
+                    FileId = table.Column<int>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -73,7 +73,7 @@ namespace Interior.Migrations
                         column: x => x.FileId,
                         principalTable: "Files",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -82,9 +82,10 @@ namespace Interior.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    Code = table.Column<string>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
-                    FileId = table.Column<int>(nullable: false)
+                    FileId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -94,7 +95,7 @@ namespace Interior.Migrations
                         column: x => x.FileId,
                         principalTable: "Files",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -103,7 +104,7 @@ namespace Interior.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    FileId = table.Column<int>(nullable: false),
+                    FileId = table.Column<int>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -114,7 +115,7 @@ namespace Interior.Migrations
                         column: x => x.FileId,
                         principalTable: "Files",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -156,7 +157,7 @@ namespace Interior.Migrations
                     GlbHref = table.Column<string>(nullable: true),
                     Avaiable = table.Column<bool>(nullable: false),
                     IsVisible = table.Column<bool>(nullable: false),
-                    FileId = table.Column<int>(nullable: false),
+                    FileId = table.Column<int>(nullable: true),
                     BrandId = table.Column<int>(nullable: false),
                     ShopId = table.Column<int>(nullable: false),
                     CategoryId = table.Column<int>(nullable: false),
@@ -182,7 +183,7 @@ namespace Interior.Migrations
                         column: x => x.FileId,
                         principalTable: "Files",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Interiors_Shops_ShopId",
                         column: x => x.ShopId,
@@ -197,7 +198,7 @@ namespace Interior.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    FileId = table.Column<int>(nullable: false),
+                    FileId = table.Column<int>(nullable: true),
                     CategoryId = table.Column<int>(nullable: false),
                     BrandId = table.Column<int>(nullable: false),
                     ShopId = table.Column<int>(nullable: false),
@@ -225,7 +226,7 @@ namespace Interior.Migrations
                         column: x => x.FileId,
                         principalTable: "Files",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Recommendations_Interiors_InteriorId",
                         column: x => x.InteriorId,

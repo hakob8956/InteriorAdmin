@@ -30,32 +30,32 @@ namespace Interior.Models.EFContext
                 .HasOne<FileStorage>(s => s.File)
                 .WithMany(s => s.Brands)
                 .HasForeignKey(s => s.FileId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
             modelBuilder.Entity<Category>()
                .HasOne<FileStorage>(s => s.File)
                .WithMany(s => s.Categories)
                .HasForeignKey(s => s.FileId)
-               .OnDelete(DeleteBehavior.Restrict);
+               .OnDelete(DeleteBehavior.SetNull);
             modelBuilder.Entity<Interior.Models.Entities.Interior>()
               .HasOne<FileStorage>(s => s.File)
               .WithMany(s => s.Interiors)
               .HasForeignKey(s => s.FileId)
-              .OnDelete(DeleteBehavior.Restrict);
+              .OnDelete(DeleteBehavior.SetNull);
             modelBuilder.Entity<Language>()
               .HasOne<FileStorage>(s => s.File)
               .WithMany(s => s.Languages)
               .HasForeignKey(s => s.FileId)
-              .OnDelete(DeleteBehavior.Restrict);
+              .OnDelete(DeleteBehavior.SetNull);
             modelBuilder.Entity<Recommendation>()
               .HasOne<FileStorage>(s => s.File)
               .WithMany(s => s.Recommendations)
               .HasForeignKey(s => s.FileId)
-              .OnDelete(DeleteBehavior.Restrict);
+              .OnDelete(DeleteBehavior.SetNull);
             modelBuilder.Entity<Shop>()
               .HasOne<FileStorage>(s => s.File)
               .WithMany(s => s.Shops)
               .HasForeignKey(s => s.FileId)
-              .OnDelete(DeleteBehavior.Restrict);
+              .OnDelete(DeleteBehavior.SetNull);
 
 
             modelBuilder.Entity<User>()

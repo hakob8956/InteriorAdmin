@@ -16,7 +16,9 @@ const routes: Routes = [
   { path: "adminEdit/:id", component: AdminEditComponent },
   { path: "adminChangePassword/:id", component: AdminChangePasswordComponent },
   { path: "languageView", component: LanguageViewComponent },
-  { path: "languageEdit", component: LanguageEditComponent }
+  { path: "languageEdit", component: LanguageEditComponent },
+  { path: "languageEdit/:id", component: LanguageEditComponent }
+
 
 ];
 
