@@ -102,7 +102,7 @@ namespace Interior.Controllers
                                 Directory.CreateDirectory("/Files");
                             var fileName = DateTime.Now.Ticks + Path.GetExtension(model.File.FileName);
                             string filePath = Path.Combine(_appEnvironment.WebRootPath, "Files", fileName);
-                            if (/*model.File.Length <= _fileSize*/true)
+                            if (model.File.Length <= _fileSize)
                             {
                                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                                 {
@@ -110,8 +110,8 @@ namespace Interior.Controllers
                                 }
                                 FileStorage file = new FileStorage { Name = model.FileName, Path = filePath };
                                 var currentFile = await _fileService.AddFileAsync(file);
-                                //if (currentLanguage.File != null)//delete old file
-                                //    await _fileService.DeleteFileAsync(currentLanguage.File.Id);
+                                if (currentLanguage.File != null)//delete old file
+                                    await _fileService.DeleteFileAsync(currentLanguage.File.Id);
 
                                 if (currentFile != null)
                                 {

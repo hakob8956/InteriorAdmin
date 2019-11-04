@@ -11,7 +11,8 @@
           (dataStateChange)="dataStateChange($event)"
         >
         <!-- <app-show-message [statusAlert]="1" [message]="Hello"></app-show-message> -->
-        <kendo-grid-column field="UserInfo" width="130">
+        
+        <kendo-grid-column field="UserInfo" width="130" [sortable]="false">
             <ng-template kendoGridCellTemplate let-dataItem>
               <div style="display: flex">
                 <!-- <img src="{{ 'assets/images/faces/face1.jpg' }}" 
@@ -35,7 +36,7 @@
                 </div>
              </ng-template>
       </kendo-grid-column>
-      <kendo-grid-column field="Actions" title="Actions" width="120">
+      <kendo-grid-column field="Actions" title="Actions" width="120" [sortable]="false">
         <ng-template kendoGridCellTemplate let-dataItem>
           <button (click)="createButtonClick()">Add</button>
           <button (click)="editButtonClick(dataItem.id)">Edit</button>

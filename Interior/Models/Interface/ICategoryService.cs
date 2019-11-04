@@ -12,6 +12,6 @@ namespace Interior.Models.Interface
         Task<ResultCode> AddCategoryAsync(Category category);
         Task<ResultCode> DeleteCategoryAsync(Category category);
         Task<ResultCode> UpdateCategoryAsync(Category category);
-        Task<IEnumerable<Category>> GetAllCategoriesAsync();
+        Task<(IEnumerable<Category>, int count)> GetAllCategoriesAsync();
     }
 }

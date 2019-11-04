@@ -10,6 +10,7 @@ namespace Interior.Models.Entities
     {
         [Key]
         public int Id { get; set; }
+        public string Name { get; set; }
         public int? FileId { get; set; }
         public FileStorage File { get; set; }
         public ICollection<Content> Contents { get; set; }

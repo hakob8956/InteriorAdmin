@@ -50,9 +50,10 @@ namespace Interior.Services
             }
         }
 
-        public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
+        public async Task<(IEnumerable<Category>, int count)> GetAllCategoriesAsync()
         {
-            return await _context.Categories.ToListAsync();
+            var model = await _context.Categories.AsNoTracking().ToListAsync();
+            return (model, model.Count);
         }
 
         public async Task<ResultCode> UpdateCategoryAsync(Category category)

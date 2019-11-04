@@ -33,6 +33,9 @@ namespace Interior.Mapping
                 conf.CreateMap<LanguageShowViewModel, Language>();
                 conf.CreateMap<LanguageShowViewModel, Language>().ReverseMap();
 
+                conf.CreateMap<CategoryShowViewModel, Category>();
+                conf.CreateMap<CategoryShowViewModel, Category>().ReverseMap();
+
             });
 
             return mapperConfig.CreateMapper();

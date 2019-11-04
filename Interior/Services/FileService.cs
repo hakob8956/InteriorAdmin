@@ -50,6 +50,7 @@ namespace Interior.Services
                     return ResultCode.Error;
                 _context.Files.Remove(currentFile);
                 await _context.SaveChangesAsync();
+                File.Delete(currentFile.Path);//Delete File
                 return ResultCode.Success;
             }
             catch (Exception)

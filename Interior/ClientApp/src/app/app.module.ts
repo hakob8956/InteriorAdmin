@@ -16,7 +16,6 @@ import { FooterComponent } from './footer/footer.component';
 import { GridModule } from '@progress/kendo-angular-grid';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
-import { InfoDetailComponent } from './info-detail/info-detail.component';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { AdminEditComponent } from './Admin/admin-edit/admin-edit.component';
 import { AdminChangePasswordComponent } from './Admin/admin-change-password/admin-change-password.component';
@@ -24,6 +23,8 @@ import { ShowMessageComponent } from './show-message/show-message.component';
 import { LanguageViewComponent } from './Language/language-view/language-view.component';
 import { LanguageEditComponent } from './Language/language-edit/language-edit.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { CategoryViewComponent } from './Category/category-view/category-view.component';
+import { CategoryEditComponent } from './Category/category-edit/category-edit.component';
 
 
 
@@ -35,12 +36,13 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     DashboardComponent,
     AdminViewComponent,
     FooterComponent,
-    InfoDetailComponent,
     AdminEditComponent,
     AdminChangePasswordComponent,
     ShowMessageComponent,
     LanguageViewComponent,
-    LanguageEditComponent
+    LanguageEditComponent,
+    CategoryViewComponent,
+    CategoryEditComponent
   ],
   imports: [
     BrowserModule,

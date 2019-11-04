@@ -1,6 +1,7 @@
 <kendo-grid 
 [data]="view | async"
-[loading]="view.loading">
+[loading]="view.loading"
+[scrollable]="'none'">
   <!-- <app-show-message [statusAlert]="1" [message]="Hello"></app-show-message> -->
   <kendo-grid-column field="Id">
     <ng-template kendoGridCellTemplate let-dataItem>

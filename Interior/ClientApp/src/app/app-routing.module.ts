@@ -1,3 +1,4 @@
+import { CategoryViewComponent } from './Category/category-view/category-view.component';
 import { LanguageEditComponent } from './Language/language-edit/language-edit.component';
 import { AdminChangePasswordComponent } from "./Admin/admin-change-password/admin-change-password.component";
 import { AdminEditComponent } from "./Admin/admin-edit/admin-edit.component";
@@ -17,8 +18,8 @@ const routes: Routes = [
   { path: "adminChangePassword/:id", component: AdminChangePasswordComponent },
   { path: "languageView", component: LanguageViewComponent },
   { path: "languageEdit", component: LanguageEditComponent },
-  { path: "languageEdit/:id", component: LanguageEditComponent }
-
+  { path: "languageEdit/:id", component: LanguageEditComponent },
+  { path: "categoryView", component: CategoryViewComponent }
 
 ];
 
