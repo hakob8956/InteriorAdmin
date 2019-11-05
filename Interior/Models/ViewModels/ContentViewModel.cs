@@ -1,14 +1,14 @@
-﻿using Interior.Models.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Interior.Models.ViewModels
 {
-    public class CategoryShowViewModel
+    public class ContentViewModel
     {
         public int Id { get; set; }
-        public ICollection<Content> Contents { get; set; }
+        public int LanguageId { get; set; }
+        public string Text { get; set; }
     }
 }

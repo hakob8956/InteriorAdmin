@@ -18,18 +18,18 @@ namespace Interior.Services
             _context = context;
         }
 
-        public async Task<ResultCode> AddCategoryAsync(Category category)
+        public async Task<Category> AddCategoryAsync(Category category)
         {
             try
             {
                 category.Id = 0;
                 _context.Categories.Add(category);
                 await _context.SaveChangesAsync();
-                return ResultCode.Success;
+                return category;
             }
             catch (Exception)
             {
-                return ResultCode.Error;
+                return null;
             }
         }
 
@@ -52,8 +52,23 @@ namespace Interior.Services
 
         public async Task<(IEnumerable<Category>, int count)> GetAllCategoriesAsync()
         {
-            var model = await _context.Categories.AsNoTracking().ToListAsync();
-            return (model, model.Count);
+            try
+            {
+                var model = await _context.Categories.Include(s=>s.Contents).AsNoTracking().ToListAsync();
+                return (model, model.Count);
+
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+            
+        }
+
+        public async Task<Category> GetCategoryById(int id)
+        {
+            return await _context.Categories.Include(s => s.Contents).Include(s=>s.File).AsNoTracking().SingleOrDefaultAsync(i=>id==i.Id);
         }
 
         public async Task<ResultCode> UpdateCategoryAsync(Category category)

@@ -1,3 +1,4 @@
+import { CategoryEditComponent } from './Category/category-edit/category-edit.component';
 import { CategoryViewComponent } from './Category/category-view/category-view.component';
 import { LanguageEditComponent } from './Language/language-edit/language-edit.component';
 import { AdminChangePasswordComponent } from "./Admin/admin-change-password/admin-change-password.component";
@@ -19,8 +20,9 @@ const routes: Routes = [
   { path: "languageView", component: LanguageViewComponent },
   { path: "languageEdit", component: LanguageEditComponent },
   { path: "languageEdit/:id", component: LanguageEditComponent },
-  { path: "categoryView", component: CategoryViewComponent }
-
+  { path: "categoryView", component: CategoryViewComponent },
+  { path: "categoryEdit", component: CategoryEditComponent },
+  { path: "categoryEdit/:id", component: CategoryEditComponent},
 ];
 
 @NgModule({

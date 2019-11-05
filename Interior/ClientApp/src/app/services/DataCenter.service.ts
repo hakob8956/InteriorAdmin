@@ -92,5 +92,22 @@ export class LanguageService extends BaseService {
     return this.http.get(`${this.BASE_URL}/Language/get-byId/${id}`).pipe(
       catchError(this.handleError)
     );
-  } 
+    
+  }
+  public getAllLanguages(){
+    return this.http.get(`${this.BASE_URL}/Language/get-all`).pipe(
+      map(response=>response["data"].data),
+      catchError(this.handleError)
+    ); 
+}
+}
+
+@Injectable()
+export class CategoryService extends BaseService {
+  constructor(private http: HttpClient) {super()}
+  public getCategory(id:number){
+    return this.http.get(`${this.BASE_URL}/Category/get-byId/${id}`).pipe(
+      catchError(this.handleError)
+    );
+  }
 }

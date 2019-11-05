@@ -1,4 +1,4 @@
-import { UserDataService, LanguageDataService } from './services/KendoCenter.service';
+import { UserDataService, LanguageDataService, CategoryDataService } from './services/KendoCenter.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -58,7 +58,7 @@ import { CategoryEditComponent } from './Category/category-edit/category-edit.co
     FormsModule,
     FontAwesomeModule
   ],
-  providers: [UserDataService,LanguageDataService],
+  providers: [UserDataService,LanguageDataService,CategoryDataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

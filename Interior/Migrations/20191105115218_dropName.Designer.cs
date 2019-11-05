@@ -4,14 +4,16 @@ using Interior.Models.EFContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Interior.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20191105115218_dropName")]
+    partial class dropName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,7 +46,8 @@ namespace Interior.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<int?>("FileId");
+                    b.Property<int?>("FileId")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -59,17 +62,17 @@ namespace Interior.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("BrandId");
+                    b.Property<int>("BrandId");
 
-                    b.Property<int?>("CategoryId");
+                    b.Property<int>("CategoryId");
 
-                    b.Property<int?>("InteriorId");
+                    b.Property<int>("InteriorId");
 
                     b.Property<int>("LanguageId");
 
-                    b.Property<int?>("RecommendationId");
+                    b.Property<int>("RecommendationId");
 
-                    b.Property<int?>("ShopId");
+                    b.Property<int>("ShopId");
 
                     b.Property<string>("Text");
 

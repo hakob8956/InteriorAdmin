@@ -1,3 +1,29 @@
-<p>
-  category-view works!
-</p>
+<kendo-grid
+  [data]="view | async"
+  [loading]="view.loading"
+  [scrollable]="'none'"
+>
+  <!-- <app-show-message [statusAlert]="1" [message]="Hello"></app-show-message> -->
+  <kendo-grid-column field="Id">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <div style="display: flex">
+        <p>{{ dataItem.id }}</p>
+      </div>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="Name">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <div style="display: flex">
+        <p>{{ dataItem.contents[0].text }}</p>
+      </div>
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column field="Actions" title="Actions" width="120">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <button (click)="createButtonClick(dataItem.id)">Add</button>
+      <button (click)="editButtonClick(dataItem.id)">Edit</button>
+      <button (click)="deleteButtonClick(dataItem.id)">Delete</button>
+    </ng-template>
+  </kendo-grid-column>
+</kendo-grid>

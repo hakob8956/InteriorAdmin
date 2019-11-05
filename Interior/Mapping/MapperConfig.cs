@@ -36,6 +36,8 @@ namespace Interior.Mapping
                 conf.CreateMap<CategoryShowViewModel, Category>();
                 conf.CreateMap<CategoryShowViewModel, Category>().ReverseMap();
 
+                conf.CreateMap<ContentViewModel, Content>();
+                conf.CreateMap<ContentViewModel, Content>().ReverseMap();
             });
 
             return mapperConfig.CreateMapper();
