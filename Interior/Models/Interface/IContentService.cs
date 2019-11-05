@@ -13,6 +13,5 @@ namespace Interior.Models.Interface
 
 
 
-
     }
 }

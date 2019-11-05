@@ -14,26 +14,27 @@
             <option 
             *ngFor="let item of languageModel" 
             [value]="item.id"  
-            [selected]="item.id == currentLanguageId">
+            >
               {{ item.name }}
             </option>
           </select>
-          <div
-            *ngFor="let item of categoryModel.contents"
-            style="display: inline-block;width:70%"
-          >
-            <input
+
+          <ng-container *ngFor="let item of languageModel">
+              <input
               type="text"
               class="form-control"
-              style="width: 100%;"
-              [value]="item.text"
-              [placeholder]=""
+              style="width: 70%;"
+              [value]="getTextFromCategory(item.id)"
+              placeholder="Text for {{item.name}}"
+              [name]="item.id"
               [ngStyle]="{
                 display:
-                  item.languageId == currentLanguageId ? 'inline-block' : 'none'
+                  item.id == currentLanguageId ? 'inline-block' : 'none'
               }"
+              (change)=(inputTextChange($event.target))
             />
-          </div>
+          </ng-container>
+          
         </div>
         <div class="custom-file form-group">
           <input

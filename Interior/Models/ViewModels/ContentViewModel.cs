@@ -11,4 +11,11 @@ namespace Interior.Models.ViewModels
         public int LanguageId { get; set; }
         public string Text { get; set; }
     }
+    public class ContentShowViewModel
+    {
+        public int Id { get; set; }
+        public int LanguageId { get; set; }
+        public string LanguageName { get; set; }
+        public string Text { get; set; }
+    }
 }
