@@ -21,9 +21,9 @@ namespace Interior.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
-        private IFileService _fileService;
-        IHostingEnvironment _appEnvironment;
-        private long _fileSize;
+        private readonly IFileService _fileService;
+        private readonly IHostingEnvironment _appEnvironment;
+        private readonly long _fileSize;
         private readonly IMapper _mapper;
         private readonly IContentService _contentService;
         public CategoryController(ICategoryService categoryService, IMapper mapper, IFileService fileService, IHostingEnvironment appEnvironment, IOptions<AppSettings> settings, IContentService contentService)

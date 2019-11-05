@@ -17,7 +17,7 @@ namespace Interior.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private IUserService _userService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly IRoleService _roleService;
         public UserController(IUserService userService, IMapper mapper, IRoleService roleService)

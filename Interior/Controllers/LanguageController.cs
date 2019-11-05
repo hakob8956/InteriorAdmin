@@ -21,12 +21,12 @@ namespace Interior.Controllers
     [ApiController]
     public class LanguageController : ControllerBase
     {
-        private ILanguageService _languageService;
-        private IFileService _fileService;
-        IHostingEnvironment _appEnvironment;
-        private long _fileSize;
+        private readonly ILanguageService _languageService;
+        private readonly IFileService _fileService;
+        private readonly IHostingEnvironment _appEnvironment;
+        private readonly long _fileSize;
 
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
         public LanguageController(ILanguageService languageService, IMapper mapper, IFileService fileService, IHostingEnvironment appEnvironment, IOptions<AppSettings> settings)
         {
             _languageService = languageService;
@@ -163,7 +163,7 @@ namespace Interior.Controllers
                             Directory.CreateDirectory("/Files");
                         var fileName = DateTime.Now.Ticks + Path.GetExtension(model.File.FileName);
                         string filePath = Path.Combine(_appEnvironment.WebRootPath, "Files", fileName);
-                        if (/*model.File.Length <= _fileSize*/true)
+                        if (model.File.Length <= _fileSize)
                         {
                             using (var fileStream = new FileStream(filePath, FileMode.Create))
                             {
