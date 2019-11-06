@@ -1,3 +1,4 @@
+import { CategoryEditModel } from './../models/Category';
 import { LanguageEditModel } from 'src/app/models/Language';
 import { LanguageEditComponent } from './../Language/language-edit/language-edit.component';
 import { RegisterUserModel, UpdateUserModel, ChangeUserPasswordModel } from './../models/User';
@@ -6,6 +7,7 @@ import { Injectable } from "@angular/core";
 import { throwError, Observable, BehaviorSubject } from "rxjs";
 import { HttpErrorResponse, HttpClient } from "@angular/common/http";
 import { State, toODataString } from "@progress/kendo-data-query";
+import { ShopEditModel } from '../models/Shop';
 
 export abstract class BaseService{
   constructor(){}
@@ -107,6 +109,63 @@ export class CategoryService extends BaseService {
   constructor(private http: HttpClient) {super()}
   public getCategory(id:number){
     return this.http.get(`${this.BASE_URL}/Category/get-byId/${id}`).pipe(
+      catchError(this.handleError)
+    );
+  }
+  public createCategory(model:CategoryEditModel){
+    console.log(model)
+    const formData:FormData = new FormData();
+    if(model.file != null)
+        formData.append('File',model.file,model.file.name);
+    formData.append('Contents',JSON.stringify(model.contents));
+    formData.append('FileName',model.fileName);
+    formData.append('Id',model.id.toString());
+    return this.http.post(`${this.BASE_URL}/Category/create-category`,formData).pipe(
+      catchError(this.handleError)
+    );
+  }
+  public editCategory(model:CategoryEditModel){
+    console.log(model)
+    const formData:FormData = new FormData();
+    if(model.file != null)
+        formData.append('File',model.file,model.file.name);
+    formData.append('Contents',JSON.stringify(model.contents));
+    formData.append('FileName',model.fileName);
+    formData.append('Id',model.id.toString());
+    return this.http.post(`${this.BASE_URL}/Category/edit-category`,formData).pipe(
+      catchError(this.handleError)
+    );
+  }
+}
+Injectable()
+export class ShopService extends BaseService {
+  constructor(private http: HttpClient) {super()}
+  public getShopbyId(id:number){
+    return this.http.get(`${this.BASE_URL}/Shop/get-byId/${id}`).pipe(
+      catchError(this.handleError)
+    );
+  }
+  public createShop(model:ShopEditModel){
+    console.log(model)
+    const formData:FormData = new FormData();
+    if(model.file != null)
+        formData.append('File',model.file,model.file.name);
+    formData.append('Contents',JSON.stringify(model.contents));
+    formData.append('FileName',model.fileName);
+    formData.append('Id',model.id.toString());
+    return this.http.post(`${this.BASE_URL}/Shop/create-shop`,formData).pipe(
+      catchError(this.handleError)
+    );
+  }
+  public editShop(model:ShopEditModel){
+    console.log(model)
+    const formData:FormData = new FormData();
+    if(model.file != null)
+        formData.append('File',model.file,model.file.name);
+    formData.append('Contents',JSON.stringify(model.contents));
+    formData.append('FileName',model.fileName);
+    formData.append('Id',model.id.toString());
+    return this.http.post(`${this.BASE_URL}/Shop/edit-shop`,formData).pipe(
       catchError(this.handleError)
     );
   }

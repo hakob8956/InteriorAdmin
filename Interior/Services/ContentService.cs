@@ -32,5 +32,18 @@ namespace Interior.Services
                 return ResultCode.Error;
             }
         }
+        public async Task<ResultCode> EditTextToContentAsync(Content content)
+        {
+            try
+            {
+                _context.Contents.Update(content);
+                await _context.SaveChangesAsync();
+                return ResultCode.Success;
+            }
+            catch (Exception)
+            {
+                return ResultCode.Error;
+            }
+        }
     }
 }

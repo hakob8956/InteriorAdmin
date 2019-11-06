@@ -19,17 +19,17 @@ namespace Interior.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class ShopController : ControllerBase
     {
-        private readonly ICategoryService _categoryService;
+        private readonly IShopService _shopService;
         private readonly IFileService _fileService;
         private readonly IHostingEnvironment _appEnvironment;
         private readonly long _fileSize;
         private readonly IMapper _mapper;
         private readonly IContentService _contentService;
-        public CategoryController(ICategoryService categoryService, IMapper mapper, IFileService fileService, IHostingEnvironment appEnvironment, IOptions<AppSettings> settings, IContentService contentService)
+        public ShopController(IShopService shopService, IMapper mapper, IFileService fileService, IHostingEnvironment appEnvironment, IOptions<AppSettings> settings, IContentService contentService)
         {
-            _categoryService = categoryService;
+            _shopService = shopService;
             _mapper = mapper;
             _fileService = fileService;
             _appEnvironment = appEnvironment;
@@ -38,12 +38,12 @@ namespace Interior.Controllers
         }
 
         [HttpGet("get-all")]
-        public async Task<IActionResult> GetCategories()
+        public async Task<IActionResult> GetShops()
         {
             try
             {
-                var (data, count) = await _categoryService.GetAllCategoriesAsync();
-                var newData = _mapper.Map<IEnumerable<Category>, IEnumerable<CategoryShowViewModel>>(data);
+                var (data, count) = await _shopService.GetAllShopsAsync();
+                var newData = _mapper.Map<IEnumerable<Shop>, IEnumerable<ShopShowViewModel>>(data);
                 var result = new
                 {
                     data = newData,
@@ -57,17 +57,17 @@ namespace Interior.Controllers
             }
         }
         [HttpGet("get-byId/{id}")]
-        public async Task<IActionResult> GetCategory(int id)
+        public async Task<IActionResult> GetShop(int id)
         {
             try
             {
-                var model = await _categoryService.GetCategoryById(id);
+                var model = await _shopService.GetShopById(id);
                 List<ContentViewModel> modelContents = new List<ContentViewModel>();
                 foreach (var item in model.Contents)
                 {
                     modelContents.Add(new ContentViewModel { Text = item.Text, LanguageId = item.LanguageId, Id = item.Id });
                 }
-                var result = new CreateCategoryViewModel { Id = model.Id, Contents = modelContents, FileName = model.File?.Name };
+                var result = new CreateShopViewModel { Id = model.Id, Contents = modelContents, FileName = model.File?.Name };
                 return Ok(ResponseSuccess.Create(result));
             }
             catch (Exception)
@@ -75,8 +75,8 @@ namespace Interior.Controllers
                 return BadRequest(ResponseError.Create("Error"));
             }
         }
-        [HttpPost("create-category")]
-        public async Task<IActionResult> CreateCategory([FromForm]CreateTakeCategoryViewModel model)
+        [HttpPost("create-shop")]
+        public async Task<IActionResult> CreateShop([FromForm]CreateTakeShopViewModel model)
         {
             try
             {
@@ -108,15 +108,15 @@ namespace Interior.Controllers
                             return BadRequest(ResponseError.Create($"File big then {_fileSize} bytes "));
                         }
                     }
-                    Category category = new Category { Id = 0, FileId = fileID };
-                    var currentCategory = await _categoryService.AddCategoryAsync(category);
-                    if (currentCategory != null)
+                    Shop shop = new Shop { Id = 0, FileId = fileID };
+                    var currentShop = await _shopService.AddShopAsync(shop);
+                    if (currentShop == ResultCode.Success)
                     {
                         IEnumerable<ContentViewModel> contentModel = JsonConvert.DeserializeObject<IEnumerable<ContentViewModel>>(model.Contents);
                         var currentContents = _mapper.Map<IEnumerable<ContentViewModel>, IEnumerable<Content>>(contentModel);
                         foreach (var content in currentContents)
                         {
-                            content.CategoryId = currentCategory.Id;
+                            content.ShopId = shop.Id;
                             if (content.Id > 0)
                                 await _contentService.EditTextToContentAsync(content);
                             else
@@ -128,7 +128,7 @@ namespace Interior.Controllers
                     }
 
 
-                    return BadRequest(ResponseError.Create("Can't create category"));
+                    return BadRequest(ResponseError.Create("Can't create shop"));
 
                 }
                 return BadRequest(ResponseError.Create("Invalid form"));
@@ -140,16 +140,16 @@ namespace Interior.Controllers
                 return BadRequest(ResponseError.Create("Unknown error"));
             }
         }
-        [HttpPost("edit-category")]
-        public async Task<IActionResult> EditCategory([FromForm]CreateTakeCategoryViewModel model)
+        [HttpPost("edit-shop")]
+        public async Task<IActionResult> EditShop([FromForm]CreateTakeShopViewModel model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var oldCategory = await _categoryService.GetCategoryById(model.Id);
-                    if (oldCategory == null)
-                        return BadRequest(ResponseError.Create("not found category"));
+                    var oldShop = await _shopService.GetShopById(model.Id);
+                    if (oldShop == null)
+                        return BadRequest(ResponseError.Create("not found shop"));
                     int? fileID = null;
                     if (model.File != null)
                     {
@@ -175,15 +175,15 @@ namespace Interior.Controllers
                             return BadRequest(ResponseError.Create($"File big then {_fileSize} bytes "));
                         }
                     }
-                    Category category = new Category { Id = model.Id, FileId = fileID };
-                    var currentCategory = await _categoryService.UpdateCategoryAsync(category);
-                    if (currentCategory == ResultCode.Success)
+                    Shop shop = new Shop { Id = model.Id, FileId = fileID };
+                    var currentShop = await _shopService.UpdateShopAsync(shop);
+                    if (currentShop == ResultCode.Success)
                     {
                         IEnumerable<ContentViewModel> contentModel = JsonConvert.DeserializeObject<IEnumerable<ContentViewModel>>(model.Contents);
                         var currentContents = _mapper.Map<IEnumerable<ContentViewModel>, IEnumerable<Content>>(contentModel);
                         foreach (var content in currentContents)
                         {
-                            content.CategoryId = model.Id;
+                            content.ShopId = model.Id;
                             if (content.Id > 0)
                                 await _contentService.EditTextToContentAsync(content);
                             else
@@ -194,7 +194,7 @@ namespace Interior.Controllers
                     }
 
 
-                    return BadRequest(ResponseError.Create("Can't create category"));
+                    return BadRequest(ResponseError.Create("Can't create shop"));
 
                 }
                 return BadRequest(ResponseError.Create("Invalid form"));
@@ -206,6 +206,5 @@ namespace Interior.Controllers
                 return BadRequest(ResponseError.Create("Unknown error"));
             }
         }
-
     }
 }

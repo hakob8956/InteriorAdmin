@@ -75,10 +75,10 @@ namespace Interior.Services
         {
             try
             {
-                var currentCategory = await _context.Categories.SingleOrDefaultAsync(n => n.Id == category.Id);
+                var currentCategory = await _context.Categories.AsNoTracking().SingleOrDefaultAsync(n => n.Id == category.Id);
                 if (currentCategory == null)
                     return ResultCode.Error;
-                _context.Categories.Update(currentCategory);
+                _context.Categories.Update(category);
                 await _context.SaveChangesAsync();
                 return ResultCode.Success;
             }

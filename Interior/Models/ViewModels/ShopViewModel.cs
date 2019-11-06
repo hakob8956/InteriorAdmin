@@ -7,14 +7,19 @@ using System.Threading.Tasks;
 
 namespace Interior.Models.ViewModels
 {
-    public class CreateCategoryViewModel
+    public class ShopShowViewModel
     {
         public int Id { get; set; }
-        public string  FileName { get; set; }
+        public ICollection<Content> Contents { get; set; }
+    }
+    public class CreateShopViewModel
+    {
+        public int Id { get; set; }
+        public string FileName { get; set; }
         public ICollection<ContentViewModel> Contents { get; set; }
         public IFormFile File { get; set; }
     }
-    public class CreateTakeCategoryViewModel
+    public class CreateTakeShopViewModel
     {
         public int Id { get; set; }
         public string FileName { get; set; }

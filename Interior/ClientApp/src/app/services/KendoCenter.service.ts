@@ -116,5 +116,16 @@ export class CategoryDataService extends KendoCenterService{
         return this.fetch(this.tableName, state);
     }
 }
+@Injectable()
+export class ShopDataService extends KendoCenterService{
+    constructor(http:HttpClient){super(http,'Shop');}
+    queryAll(st?: any): Observable<GridDataResult> {
+        const state = Object.assign({}, st);
+        delete state.skip;
+        delete state.take;
+        delete state.sort;
+        return this.fetch(this.tableName, state);
+    }
+}
 
 

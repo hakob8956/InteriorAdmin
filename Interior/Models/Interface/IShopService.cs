@@ -12,6 +12,7 @@ namespace Interior.Models.Interface
         Task<ResultCode> AddShopAsync(Shop shop);
         Task<ResultCode> DeleteShopAsync(Shop shop);
         Task<ResultCode> UpdateShopAsync(Shop shop);
-        Task<IEnumerable<Shop>> GetAllShopsAsync();
+        Task<(IEnumerable<Shop>, int count)> GetAllShopsAsync();
+        Task<Shop> GetShopById(int id);
     }
 }

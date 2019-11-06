@@ -1,6 +1,6 @@
 import { Content } from './Content';
 
-export class CategoryEditModel {
+export class ShopEditModel {
     id:       number;
     fileName: string;
     contents: Content[];

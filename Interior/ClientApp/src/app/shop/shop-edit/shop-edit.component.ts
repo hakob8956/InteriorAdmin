@@ -1,36 +1,35 @@
-import { Content } from './../../models/Content';
-import {
-  LanguageService,
-  CategoryService
-} from "./../../services/DataCenter.service";
-import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
-import { LanguageGetModel } from "src/app/models/Language";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { Router, ActivatedRoute } from "@angular/router";
-import { CategoryEditModel } from "src/app/models/Category";
+import {  LanguageService,ShopService} from './../../services/DataCenter.service';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { Form, FormGroup, FormControl, Validators } from '@angular/forms';
+import { ShopEditModel } from 'src/app/models/Shop';
+import { LanguageGetModel } from 'src/app/models/Language';
+import { Content } from '@angular/compiler/src/render3/r3_ast';
 
 @Component({
-  selector: "app-category-edit",
-  templateUrl: "./category-edit.component.html",
-  styleUrls: ["./category-edit.component.scss"],
-  providers: [LanguageService, CategoryService]
+  selector: 'app-shop-edit',
+  templateUrl: './shop-edit.component.html',
+  styleUrls: ['./shop-edit.component.scss'],
+  providers:[ShopService,LanguageService]
 })
-export class CategoryEditComponent implements OnInit {
+export class ShopEditComponent implements OnInit {
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private languageService: LanguageService,
-    private categoryServce: CategoryService
+    private shopService:ShopService
   ) {}
+
   @ViewChild("labelImport")
   labelImport: ElementRef;
   faSearch = faSearch;
-  form: FormGroup;
   fileToUpload: File = null;
-  categoryId: number;
+  shopId: number;
+  form:FormGroup;
   languageModel: LanguageGetModel;
-  categoryModel: CategoryEditModel = new CategoryEditModel();
+  shopModel: ShopEditModel = new ShopEditModel();
   contentsModel: Content[] = [];
   currentLanguageId: number;
   ngOnInit() {
@@ -44,15 +43,15 @@ export class CategoryEditComponent implements OnInit {
       this.currentLanguageId = this.languageModel[0].id;
       console.log(this.currentLanguageId);
     });
-    this.categoryId = +this.route.snapshot.params["id"];
-    if (!Number.isNaN(this.categoryId) && this.categoryId > 0) {
-      this.categoryServce.getCategory(this.categoryId).subscribe(response => {
-        this.categoryModel = response["data"];
-        console.log(this.categoryModel);
+    this.shopId = +this.route.snapshot.params["id"];
+    if (!Number.isNaN(this.shopId) && this.shopId > 0) {
+      this.shopService.getShopbyId(this.shopId).subscribe(response => {
+        this.shopModel = response["data"];
+        console.log(this.shopModel);
         this.initForm();
       });
     } else {
-      this.categoryId = 0;
+      this.shopId = 0;
     }
   }
   initForm() {
@@ -63,34 +62,34 @@ export class CategoryEditComponent implements OnInit {
     //     this.languageModel[0].name != null ? this.languageModel[0].name : ""
     //   );
     this.labelImport.nativeElement.innerText =
-      this.categoryModel.fileName != null
-        ? this.categoryModel.fileName
+      this.shopModel.fileName != null
+        ? this.shopModel.fileName
         : "Choose file";
   }
   inputTextChange(element: any) {
     let ispush: boolean = true;
-    this.categoryModel.contents.forEach(el => {
+    this.shopModel.contents.forEach(el => {
       if (el.languageId == +element.name) {
         el.text = element.value;
         ispush = false;
       }
     });
     if (ispush) {
-      this.categoryModel.contents.push({
+      this.shopModel.contents.push({
         id: 0,
         languageId: +element.name,
         text: element.value
       });
     }
-    console.log(this.categoryModel);
+    console.log(this.shopModel);
   }
-  getTextFromCategory(languageId: number): string {
+  getTextFromShop(languageId: number): string {
     let output: string = "";
-    if (this.categoryId == 0) {
+    if (this.shopId == 0) {
       return output;
     }
     try {
-      this.categoryModel.contents.forEach(element => {
+      this.shopModel.contents.forEach(element => {
         if (element != null && languageId == element.languageId) {
           output = element.text;
         }
@@ -112,25 +111,26 @@ export class CategoryEditComponent implements OnInit {
     console.log(this.currentLanguageId);
   }
   cancelButton() {
-    this.router.navigate(["/categoryView"]);
+    this.router.navigate(["/shopView"]);
   }
   submitForm() {
-    this.categoryModel.file = this.fileToUpload;
-    this.categoryModel.fileName = this.labelImport.nativeElement.innerText;
-    // console.log(this.categoryModel);
-    if (this.categoryId == 0) {
-      this.categoryModel.id = 0;
-      this.categoryServce
-        .createCategory(this.categoryModel)
+    this.shopModel.file = this.fileToUpload;
+    this.shopModel.fileName = this.labelImport.nativeElement.innerText;
+    // console.log(this.shopModel);
+    if (this.shopId == 0) {
+      this.shopModel.id = 0;
+      this.shopService
+        .createShop(this.shopModel)
         .subscribe(response => this.checkValidRequest(response["success"]));
     } else {
-      this.categoryServce
-        .editCategory(this.categoryModel)
+      this.shopService
+        .editShop(this.shopModel)
         .subscribe(response => this.checkValidRequest(response["success"]));
     }
   }
   private checkValidRequest(success: Boolean) {
-    if (success) this.router.navigate(["/categoryView"]);
+    if (success) this.router.navigate(["/shopView"]);
     else alert("Error");
   }
 }
+
