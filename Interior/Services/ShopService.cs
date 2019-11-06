@@ -76,7 +76,7 @@ namespace Interior.Services
         {
             try
             {
-                var currentShop = await _context.Shops.SingleOrDefaultAsync(n => n.Id == shop.Id);
+                var currentShop = await _context.Shops.AsNoTracking().SingleOrDefaultAsync(n => n.Id == shop.Id);
                 if (currentShop == null)
                     return ResultCode.Error;
                 _context.Shops.Update(shop);
