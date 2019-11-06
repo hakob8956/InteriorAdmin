@@ -66,10 +66,10 @@ namespace Interior.Services
         {
             try
             {
-                var currentRole = await _context.Roles.SingleOrDefaultAsync(n => n.Id == role.Id);
+                var currentRole = await _context.Roles.AsNoTracking().SingleOrDefaultAsync(n => n.Id == role.Id);
                 if (currentRole == null)
                     return ResultCode.Error;
-                _context.Roles.Update(currentRole);
+                _context.Roles.Update(role);
                 await _context.SaveChangesAsync();
                 return ResultCode.Success;
             }

@@ -68,38 +68,37 @@ export class CategoryEditComponent implements OnInit {
         : "Choose file";
   }
   inputTextChange(element: any) {
+    if(this.categoryModel.contents != null)
+        this.contentsModel = this.categoryModel.contents;
     let ispush: boolean = true;
-    this.categoryModel.contents.forEach(el => {
+    this.contentsModel.forEach(el => {
       if (el.languageId == +element.name) {
         el.text = element.value;
         ispush = false;
       }
     });
     if (ispush) {
-      this.categoryModel.contents.push({
-        id: 0,
+      this.contentsModel.push({
+        id: this.getCurrentIdFromContentModel(+element.name),
         languageId: +element.name,
         text: element.value
       });
     }
+    this.categoryModel.contents=this.contentsModel;
     console.log(this.categoryModel);
   }
-  getTextFromCategory(languageId: number): string {
-    let output: string = "";
-    if (this.categoryId == 0) {
-      return output;
-    }
-    try {
-      this.categoryModel.contents.forEach(element => {
-        if (element != null && languageId == element.languageId) {
-          output = element.text;
+  getCurrentIdFromContentModel(languageId:number):number{
+    let result:number = 0;
+    if (this.categoryId > 0)
+    {
+      this.categoryModel.contents.forEach(el=>{
+        if(languageId == el.languageId){
+            result=el.id;
         }
       });
-    } catch {
-      return output;
     }
-
-    return output;
+    return result;
+    
   }
   onFileChange(files: FileList) {
     this.labelImport.nativeElement.innerText = Array.from(files)

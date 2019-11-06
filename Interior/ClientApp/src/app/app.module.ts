@@ -1,4 +1,4 @@
-import { UserDataService, LanguageDataService, CategoryDataService, ShopDataService } from './services/KendoCenter.service';
+import { UserDataService, LanguageDataService, CategoryDataService, ShopDataService, BrandDataService } from './services/KendoCenter.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -27,6 +27,8 @@ import { CategoryViewComponent } from './Category/category-view/category-view.co
 import { CategoryEditComponent } from './Category/category-edit/category-edit.component';
 import { ShopViewComponent } from './shop/shop-view/shop-view.component';
 import { ShopEditComponent } from './shop/shop-edit/shop-edit.component';
+import { BrandViewComponent } from './Brand/brand-view/brand-view.component';
+import { BrandEditComponent } from './Brand/brand-edit/brand-edit.component';
 
 
 
@@ -46,7 +48,9 @@ import { ShopEditComponent } from './shop/shop-edit/shop-edit.component';
     CategoryViewComponent,
     CategoryEditComponent,
     ShopViewComponent,
-    ShopEditComponent
+    ShopEditComponent,
+    BrandViewComponent,
+    BrandEditComponent
   ],
   imports: [
     BrowserModule,
@@ -62,7 +66,7 @@ import { ShopEditComponent } from './shop/shop-edit/shop-edit.component';
     FormsModule,
     FontAwesomeModule
   ],
-  providers: [UserDataService,LanguageDataService,CategoryDataService,ShopDataService],
+  providers: [UserDataService,LanguageDataService,CategoryDataService,ShopDataService,BrandDataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

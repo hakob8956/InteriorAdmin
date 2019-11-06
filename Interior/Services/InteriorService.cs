@@ -58,10 +58,10 @@ namespace Interior.Services
         {
             try
             {
-                var currentInterior = await _context.Interiors.SingleOrDefaultAsync(n => n.Id == interior.Id);
+                var currentInterior = await _context.Interiors.AsNoTracking().SingleOrDefaultAsync(n => n.Id == interior.Id);
                 if (currentInterior == null)
                     return ResultCode.Error;
-                _context.Interiors.Update(currentInterior);
+                _context.Interiors.Update(interior);
                 await _context.SaveChangesAsync();
                 return ResultCode.Success;
             }

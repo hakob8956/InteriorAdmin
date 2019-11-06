@@ -45,5 +45,22 @@ namespace Interior.Services
                 return ResultCode.Error;
             }
         }
+        public async Task<ResultCode> DeleteTextToContentAsync(int id)
+        {
+            try
+            {
+                var currentModel = await _context.Contents.SingleOrDefaultAsync(s => s.Id == id);
+                if (currentModel == null)
+                    return ResultCode.Error;
+                _context.Contents.Remove(currentModel);
+                await _context.SaveChangesAsync();
+                return ResultCode.Success;
+            }
+            catch (Exception)
+            {
+                return ResultCode.Error;
+            }
+        }
     }
+
 }

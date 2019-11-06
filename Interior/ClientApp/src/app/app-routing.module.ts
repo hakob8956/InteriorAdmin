@@ -11,6 +11,8 @@ import { RouterModule, Routes } from "@angular/router";
 
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { LanguageViewComponent } from "./Language/language-view/language-view.component";
+import { BrandViewComponent } from './Brand/brand-view/brand-view.component';
+import { BrandEditComponent } from './Brand/brand-edit/brand-edit.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "/adminView", pathMatch: "full" },
@@ -27,7 +29,10 @@ const routes: Routes = [
   { path: "categoryEdit/:id", component: CategoryEditComponent},
   { path: "shopView", component: ShopViewComponent },
   { path: "shopEdit", component: ShopEditComponent },
-  { path: "shopEdit/:id", component: ShopEditComponent}
+  { path: "shopEdit/:id", component: ShopEditComponent},
+  { path: "brandView", component: BrandViewComponent },
+  { path: "brandEdit", component: BrandEditComponent },
+  { path: "brandEdit/:id", component: BrandEditComponent}
 ];
 
 @NgModule({

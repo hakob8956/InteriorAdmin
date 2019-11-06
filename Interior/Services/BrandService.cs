@@ -50,19 +50,33 @@ namespace Interior.Services
             }
         }
 
-        public async Task<IEnumerable<Brand>> GetAllBrandsAsync()
+        public async Task<(IEnumerable<Brand>, int count)> GetAllBrandsAsync()
         {
-            return await _context.Brands.ToListAsync();
-        }
+            try
+            {
+                var model = await _context.Brands.Include(s => s.Contents).AsNoTracking().ToListAsync();
+                return (model, model.Count);
 
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+
+        }
+        public async Task<Brand> GetBrandById(int id)
+        {
+            return await _context.Brands.Include(s => s.Contents).Include(s => s.File).AsNoTracking().SingleOrDefaultAsync(i => id == i.Id);
+        }
         public async Task<ResultCode> UpdateBrandAsync(Brand brand)
         {
             try
             {
-                var currentBrand = await _context.Brands.SingleOrDefaultAsync(n => n.Id == brand.Id);
+                var currentBrand = await _context.Brands.AsNoTracking().SingleOrDefaultAsync(n => n.Id == brand.Id);
                 if (currentBrand == null)
                     return ResultCode.Error;
-                _context.Brands.Update(currentBrand);
+                _context.Brands.Update(brand);
                 await _context.SaveChangesAsync();
                 return ResultCode.Success;
             }

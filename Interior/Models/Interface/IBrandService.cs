@@ -12,6 +12,7 @@ namespace Interior.Models.Interface
         Task<ResultCode> AddBrandAsync(Brand brand);
         Task<ResultCode> DeleteBrandAsync(Brand brand);
         Task<ResultCode> UpdateBrandAsync(Brand brand);
-        Task<IEnumerable<Brand>> GetAllBrandsAsync();
+        Task<(IEnumerable<Brand>, int count)> GetAllBrandsAsync();
+        Task<Brand> GetBrandById(int id);
     }
 }

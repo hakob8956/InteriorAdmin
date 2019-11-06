@@ -8,6 +8,7 @@ import { throwError, Observable, BehaviorSubject } from "rxjs";
 import { HttpErrorResponse, HttpClient } from "@angular/common/http";
 import { State, toODataString } from "@progress/kendo-data-query";
 import { ShopEditModel } from '../models/Shop';
+import { BrandEditModel } from '../models/Brand';
 
 export abstract class BaseService{
   constructor(){}
@@ -66,10 +67,12 @@ export class LanguageService extends BaseService {
   
   public addLanguages(modelCreate:LanguageEditModel){
     const formData:FormData = new FormData();
-    formData.append('File',modelCreate.file,modelCreate.file.name);
+    if(modelCreate.file != null)
+        formData.append('File',modelCreate.file,modelCreate.file.name);
     formData.append('Name',modelCreate.name);
     formData.append('Code',modelCreate.code);
-    formData.append('FileName',modelCreate.fileName);
+    if(modelCreate.fileName != null)
+        formData.append('FileName',modelCreate.fileName);
     formData.append('Id',modelCreate.id.toString());
 
     return this.http.post(`${this.BASE_URL}/Language/create-language`,formData).pipe(
@@ -171,4 +174,39 @@ export class ShopService extends BaseService {
       catchError(this.handleError)
     );
   }
+}
+@Injectable({
+    providedIn: 'root'
+})
+export class BrandService extends BaseService {
+    constructor(private http: HttpClient) { super() }
+    public getBrandbyId(id: number) {
+        return this.http.get(`${this.BASE_URL}/Brand/get-byId/${id}`).pipe(
+            catchError(this.handleError)
+        );
+    }
+    public createBrand(model: BrandEditModel) {
+        console.log(model)
+        const formData: FormData = new FormData();
+        if (model.file != null)
+            formData.append('File', model.file, model.file.name);
+        formData.append('Contents', JSON.stringify(model.contents));
+        formData.append('FileName', model.fileName);
+        formData.append('Id', model.id.toString());
+        return this.http.post(`${this.BASE_URL}/Brand/create-brand`, formData).pipe(
+            catchError(this.handleError)
+        );
+    }
+    public editBrand(model: BrandEditModel) {
+        console.log(model)
+        const formData: FormData = new FormData();
+        if (model.file != null)
+            formData.append('File', model.file, model.file.name);
+        formData.append('Contents', JSON.stringify(model.contents));
+        formData.append('FileName', model.fileName);
+        formData.append('Id', model.id.toString());
+        return this.http.post(`${this.BASE_URL}/Brand/edit-brand`, formData).pipe(
+            catchError(this.handleError)
+        );
+    }
 }

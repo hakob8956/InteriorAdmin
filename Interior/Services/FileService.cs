@@ -70,10 +70,10 @@ namespace Interior.Services
         {
             try
             {
-                var currentFile = await _context.Files.SingleOrDefaultAsync(n => n.Id == file.Id);
+                var currentFile = await _context.Files.AsNoTracking().SingleOrDefaultAsync(n => n.Id == file.Id);
                 if (currentFile == null)
                     return ResultCode.Error;
-                _context.Files.Update(currentFile);
+                _context.Files.Update(file);
                 await _context.SaveChangesAsync();
                 return ResultCode.Success;
             }

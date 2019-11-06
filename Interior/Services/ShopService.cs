@@ -62,7 +62,6 @@ namespace Interior.Services
             }
             catch (Exception e)
             {
-
                 throw;
             }
 

@@ -41,6 +41,8 @@ namespace Interior.Mapping
 
                 conf.CreateMap<ShopShowViewModel, Shop>();
                 conf.CreateMap<ShopShowViewModel, Shop>().ReverseMap();
+                conf.CreateMap<BrandShowViewModel, Brand>();
+                conf.CreateMap<BrandShowViewModel, Brand>().ReverseMap();
             });
 
             return mapperConfig.CreateMapper();

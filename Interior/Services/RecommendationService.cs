@@ -59,10 +59,10 @@ namespace Interior.Services
         {
             try
             {
-                var currentRecommendation = await _context.Recommendations.SingleOrDefaultAsync(n => n.Id == recommendation.Id);
+                var currentRecommendation = await _context.Recommendations.AsNoTracking().SingleOrDefaultAsync(n => n.Id == recommendation.Id);
                 if (currentRecommendation == null)
                     return ResultCode.Error;
-                _context.Recommendations.Update(currentRecommendation);
+                _context.Recommendations.Update(recommendation);
                 await _context.SaveChangesAsync();
                 return ResultCode.Success;
             }

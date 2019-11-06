@@ -51,6 +51,8 @@ namespace Interior
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IShopService, ShopService>();
+            services.AddScoped<IBrandService, BrandService>();
+
             services.AddSingleton(MapperConfig.CreateMapper());
 
             services.AddAuthentication(x =>

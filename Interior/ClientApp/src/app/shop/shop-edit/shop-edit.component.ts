@@ -5,7 +5,8 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Form, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ShopEditModel } from 'src/app/models/Shop';
 import { LanguageGetModel } from 'src/app/models/Language';
-import { Content } from '@angular/compiler/src/render3/r3_ast';
+import { Content } from 'src/app/models/Content';
+
 
 @Component({
   selector: 'app-shop-edit',
@@ -67,21 +68,37 @@ export class ShopEditComponent implements OnInit {
         : "Choose file";
   }
   inputTextChange(element: any) {
+    if(this.shopModel.contents != null)
+        this.contentsModel = this.shopModel.contents;
     let ispush: boolean = true;
-    this.shopModel.contents.forEach(el => {
+    this.contentsModel.forEach(el => {
       if (el.languageId == +element.name) {
         el.text = element.value;
         ispush = false;
       }
     });
     if (ispush) {
-      this.shopModel.contents.push({
-        id: 0,
+      this.contentsModel.push({
+        id: this.getCurrentIdFromContentModel(+element.name),
         languageId: +element.name,
         text: element.value
       });
     }
+    this.shopModel.contents=this.contentsModel;
     console.log(this.shopModel);
+  }
+  getCurrentIdFromContentModel(languageId:number):number{
+    let result:number = 0;
+    if (this.shopId > 0)
+    {
+      this.shopModel.contents.forEach(el=>{
+        if(languageId == el.languageId){
+            result=el.id;
+        }
+      });
+    }
+    return result;
+    
   }
   getTextFromShop(languageId: number): string {
     let output: string = "";

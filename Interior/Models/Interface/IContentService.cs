@@ -11,7 +11,7 @@ namespace Interior.Models.Interface
     {
         Task<ResultCode> AddTextToContentAsync (Content content);
         Task<ResultCode> EditTextToContentAsync(Content content);
-
+        Task<ResultCode> DeleteTextToContentAsync(int id);
 
 
 

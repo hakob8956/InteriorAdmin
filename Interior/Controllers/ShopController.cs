@@ -117,7 +117,9 @@ namespace Interior.Controllers
                         foreach (var content in currentContents)
                         {
                             content.ShopId = shop.Id;
-                            if (content.Id > 0)
+                            if (String.IsNullOrEmpty(content.Text))
+                                await _contentService.DeleteTextToContentAsync(content.Id);
+                            else if (content.Id > 0)
                                 await _contentService.EditTextToContentAsync(content);
                             else
                                 await _contentService.AddTextToContentAsync(content);
@@ -184,7 +186,9 @@ namespace Interior.Controllers
                         foreach (var content in currentContents)
                         {
                             content.ShopId = model.Id;
-                            if (content.Id > 0)
+                            if (String.IsNullOrEmpty(content.Text))
+                                await _contentService.DeleteTextToContentAsync(content.Id);
+                            else if (content.Id > 0)
                                 await _contentService.EditTextToContentAsync(content);
                             else
                                 await _contentService.AddTextToContentAsync(content);

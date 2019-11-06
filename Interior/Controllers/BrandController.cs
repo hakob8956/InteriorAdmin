@@ -19,17 +19,17 @@ namespace Interior.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class BrandController : ControllerBase
     {
-        private readonly ICategoryService _categoryService;
+        private readonly IBrandService _brandService;
         private readonly IFileService _fileService;
         private readonly IHostingEnvironment _appEnvironment;
         private readonly long _fileSize;
         private readonly IMapper _mapper;
         private readonly IContentService _contentService;
-        public CategoryController(ICategoryService categoryService, IMapper mapper, IFileService fileService, IHostingEnvironment appEnvironment, IOptions<AppSettings> settings, IContentService contentService)
+        public BrandController(IBrandService brandService, IMapper mapper, IFileService fileService, IHostingEnvironment appEnvironment, IOptions<AppSettings> settings, IContentService contentService)
         {
-            _categoryService = categoryService;
+            _brandService = brandService;
             _mapper = mapper;
             _fileService = fileService;
             _appEnvironment = appEnvironment;
@@ -38,12 +38,12 @@ namespace Interior.Controllers
         }
 
         [HttpGet("get-all")]
-        public async Task<IActionResult> GetCategories()
+        public async Task<IActionResult> GetBrands()
         {
             try
             {
-                var (data, count) = await _categoryService.GetAllCategoriesAsync();
-                var newData = _mapper.Map<IEnumerable<Category>, IEnumerable<CategoryShowViewModel>>(data);
+                var (data, count) = await _brandService.GetAllBrandsAsync();
+                var newData = _mapper.Map<IEnumerable<Brand>, IEnumerable<BrandShowViewModel>>(data);
                 var result = new
                 {
                     data = newData,
@@ -57,17 +57,17 @@ namespace Interior.Controllers
             }
         }
         [HttpGet("get-byId/{id}")]
-        public async Task<IActionResult> GetCategory(int id)
+        public async Task<IActionResult> GetBrand(int id)
         {
             try
             {
-                var model = await _categoryService.GetCategoryById(id);
+                var model = await _brandService.GetBrandById(id);
                 List<ContentViewModel> modelContents = new List<ContentViewModel>();
                 foreach (var item in model.Contents)
                 {
                     modelContents.Add(new ContentViewModel { Text = item.Text, LanguageId = item.LanguageId, Id = item.Id });
                 }
-                var result = new CreateCategoryViewModel { Id = model.Id, Contents = modelContents, FileName = model.File?.Name };
+                var result = new CreateBrandViewModel { Id = model.Id, Contents = modelContents, FileName = model.File?.Name };
                 return Ok(ResponseSuccess.Create(result));
             }
             catch (Exception)
@@ -75,8 +75,8 @@ namespace Interior.Controllers
                 return BadRequest(ResponseError.Create("Error"));
             }
         }
-        [HttpPost("create-category")]
-        public async Task<IActionResult> CreateCategory([FromForm]CreateTakeCategoryViewModel model)
+        [HttpPost("create-brand")]
+        public async Task<IActionResult> CreateBrand([FromForm]CreateTakeBrandViewModel model)
         {
             try
             {
@@ -108,15 +108,15 @@ namespace Interior.Controllers
                             return BadRequest(ResponseError.Create($"File big then {_fileSize} bytes "));
                         }
                     }
-                    Category category = new Category { Id = 0, FileId = fileID };
-                    var currentCategory = await _categoryService.AddCategoryAsync(category);
-                    if (currentCategory != null)
+                    Brand brand = new Brand { Id = 0, FileId = fileID };
+                    var currentBrand = await _brandService.AddBrandAsync(brand);
+                    if (currentBrand == ResultCode.Success)
                     {
                         IEnumerable<ContentViewModel> contentModel = JsonConvert.DeserializeObject<IEnumerable<ContentViewModel>>(model.Contents);
                         var currentContents = _mapper.Map<IEnumerable<ContentViewModel>, IEnumerable<Content>>(contentModel);
                         foreach (var content in currentContents)
                         {
-                            content.CategoryId = currentCategory.Id;
+                            content.BrandId = brand.Id;
                             if (String.IsNullOrEmpty(content.Text))
                                 await _contentService.DeleteTextToContentAsync(content.Id);
                             else if (content.Id > 0)
@@ -130,7 +130,7 @@ namespace Interior.Controllers
                     }
 
 
-                    return BadRequest(ResponseError.Create("Can't create category"));
+                    return BadRequest(ResponseError.Create("Can't create brand"));
 
                 }
                 return BadRequest(ResponseError.Create("Invalid form"));
@@ -142,16 +142,16 @@ namespace Interior.Controllers
                 return BadRequest(ResponseError.Create("Unknown error"));
             }
         }
-        [HttpPost("edit-category")]
-        public async Task<IActionResult> EditCategory([FromForm]CreateTakeCategoryViewModel model)
+        [HttpPost("edit-brand")]
+        public async Task<IActionResult> EditBrand([FromForm]CreateTakeBrandViewModel model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var oldCategory = await _categoryService.GetCategoryById(model.Id);
-                    if (oldCategory == null)
-                        return BadRequest(ResponseError.Create("not found category"));
+                    var oldBrand = await _brandService.GetBrandById(model.Id);
+                    if (oldBrand == null)
+                        return BadRequest(ResponseError.Create("not found brand"));
                     int? fileID = null;
                     if (model.File != null)
                     {
@@ -177,18 +177,18 @@ namespace Interior.Controllers
                             return BadRequest(ResponseError.Create($"File big then {_fileSize} bytes "));
                         }
                     }
-                    Category category = new Category { Id = model.Id, FileId = fileID };
-                    var currentCategory = await _categoryService.UpdateCategoryAsync(category);
-                    if (currentCategory == ResultCode.Success)
+                    Brand brand = new Brand { Id = model.Id, FileId = fileID };
+                    var currentBrand = await _brandService.UpdateBrandAsync(brand);
+                    if (currentBrand == ResultCode.Success)
                     {
                         IEnumerable<ContentViewModel> contentModel = JsonConvert.DeserializeObject<IEnumerable<ContentViewModel>>(model.Contents);
                         var currentContents = _mapper.Map<IEnumerable<ContentViewModel>, IEnumerable<Content>>(contentModel);
                         foreach (var content in currentContents)
                         {
-                            content.CategoryId = model.Id;
+                            content.BrandId = model.Id;
                             if (String.IsNullOrEmpty(content.Text))
                                 await _contentService.DeleteTextToContentAsync(content.Id);
-                            else  if (content.Id > 0)
+                            else if (content.Id > 0)
                                 await _contentService.EditTextToContentAsync(content);
                             else
                                 await _contentService.AddTextToContentAsync(content);
@@ -198,7 +198,7 @@ namespace Interior.Controllers
                     }
 
 
-                    return BadRequest(ResponseError.Create("Can't create category"));
+                    return BadRequest(ResponseError.Create("Can't create brand"));
 
                 }
                 return BadRequest(ResponseError.Create("Invalid form"));
@@ -210,6 +210,5 @@ namespace Interior.Controllers
                 return BadRequest(ResponseError.Create("Unknown error"));
             }
         }
-
     }
 }
