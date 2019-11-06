@@ -79,7 +79,7 @@ namespace Interior.Services
                 var currentShop = await _context.Shops.SingleOrDefaultAsync(n => n.Id == shop.Id);
                 if (currentShop == null)
                     return ResultCode.Error;
-                _context.Shops.Update(currentShop);
+                _context.Shops.Update(shop);
                 await _context.SaveChangesAsync();
                 return ResultCode.Success;
             }

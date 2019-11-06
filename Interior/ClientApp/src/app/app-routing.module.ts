@@ -1,3 +1,5 @@
+import { ShopEditComponent } from './shop/shop-edit/shop-edit.component';
+import { ShopViewComponent } from './shop/shop-view/shop-view.component';
 import { CategoryEditComponent } from './Category/category-edit/category-edit.component';
 import { CategoryViewComponent } from './Category/category-view/category-view.component';
 import { LanguageEditComponent } from './Language/language-edit/language-edit.component';
@@ -23,6 +25,9 @@ const routes: Routes = [
   { path: "categoryView", component: CategoryViewComponent },
   { path: "categoryEdit", component: CategoryEditComponent },
   { path: "categoryEdit/:id", component: CategoryEditComponent},
+  { path: "shopView", component: ShopViewComponent },
+  { path: "shopEdit", component: ShopEditComponent },
+  { path: "shopEdit/:id", component: ShopEditComponent}
 ];
 
 @NgModule({

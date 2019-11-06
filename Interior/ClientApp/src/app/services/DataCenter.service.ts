@@ -137,7 +137,9 @@ export class CategoryService extends BaseService {
     );
   }
 }
-Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ShopService extends BaseService {
   constructor(private http: HttpClient) {super()}
   public getShopbyId(id:number){
