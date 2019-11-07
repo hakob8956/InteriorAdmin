@@ -4,14 +4,16 @@ using Interior.Models.EFContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Interior.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20191107131025_AddFilesIdInInterior")]
+    partial class AddFilesIdInInterior
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,8 +115,6 @@ namespace Interior.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AndroidFileId");
-
                     b.Property<bool>("Avaiable");
 
                     b.Property<int>("BrandId");
@@ -127,16 +127,18 @@ namespace Interior.Migrations
 
                     b.Property<int?>("GlbFileId");
 
-                    b.Property<int?>("ImageFileId");
-
-                    b.Property<int?>("IosFileId");
-
                     b.Property<bool>("IsVisible");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(10,2)");
 
                     b.Property<int>("ShopId");
+
+                    b.Property<int?>("fileAndroidId");
+
+                    b.Property<int?>("fileIosId");
+
+                    b.Property<int?>("imageId");
 
                     b.HasKey("Id");
 

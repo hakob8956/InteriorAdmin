@@ -13,6 +13,6 @@ namespace Interior.Models.Interface
         Task<ResultCode> AddInteriorAsync(Interior.Models.Entities.Interior interior);
         Task<ResultCode> DeleteInteriorAsync(Interior.Models.Entities.Interior interior);
         Task<ResultCode> UpdateInteriorAsync(Interior.Models.Entities.Interior interior);
-        Task<IEnumerable<Interior.Models.Entities.Interior>> GetAllInteriorsAsync();
+        Task<(IEnumerable<Interior.Models.Entities.Interior>, int count)> GetAllInteriorsAsync(int? skip, int? take, bool? desc, string columnName);
     }
 }

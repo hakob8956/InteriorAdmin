@@ -24,7 +24,7 @@ namespace Interior.Models.EFContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().HasIndex(u =>new {u.Username,u.Email }).IsUnique();
+            modelBuilder.Entity<User>().HasIndex(u => new { u.Username, u.Email }).IsUnique();
             //File one to many 
             modelBuilder.Entity<Brand>()
                 .HasOne<FileStorage>(s => s.File)
@@ -36,11 +36,28 @@ namespace Interior.Models.EFContext
                .WithMany(s => s.Categories)
                .HasForeignKey(s => s.FileId)
                .OnDelete(DeleteBehavior.SetNull);
+
             modelBuilder.Entity<Interior.Models.Entities.Interior>()
               .HasOne<FileStorage>(s => s.File)
               .WithMany(s => s.Interiors)
-              .HasForeignKey(s => s.FileId)
+              .HasForeignKey(s => s.ImageFileId)
               .OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.Entity<Interior.Models.Entities.Interior>()
+             .HasOne<FileStorage>(s => s.File)
+             .WithMany(s => s.Interiors)
+             .HasForeignKey(s => s.IosFileId)
+             .OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.Entity<Interior.Models.Entities.Interior>()
+             .HasOne<FileStorage>(s => s.File)
+             .WithMany(s => s.Interiors)
+             .HasForeignKey(s => s.AndroidFileId)
+             .OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.Entity<Interior.Models.Entities.Interior>()
+             .HasOne<FileStorage>(s => s.File)
+             .WithMany(s => s.Interiors)
+             .HasForeignKey(s => s.GlbFileId)
+             .OnDelete(DeleteBehavior.SetNull);
+
             modelBuilder.Entity<Language>()
               .HasOne<FileStorage>(s => s.File)
               .WithMany(s => s.Languages)
@@ -99,7 +116,7 @@ namespace Interior.Models.EFContext
              .HasForeignKey(s => s.InteriorId)
              .OnDelete(DeleteBehavior.Cascade);
 
-    
+
 
             //Interior
             modelBuilder.Entity<Interior.Models.Entities.Interior>()

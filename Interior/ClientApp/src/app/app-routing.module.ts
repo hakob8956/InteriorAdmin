@@ -1,3 +1,4 @@
+import { InteriorViewComponent } from './Interior/interior-view/interior-view.component';
 import { ShopEditComponent } from './shop/shop-edit/shop-edit.component';
 import { ShopViewComponent } from './shop/shop-view/shop-view.component';
 import { CategoryEditComponent } from './Category/category-edit/category-edit.component';
@@ -13,6 +14,7 @@ import { DashboardComponent } from "./dashboard/dashboard.component";
 import { LanguageViewComponent } from "./Language/language-view/language-view.component";
 import { BrandViewComponent } from './Brand/brand-view/brand-view.component';
 import { BrandEditComponent } from './Brand/brand-edit/brand-edit.component';
+import { InteriorEditComponent } from './Interior/interior-edit/interior-edit.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "/adminView", pathMatch: "full" },
@@ -32,7 +34,10 @@ const routes: Routes = [
   { path: "shopEdit/:id", component: ShopEditComponent},
   { path: "brandView", component: BrandViewComponent },
   { path: "brandEdit", component: BrandEditComponent },
-  { path: "brandEdit/:id", component: BrandEditComponent}
+  { path: "brandEdit/:id", component: BrandEditComponent},
+  { path: "interiorView", component: InteriorViewComponent },
+  { path: "interiorEdit", component: InteriorEditComponent },
+  { path: "interiorEdit/:id", component: InteriorEditComponent}
 ];
 
 @NgModule({

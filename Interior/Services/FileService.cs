@@ -82,7 +82,7 @@ namespace Interior.Services
                 return ResultCode.Error;
             }
         }
-        private string GetMimeType(string fileName)
+        public string GetMimeType(string fileName)
         {
             // Make Sure Microsoft.AspNetCore.StaticFiles Nuget Package is installed
             var provider = new FileExtensionContentTypeProvider();

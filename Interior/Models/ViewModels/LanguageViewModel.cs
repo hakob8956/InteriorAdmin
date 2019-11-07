@@ -24,7 +24,7 @@ namespace Interior.Models.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
-
+       // public FileViewModel File { get; set; }
         public string FileName { get; set; }
         public byte[] ImageData { get; set; }
         public string ImageMimeType { get; set; }

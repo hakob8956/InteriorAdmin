@@ -1,0 +1,60 @@
+<kendo-grid
+          [data]="view | async"
+          [loading]="view.loading"
+          [pageSize]="pageSize"
+          [skip]="skip"
+          [sort]="sort"
+          [sortable]="true"
+          [pageable]="true"
+          [scrollable]="'none'"
+          [filterable]="false"
+          (dataStateChange)="dataStateChange($event)"
+        >
+        <!-- <app-show-message [statusAlert]="1" [message]="Hello"></app-show-message> -->
+        
+        <kendo-grid-column field="Id" width="130" [sortable]="false">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <div style="display: flex">
+                 <p>{{dataItem.id}}</p>
+                </div>
+             </ng-template>
+        </kendo-grid-column> 
+        <kendo-grid-column field="Name"> 
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <div style="display: flex">      
+                   <p>{{dataItem.contents[0].text}}</p>
+                  </div>
+               </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="DeepLinkingUrl" > 
+          <ng-template kendoGridCellTemplate let-dataItem>
+              <div style="display: flex">      
+                 <p >{{dataItem.deepLinkingUrl}}</p>
+                </div>
+             </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="Brand" > 
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div style="display: flex">      
+               <p >{{dataItem.brand.contents[0].text}}</p>
+              </div>
+           </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Price" > 
+      <ng-template kendoGridCellTemplate let-dataItem>
+          <div style="display: flex">      
+             <p >{{dataItem.price}}</p>
+            </div>
+         </ng-template>
+  </kendo-grid-column>
+      <kendo-grid-column field="Actions" title="Actions" width="120" [sortable]="false">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <button (click)="createButtonClick()">Add</button>
+          <button (click)="editButtonClick(dataItem.id)">Edit</button>
+
+        </ng-template>
+    </kendo-grid-column>
+      
+
+
+      </kendo-grid>

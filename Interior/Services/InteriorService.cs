@@ -48,11 +48,51 @@ namespace Interior.Services
                 return ResultCode.Error;
             }
         }
-
-        public async Task<IEnumerable<Models.Entities.Interior>> GetAllInteriorsAsync()
+        private IQueryable<Interior.Models.Entities.Interior> OrderTable(IQueryable<Interior.Models.Entities.Interior> data, string columnName, bool desc)
         {
-            return await _context.Interiors.ToListAsync();
+            switch (columnName)
+            {
+                case "Id":
+                    if (desc)
+                        return data.OrderBy(x => x.Id);
+                    else
+                        return data.OrderByDescending(x => x.Id);
+                case "Price":
+                    if (desc)
+                        return data.OrderBy(x => x.Price);
+                    else
+                        return data.OrderByDescending(x => x.Price);
+                case "DeepLinkUrl":
+                    if (desc)
+                        return data.OrderBy(x => x.DeepLinkingUrl);
+                    else
+                        return data.OrderByDescending(x => x.DeepLinkingUrl);
+                default:
+                    return null;
+            }
         }
+
+        public async Task<(IEnumerable<Interior.Models.Entities.Interior>, int count)> GetAllInteriorsAsync(int? skip, int? take, bool? desc, string columnName)
+        {
+            try
+            {
+                var lenght = await _context.Interiors.CountAsync();
+                IQueryable<Interior.Models.Entities.Interior> data = null;
+                if (skip != null || take != null)
+                    data = _context.Interiors.Include(s=>s.Contents).Include(s=>s.Brand).ThenInclude(s => s.Contents).Skip((int)skip).Take((int)take);
+                else
+                    data = _context.Interiors.Include(s => s.Contents).Include(s => s.Brand).ThenInclude(s=>s.Contents);
+                if (desc != null && columnName != null)
+                    data = OrderTable(data, columnName, (bool)desc);
+
+                return (await data.AsNoTracking().ToListAsync(), lenght);
+            }
+            catch (Exception e)
+            {
+                return (null, 0);
+            }
+        }
+
 
         public async Task<ResultCode> UpdateInteriorAsync(Models.Entities.Interior interior)
         {

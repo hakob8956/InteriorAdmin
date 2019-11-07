@@ -41,8 +41,12 @@ namespace Interior.Mapping
 
                 conf.CreateMap<ShopShowViewModel, Shop>();
                 conf.CreateMap<ShopShowViewModel, Shop>().ReverseMap();
+
                 conf.CreateMap<BrandShowViewModel, Brand>();
                 conf.CreateMap<BrandShowViewModel, Brand>().ReverseMap();
+
+                conf.CreateMap<Interior.Models.Entities.Interior, InteriorShowViewModel>();
+                conf.CreateMap<Interior.Models.Entities.Interior, InteriorShowViewModel>().ReverseMap();
             });
 
             return mapperConfig.CreateMapper();
