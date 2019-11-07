@@ -33,6 +33,7 @@ namespace Interior.Models.Entities
 
         public ICollection<Content> Contents { get; set; }
         public ICollection<Recommendation> Recommendations { get; set; }
+        public ICollection<OptionContent> OptionsContents { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public Interior()

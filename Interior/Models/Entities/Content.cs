@@ -24,5 +24,6 @@ namespace Interior.Models.Entities
         public int? RecommendationId { get; set; }
         public Recommendation Recommendation { get; set; }
 
+
     }
 }

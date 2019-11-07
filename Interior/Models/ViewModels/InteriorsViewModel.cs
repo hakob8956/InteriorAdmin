@@ -18,24 +18,11 @@ namespace Interior.Models.ViewModels
         public ICollection<Content> Contents { get; set; }
         public BrandShowViewModel Brand { get; set; }
     }
-    public class CreateInteriorViewModel
+    public class InteriorRequestModel
     {
         public int Id { get; set; }
-        public ICollection<Content> Contents { get; set; }
-    }
-    //public class CreateBrandViewModel
-    //{
-    //    public int Id { get; set; }
-    //    public string FileName { get; set; }
-    //    public ICollection<ContentViewModel> Contents { get; set; }
-    //    public IFormFile File { get; set; }
-    //}
-    public class CreateSendInteriorViewModel
-    {
-        public int Id { get; set; }
-        public string FileName { get; set; }
-        public IEnumerable<Content> NameContents { get; set; }
-        public IEnumerable<Content> DescriptionContents { get; set; }
+        public Content NameContent { get; set; }
+        public Content DescriptionContent { get; set; }
         public FileViewModel ImageFile { get; set; }
 
         public FileViewModel IosFile { get; set; }
@@ -43,19 +30,20 @@ namespace Interior.Models.ViewModels
 
         public FileViewModel GlbFile { get; set; }
         public decimal Price { get; set; }
-        public IEnumerable<Shop> Shops { get; set; }
+
         public bool IsAvailable { get; set; }
         public string BuyUrl { get; set; }
-        public IEnumerable<Brand> Brands { get; set; }
-        public IEnumerable<Category> Categories { get; set; }
-
+        public int ShopId { get; set; }
+        public int BrandId { get; set; }
+        public int CategoryId { get; set; }
+        public bool IsVisible { get; set; }
+        public ICollection<OptionContent> OptionContents { get; set; }
     }
-    public class CreateTakeInteriorViewModel
+    public class InteriorResponseModel
     {
         public int Id { get; set; }
-        public string FileName { get; set; }
-        public string NameContents { get; set; }
-        public string DescriptionContents { get; set; }
+        public string NameContent { get; set; } // Convert Json
+        public string DescriptionContent { get; set; } //Convert Json
         public IFormFile ImageFile { get; set; }
 
         public IFormFile IosFile { get; set; }
@@ -63,11 +51,14 @@ namespace Interior.Models.ViewModels
 
         public IFormFile GlbFile { get; set; }
         public decimal Price { get; set; }
-        public IEnumerable<Shop> Shops { get; set; }
+
         public bool IsAvailable { get; set; }
         public string BuyUrl { get; set; }
-        public IEnumerable<Brand> Brands { get; set; }
-        public IEnumerable<Category> Categories { get; set; }
-
+        public int ShopId { get; set; }
+        public int BrandId { get; set; }
+        public int CategoryId { get; set; }
+        public bool IsVisible { get; set; }
+        public ICollection<OptionContent> OptionContents { get; set; } //convertJson
     }
+
 }

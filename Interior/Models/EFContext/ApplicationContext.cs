@@ -19,6 +19,8 @@ namespace Interior.Models.EFContext
         public DbSet<Language> Languages { get; set; }
         public DbSet<Recommendation> Recommendations { get; set; }
         public DbSet<FileStorage> Files { get; set; }
+        public DbSet<OptionContent> OptionContents { get; set; }
+
 
 
 
@@ -137,6 +139,7 @@ namespace Interior.Models.EFContext
              .HasForeignKey(s => s.CategoryId)
              .OnDelete(DeleteBehavior.Restrict);
 
+
             //Reccommendation
             modelBuilder.Entity<Recommendation>()
                 .HasOne<Category>(s => s.Category)
@@ -155,6 +158,22 @@ namespace Interior.Models.EFContext
                 .WithMany(s => s.Recommendations)
                 .HasForeignKey(s => s.ShopId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+
+
+
+            //OptionsContent
+            modelBuilder.Entity<OptionContent>()
+             .HasOne<Interior.Models.Entities.Interior>(s => s.Interior)
+             .WithMany(s => s.OptionsContents)
+             .HasForeignKey(s => s.InteriorId)
+             .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<OptionContent>()
+            .HasOne<Language>(s => s.Language)
+            .WithMany(s => s.OptionContents)
+            .HasForeignKey(s => s.LanguageId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         }
     }

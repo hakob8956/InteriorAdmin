@@ -47,6 +47,9 @@ namespace Interior.Mapping
 
                 conf.CreateMap<Interior.Models.Entities.Interior, InteriorShowViewModel>();
                 conf.CreateMap<Interior.Models.Entities.Interior, InteriorShowViewModel>().ReverseMap();
+
+                conf.CreateMap<CreateTakeInteriorViewModel, Interior.Models.Entities.Interior>();
+                conf.CreateMap<CreateTakeInteriorViewModel, Interior.Models.Entities.Interior>().ReverseMap();
             });
 
             return mapperConfig.CreateMapper();

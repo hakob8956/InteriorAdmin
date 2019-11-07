@@ -59,6 +59,20 @@ namespace Interior.Controllers
                 return BadRequest(ResponseError.Create("Error"));
             }
         }
+        [HttpGet("get-byId/{id}")]
+        public async Task<IActionResult> GetInterior(int id)
+        {
+            try
+            {
+                var model = await _interiorService.GetByIdAsync(id);
+                var result = _mapper.Map<Interior.Models.Entities.Interior,CreateTakeInteriorViewModel>(model);
+                return Ok(ResponseSuccess.Create(result));
+            }
+            catch (Exception)
+            {
+                return BadRequest(ResponseError.Create("Error"));
+            }
+        }
 
     }
 }

@@ -210,3 +210,38 @@ export class BrandService extends BaseService {
         );
     }
 }
+@Injectable({
+  providedIn: 'root'
+})
+export class InteriorService extends BaseService {
+  constructor(private http: HttpClient) { super() }
+  public getInteriorbyId(id: number) {
+      return this.http.get(`${this.BASE_URL}/Interior/get-byId/${id}`).pipe(
+          catchError(this.handleError)
+      );
+  }
+  // public createBrand(model: BrandEditModel) {
+  //     console.log(model)
+  //     const formData: FormData = new FormData();
+  //     if (model.file != null)
+  //         formData.append('File', model.file, model.file.name);
+  //     formData.append('Contents', JSON.stringify(model.contents));
+  //     formData.append('FileName', model.fileName);
+  //     formData.append('Id', model.id.toString());
+  //     return this.http.post(`${this.BASE_URL}/Brand/create-brand`, formData).pipe(
+  //         catchError(this.handleError)
+  //     );
+  // }
+  // public editBrand(model: BrandEditModel) {
+  //     console.log(model)
+  //     const formData: FormData = new FormData();
+  //     if (model.file != null)
+  //         formData.append('File', model.file, model.file.name);
+  //     formData.append('Contents', JSON.stringify(model.contents));
+  //     formData.append('FileName', model.fileName);
+  //     formData.append('Id', model.id.toString());
+  //     return this.http.post(`${this.BASE_URL}/Brand/edit-brand`, formData).pipe(
+  //         catchError(this.handleError)
+  //     );
+  // }
+}

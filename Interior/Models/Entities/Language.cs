@@ -15,6 +15,8 @@ namespace Interior.Models.Entities
         [Required]
         public string Code { get; set; }
         public ICollection<Content> Contents { get; set; }
+        public ICollection<OptionContent> OptionContents { get; set; }
+
         public DateTime CreatedDate { get; set; }
         public int? FileId { get; set; }
         public FileStorage File { get; set; }

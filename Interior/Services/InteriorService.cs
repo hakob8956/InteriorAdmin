@@ -92,7 +92,15 @@ namespace Interior.Services
                 return (null, 0);
             }
         }
-
+        public async Task<Interior.Models.Entities.Interior> GetByIdAsync(int id)
+        {
+            return await _context.Interiors
+                .Include(r => r.Contents)
+                .Include(s=>s.Brand).ThenInclude(s=>s.Contents)
+                .Include(s=>s.Shop).ThenInclude(s=>s.Contents)
+                .Include(s=>s.Category).ThenInclude(s=>s.Contents)
+                .AsNoTracking().SingleOrDefaultAsync(r => r.Id == id);
+        }
 
         public async Task<ResultCode> UpdateInteriorAsync(Models.Entities.Interior interior)
         {
