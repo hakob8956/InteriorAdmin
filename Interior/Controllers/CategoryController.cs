@@ -67,7 +67,7 @@ namespace Interior.Controllers
                 {
                     modelContents.Add(new ContentViewModel { Text = item.Text, LanguageId = item.LanguageId, Id = item.Id });
                 }
-                var result = new CreateCategoryViewModel { Id = model.Id, Contents = modelContents, FileName = model.File?.Name };
+                var result = new CreateCategoryViewModel { Id = model.Id, Contents = modelContents, FileName = model.FilesAttachment?.File?.Name };
                 return Ok(ResponseSuccess.Create(result));
             }
             catch (Exception)
@@ -108,7 +108,7 @@ namespace Interior.Controllers
                             return BadRequest(ResponseError.Create($"File big then {_fileSize} bytes "));
                         }
                     }
-                    Category category = new Category { Id = 0, FileId = fileID };
+                    Category category = new Category { Id = 0};
                     var currentCategory = await _categoryService.AddCategoryAsync(category);
                     if (currentCategory != null)
                     {
@@ -177,7 +177,7 @@ namespace Interior.Controllers
                             return BadRequest(ResponseError.Create($"File big then {_fileSize} bytes "));
                         }
                     }
-                    Category category = new Category { Id = model.Id, FileId = fileID };
+                    Category category = new Category { Id = model.Id };
                     var currentCategory = await _categoryService.UpdateCategoryAsync(category);
                     if (currentCategory == ResultCode.Success)
                     {

@@ -63,13 +63,13 @@ namespace Interior.Controllers
                 var currentLanguage = await _languageService.GetLanguageByIdAsync(id);
                 if (currentLanguage != null)
                 {
-                    FileContentResult currentFile = _fileService.DownloadFile(currentLanguage.File?.Name);
+                    FileContentResult currentFile = _fileService.DownloadFile(currentLanguage.FilesAttachment?.File?.Name);
                     LanguageGetViewModel result = new LanguageGetViewModel()
                     {
                         Code = currentLanguage.Code,
                         Id = currentLanguage.Id,
                         Name = currentLanguage.Name,
-                        FileName = currentLanguage?.File?.Name,
+                        FileName = currentLanguage?.FilesAttachment?.File?.Name,
                         ImageData = currentFile?.FileContents,
                         ImageMimeType = currentFile?.ContentType
                     };
@@ -111,8 +111,8 @@ namespace Interior.Controllers
                                 }
                                 FileStorage file = new FileStorage { Name = model.FileName, Path = filePath };
                                 var currentFile = await _fileService.AddFileAsync(file);
-                                if (currentLanguage.File != null)//delete old file
-                                    await _fileService.DeleteFileAsync(currentLanguage.File.Id);
+                                if (currentLanguage.FilesAttachment != null)//delete old file
+                                    await _fileService.DeleteFileAsync(currentLanguage.FilesAttachment.Id);
 
                                 if (currentFile != null)
                                 {
@@ -126,11 +126,11 @@ namespace Interior.Controllers
                                 return BadRequest(ResponseError.Create($"File big then {_fileSize} bytes "));
                             }
                         }
-                        else if (currentLanguage.File != null && model.FileName == currentLanguage?.File?.Name)
+                        else if (currentLanguage.FilesAttachment != null && model.FileName == currentLanguage?.FilesAttachment?.File?.Name)
                         {
-                            fileID = currentLanguage.FileId;
+                            fileID = currentLanguage.FilesAttachment?.File?.Id;
                         }
-                        Language language = new Language { Id = model.Id, Name = model.Name, FileId = fileID, Code = model.Code };
+                        Language language = new Language { Id = model.Id, Name = model.Name, Code = model.Code };//TODO ADD FileID
                         var resultCode = await _languageService.UpdateLanguageAsync(language);
                         if (resultCode != ResultCode.Error)
                         {
@@ -182,7 +182,7 @@ namespace Interior.Controllers
                             return BadRequest(ResponseError.Create($"File big then {_fileSize} bytes "));
                         }
                     }
-                    Language language = new Language { Name = model.Name, FileId = fileID, Code = model.Code };
+                    Language language = new Language { Name = model.Name, Code = model.Code };//TODO:Add FileId
                     var resultCode = await _languageService.AddLanguageAsync(language);
                     if (resultCode != ResultCode.Error)
                     {

@@ -79,15 +79,15 @@ namespace Interior.Services
                 var lenght = await _context.Interiors.CountAsync();
                 IQueryable<Interior.Models.Entities.Interior> data = null;
                 if (skip != null || take != null)
-                    data = _context.Interiors.Include(s=>s.Contents).Include(s=>s.Brand).ThenInclude(s => s.Contents).Skip((int)skip).Take((int)take);
+                    data = _context.Interiors.Skip((int)skip).Take((int)take);
                 else
-                    data = _context.Interiors.Include(s => s.Contents).Include(s => s.Brand).ThenInclude(s=>s.Contents);
+                    data = _context.Interiors;
                 if (desc != null && columnName != null)
                     data = OrderTable(data, columnName, (bool)desc);
 
                 return (await data.AsNoTracking().ToListAsync(), lenght);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return (null, 0);
             }
@@ -95,10 +95,6 @@ namespace Interior.Services
         public async Task<Interior.Models.Entities.Interior> GetByIdAsync(int id)
         {
             return await _context.Interiors
-                .Include(r => r.Contents)
-                .Include(s=>s.Brand).ThenInclude(s=>s.Contents)
-                .Include(s=>s.Shop).ThenInclude(s=>s.Contents)
-                .Include(s=>s.Category).ThenInclude(s=>s.Contents)
                 .AsNoTracking().SingleOrDefaultAsync(r => r.Id == id);
         }
 

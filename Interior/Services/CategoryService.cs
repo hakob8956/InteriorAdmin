@@ -68,7 +68,7 @@ namespace Interior.Services
 
         public async Task<Category> GetCategoryById(int id)
         {
-            return await _context.Categories.Include(s => s.Contents).Include(s=>s.File).AsNoTracking().SingleOrDefaultAsync(i=>id==i.Id);
+            return await _context.Categories.Include(s => s.Contents).Include(s=>s.FilesAttachment).AsNoTracking().SingleOrDefaultAsync(i=>id==i.Id);
         }
 
         public async Task<ResultCode> UpdateCategoryAsync(Category category)

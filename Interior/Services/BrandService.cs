@@ -67,7 +67,7 @@ namespace Interior.Services
         }
         public async Task<Brand> GetBrandById(int id)
         {
-            return await _context.Brands.Include(s => s.Contents).Include(s => s.File).AsNoTracking().SingleOrDefaultAsync(i => id == i.Id);
+            return await _context.Brands.Include(s => s.Contents).Include(s => s.FilesAttachment).AsNoTracking().SingleOrDefaultAsync(i => id == i.Id);
         }
         public async Task<ResultCode> UpdateBrandAsync(Brand brand)
         {

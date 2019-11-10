@@ -67,7 +67,7 @@ namespace Interior.Controllers
                 {
                     modelContents.Add(new ContentViewModel { Text = item.Text, LanguageId = item.LanguageId, Id = item.Id });
                 }
-                var result = new CreateShopViewModel { Id = model.Id, Contents = modelContents, FileName = model.File?.Name };
+                var result = new CreateShopViewModel { Id = model.Id, Contents = modelContents, FileName = model.FilesAttachment?.File?.Name };
                 return Ok(ResponseSuccess.Create(result));
             }
             catch (Exception)
@@ -108,7 +108,7 @@ namespace Interior.Controllers
                             return BadRequest(ResponseError.Create($"File big then {_fileSize} bytes "));
                         }
                     }
-                    Shop shop = new Shop { Id = 0, FileId = fileID };
+                    Shop shop = new Shop { Id = 0};//TODO:Add FileID
                     var currentShop = await _shopService.AddShopAsync(shop);
                     if (currentShop == ResultCode.Success)
                     {
@@ -177,7 +177,7 @@ namespace Interior.Controllers
                             return BadRequest(ResponseError.Create($"File big then {_fileSize} bytes "));
                         }
                     }
-                    Shop shop = new Shop { Id = model.Id, FileId = fileID };
+                    Shop shop = new Shop { Id = model.Id };//TODO:Add FIleID
                     var currentShop = await _shopService.UpdateShopAsync(shop);
                     if (currentShop == ResultCode.Success)
                     {

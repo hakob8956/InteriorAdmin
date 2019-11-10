@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,16 +17,18 @@ namespace Interior.Models.Entities
         public string Name { get; set; }
         [Required]
         public string Code { get; set; }
-        public ICollection<Content> Contents { get; set; }
-        public ICollection<OptionContent> OptionContents { get; set; }
+        public virtual ICollection<Content> Contents { get; set; }
+        public virtual ICollection<OptionContent> OptionContents { get; set; }
 
         public DateTime CreatedDate { get; set; }
-        public int? FileId { get; set; }
-        public FileStorage File { get; set; }
+        public FilesAttachment FilesAttachment { get; set; }
         public Language()
         {
             this.CreatedDate = DateTime.UtcNow;
+            Contents = new Collection<Content>();
+            OptionContents = new Collection<OptionContent>();
         }
+
 
 
     }

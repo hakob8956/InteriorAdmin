@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -19,7 +21,17 @@ namespace Interior.Models.Entities
         public Language Language { get; set; }
         public int InteriorId { get; set; }
         public Interior Interior { get; set; }
+        public class OptionContentMapping : IEntityTypeConfiguration<OptionContent>
+        {
 
+            public void Configure(EntityTypeBuilder<OptionContent> builder)
+            {
+                builder.HasOne<Language>(s => s.Language)
+                .WithMany(s => s.OptionContents)
+                .HasForeignKey(s => s.LanguageId)
+                .OnDelete(DeleteBehavior.Cascade);
+            }
+        }
 
     }
 }

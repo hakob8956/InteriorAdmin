@@ -65,8 +65,8 @@ namespace Interior.Controllers
             try
             {
                 var model = await _interiorService.GetByIdAsync(id);
-                var result = _mapper.Map<Interior.Models.Entities.Interior,CreateTakeInteriorViewModel>(model);
-                return Ok(ResponseSuccess.Create(result));
+               // var result = _mapper.Map<Interior.Models.Entities.Interior,CreateTakeInteriorViewModel>(model);
+                return Ok(ResponseSuccess.Create(model));
             }
             catch (Exception)
             {

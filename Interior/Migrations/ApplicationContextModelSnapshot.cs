@@ -27,11 +27,7 @@ namespace Interior.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<int?>("FileId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("FileId");
 
                     b.ToTable("Brands");
                 });
@@ -44,11 +40,7 @@ namespace Interior.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<int?>("FileId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("FileId");
 
                     b.ToTable("Categories");
                 });
@@ -63,8 +55,6 @@ namespace Interior.Migrations
 
                     b.Property<int?>("CategoryId");
 
-                    b.Property<int?>("InteriorId");
-
                     b.Property<int>("LanguageId");
 
                     b.Property<int?>("RecommendationId");
@@ -78,8 +68,6 @@ namespace Interior.Migrations
                     b.HasIndex("BrandId");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("InteriorId");
 
                     b.HasIndex("LanguageId");
 
@@ -96,6 +84,8 @@ namespace Interior.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime>("CreatedDate");
+
                     b.Property<string>("Name")
                         .IsRequired();
 
@@ -107,44 +97,86 @@ namespace Interior.Migrations
                     b.ToTable("Files");
                 });
 
+            modelBuilder.Entity("Interior.Models.Entities.FilesAttachment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("BrandId");
+
+                    b.Property<int?>("CategoryId");
+
+                    b.Property<int>("FileId");
+
+                    b.Property<byte>("FileType");
+
+                    b.Property<int?>("InteriorId");
+
+                    b.Property<int?>("LanguageId");
+
+                    b.Property<int?>("RecommendationId");
+
+                    b.Property<int?>("ShopId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BrandId")
+                        .IsUnique()
+                        .HasFilter("[BrandId] IS NOT NULL");
+
+                    b.HasIndex("CategoryId")
+                        .IsUnique()
+                        .HasFilter("[CategoryId] IS NOT NULL");
+
+                    b.HasIndex("FileId")
+                        .IsUnique();
+
+                    b.HasIndex("InteriorId");
+
+                    b.HasIndex("LanguageId")
+                        .IsUnique()
+                        .HasFilter("[LanguageId] IS NOT NULL");
+
+                    b.HasIndex("RecommendationId")
+                        .IsUnique()
+                        .HasFilter("[RecommendationId] IS NOT NULL");
+
+                    b.HasIndex("ShopId")
+                        .IsUnique()
+                        .HasFilter("[ShopId] IS NOT NULL");
+
+                    b.ToTable("FilesAttachments");
+                });
+
             modelBuilder.Entity("Interior.Models.Entities.Interior", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AndroidFileId");
-
                     b.Property<bool>("Avaiable");
 
-                    b.Property<int>("BrandId");
+                    b.Property<int?>("BrandId");
 
-                    b.Property<int>("CategoryId");
+                    b.Property<int?>("CategoryId");
 
                     b.Property<DateTime>("CreatedDate");
 
                     b.Property<string>("DeepLinkingUrl");
-
-                    b.Property<int?>("GlbFileId");
-
-                    b.Property<int?>("ImageFileId");
-
-                    b.Property<int?>("IosFileId");
 
                     b.Property<bool>("IsVisible");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<int>("ShopId");
+                    b.Property<int?>("ShopId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("GlbFileId");
 
                     b.HasIndex("ShopId");
 
@@ -162,14 +194,10 @@ namespace Interior.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<int?>("FileId");
-
                     b.Property<string>("Name")
                         .IsRequired();
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FileId");
 
                     b.ToTable("Languages");
                 });
@@ -213,8 +241,6 @@ namespace Interior.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<int?>("FileId");
-
                     b.Property<int?>("InteriorId");
 
                     b.Property<DateTime>("ModifiedDate");
@@ -226,8 +252,6 @@ namespace Interior.Migrations
                     b.HasIndex("BrandId");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("FileId");
 
                     b.HasIndex("InteriorId");
 
@@ -259,11 +283,7 @@ namespace Interior.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<int?>("FileId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("FileId");
 
                     b.ToTable("Shops");
                 });
@@ -302,22 +322,6 @@ namespace Interior.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Interior.Models.Entities.Brand", b =>
-                {
-                    b.HasOne("Interior.Models.Entities.FileStorage", "File")
-                        .WithMany("Brands")
-                        .HasForeignKey("FileId")
-                        .OnDelete(DeleteBehavior.SetNull);
-                });
-
-            modelBuilder.Entity("Interior.Models.Entities.Category", b =>
-                {
-                    b.HasOne("Interior.Models.Entities.FileStorage", "File")
-                        .WithMany("Categories")
-                        .HasForeignKey("FileId")
-                        .OnDelete(DeleteBehavior.SetNull);
-                });
-
             modelBuilder.Entity("Interior.Models.Entities.Content", b =>
                 {
                     b.HasOne("Interior.Models.Entities.Brand", "Brand")
@@ -328,11 +332,6 @@ namespace Interior.Migrations
                     b.HasOne("Interior.Models.Entities.Category", "Category")
                         .WithMany("Contents")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Interior.Models.Entities.Interior", "Interior")
-                        .WithMany("Contents")
-                        .HasForeignKey("InteriorId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Interior.Models.Entities.Language", "Language")
@@ -351,6 +350,44 @@ namespace Interior.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Interior.Models.Entities.FilesAttachment", b =>
+                {
+                    b.HasOne("Interior.Models.Entities.Brand", "Brand")
+                        .WithOne("FilesAttachment")
+                        .HasForeignKey("Interior.Models.Entities.FilesAttachment", "BrandId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Interior.Models.Entities.Category", "Category")
+                        .WithOne("FilesAttachment")
+                        .HasForeignKey("Interior.Models.Entities.FilesAttachment", "CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Interior.Models.Entities.FileStorage", "File")
+                        .WithOne("FilesAttachment")
+                        .HasForeignKey("Interior.Models.Entities.FilesAttachment", "FileId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Interior.Models.Entities.Interior", "Interior")
+                        .WithMany("FilesAttachments")
+                        .HasForeignKey("InteriorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Interior.Models.Entities.Language", "Language")
+                        .WithOne("FilesAttachment")
+                        .HasForeignKey("Interior.Models.Entities.FilesAttachment", "LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Interior.Models.Entities.Recommendation", "Recommendation")
+                        .WithOne("FilesAttachment")
+                        .HasForeignKey("Interior.Models.Entities.FilesAttachment", "RecommendationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Interior.Models.Entities.Shop", "Shop")
+                        .WithOne("FilesAttachment")
+                        .HasForeignKey("Interior.Models.Entities.FilesAttachment", "ShopId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Interior.Models.Entities.Interior", b =>
                 {
                     b.HasOne("Interior.Models.Entities.Brand", "Brand")
@@ -363,23 +400,10 @@ namespace Interior.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Interior.Models.Entities.FileStorage", "File")
-                        .WithMany("Interiors")
-                        .HasForeignKey("GlbFileId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("Interior.Models.Entities.Shop", "Shop")
                         .WithMany("Interiors")
                         .HasForeignKey("ShopId")
                         .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("Interior.Models.Entities.Language", b =>
-                {
-                    b.HasOne("Interior.Models.Entities.FileStorage", "File")
-                        .WithMany("Languages")
-                        .HasForeignKey("FileId")
-                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("Interior.Models.Entities.OptionContent", b =>
@@ -407,11 +431,6 @@ namespace Interior.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Interior.Models.Entities.FileStorage", "File")
-                        .WithMany("Recommendations")
-                        .HasForeignKey("FileId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("Interior.Models.Entities.Interior")
                         .WithMany("Recommendations")
                         .HasForeignKey("InteriorId");
@@ -420,14 +439,6 @@ namespace Interior.Migrations
                         .WithMany("Recommendations")
                         .HasForeignKey("ShopId")
                         .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("Interior.Models.Entities.Shop", b =>
-                {
-                    b.HasOne("Interior.Models.Entities.FileStorage", "File")
-                        .WithMany("Shops")
-                        .HasForeignKey("FileId")
-                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("Interior.Models.Entities.User", b =>

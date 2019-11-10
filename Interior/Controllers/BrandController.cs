@@ -67,7 +67,7 @@ namespace Interior.Controllers
                 {
                     modelContents.Add(new ContentViewModel { Text = item.Text, LanguageId = item.LanguageId, Id = item.Id });
                 }
-                var result = new CreateBrandViewModel { Id = model.Id, Contents = modelContents, FileName = model.File?.Name };
+                var result = new CreateBrandViewModel { Id = model.Id, Contents = modelContents, FileName = model.FilesAttachment?.File?.Name };
                 return Ok(ResponseSuccess.Create(result));
             }
             catch (Exception)
@@ -108,10 +108,11 @@ namespace Interior.Controllers
                             return BadRequest(ResponseError.Create($"File big then {_fileSize} bytes "));
                         }
                     }
-                    Brand brand = new Brand { Id = 0, FileId = fileID };
+                    Brand brand = new Brand { Id = 0};
                     var currentBrand = await _brandService.AddBrandAsync(brand);
                     if (currentBrand == ResultCode.Success)
                     {
+                        
                         IEnumerable<ContentViewModel> contentModel = JsonConvert.DeserializeObject<IEnumerable<ContentViewModel>>(model.Contents);
                         var currentContents = _mapper.Map<IEnumerable<ContentViewModel>, IEnumerable<Content>>(contentModel);
                         foreach (var content in currentContents)
@@ -177,7 +178,7 @@ namespace Interior.Controllers
                             return BadRequest(ResponseError.Create($"File big then {_fileSize} bytes "));
                         }
                     }
-                    Brand brand = new Brand { Id = model.Id, FileId = fileID };
+                    Brand brand = new Brand { Id = model.Id};
                     var currentBrand = await _brandService.UpdateBrandAsync(brand);
                     if (currentBrand == ResultCode.Success)
                     {

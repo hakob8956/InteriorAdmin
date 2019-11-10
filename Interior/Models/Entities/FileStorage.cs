@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,12 +17,15 @@ namespace Interior.Models.Entities
         public string Name { get; set; }
         [Required]
         public string Path { get; set; }
-        public ICollection<Language> Languages { get; set; }
-        public ICollection<Category> Categories { get; set; }
-        public ICollection<Shop> Shops { get; set; }
-        public ICollection<Brand> Brands { get; set; }
-        public ICollection<Interior> Interiors { get; set; }
-        public ICollection<Recommendation> Recommendations { get; set; }
+        public FilesAttachment FilesAttachment { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public FileStorage()
+        {
+            this.CreatedDate = DateTime.UtcNow;
+
+
+        }
+
 
     }
 }

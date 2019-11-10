@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections;
 using System.ComponentModel.DataAnnotations;
@@ -25,6 +27,19 @@ namespace Interior.Models.Entities
         public User()
         {
             this.CreatedDate = DateTime.UtcNow;
+        }
+        public class UserMapping : IEntityTypeConfiguration<User>
+        {
+
+            public void Configure(EntityTypeBuilder<User> builder)
+            {
+                builder.HasOne<Role>(s => s.Role)
+                .WithMany(s => s.Users)
+                .HasForeignKey(s => s.RoleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                builder.HasIndex(u => new { u.Username, u.Email }).IsUnique();
+            }
         }
 
     }
