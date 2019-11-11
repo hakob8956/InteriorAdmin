@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace Interior.Controllers
 {
@@ -23,18 +24,20 @@ namespace Interior.Controllers
     {
         private readonly ILanguageService _languageService;
         private readonly IFileService _fileService;
-        private readonly IHostingEnvironment _appEnvironment;
-        private readonly long _fileSize;
+        private readonly IFilesAttachmentService _filesAttachmentService;
+
 
         private readonly IMapper _mapper;
-        public LanguageController(ILanguageService languageService, IMapper mapper, IFileService fileService, IHostingEnvironment appEnvironment, IOptions<AppSettings> settings)
+        public LanguageController(
+            ILanguageService languageService, 
+            IMapper mapper, 
+            IFileService fileService, 
+            IFilesAttachmentService filesAttachmentService)
         {
             _languageService = languageService;
             _mapper = mapper;
             _fileService = fileService;
-            _appEnvironment = appEnvironment;
-            _fileSize = settings.Value.FileSize;
-
+            _filesAttachmentService = filesAttachmentService;
         }
         [HttpGet("get-all")]
         public async Task<IActionResult> GetLanguages()
@@ -63,16 +66,14 @@ namespace Interior.Controllers
                 var currentLanguage = await _languageService.GetLanguageByIdAsync(id);
                 if (currentLanguage != null)
                 {
-                    FileContentResult currentFile = _fileService.DownloadFile(currentLanguage.FilesAttachment?.File?.Name);
-                    LanguageGetViewModel result = new LanguageGetViewModel()
+                    var result = new LanguageRequestViewModel { Id = currentLanguage.Id, Code = currentLanguage.Code, Name = currentLanguage.Name };
+                    if (currentLanguage.FilesAttachment?.File != null)
                     {
-                        Code = currentLanguage.Code,
-                        Id = currentLanguage.Id,
-                        Name = currentLanguage.Name,
-                        FileName = currentLanguage?.FilesAttachment?.File?.Name,
-                        ImageData = currentFile?.FileContents,
-                        ImageMimeType = currentFile?.ContentType
-                    };
+                        var currentFile = _fileService.DownloadFile(Path.GetFileName(currentLanguage.FilesAttachment.File.Path));
+                        var fileViewModel = new FileViewModel { FileId = currentLanguage.FilesAttachment.FileId, FileName = currentLanguage.FilesAttachment.File.Name, ImageData = currentFile.FileContents, ImageMimeType = currentFile.ContentType };
+                        result.CurrentFile = fileViewModel;
+                    }
+
                     return Ok(ResponseSuccess.Create(result));
 
                 }
@@ -99,46 +100,39 @@ namespace Interior.Controllers
                         int? fileID = null;
                         if (model.File != null)
                         {
-                            if (!Directory.Exists("/Files"))
-                                Directory.CreateDirectory("/Files");
-                            var fileName = DateTime.Now.Ticks + Path.GetExtension(model.File.FileName);
-                            string filePath = Path.Combine(_appEnvironment.WebRootPath, "Files", fileName);
-                            if (model.File.Length <= _fileSize)
-                            {
-                                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                                {
-                                    await model.File.CopyToAsync(fileStream);
-                                }
-                                FileStorage file = new FileStorage { Name = model.FileName, Path = filePath };
-                                var currentFile = await _fileService.AddFileAsync(file);
-                                if (currentLanguage.FilesAttachment != null)//delete old file
-                                    await _fileService.DeleteFileAsync(currentLanguage.FilesAttachment.Id);
+                            FileViewModel fileView = JsonConvert.DeserializeObject<FileViewModel>(model.CurrentFile);
 
-                                if (currentFile != ResultCode.Error)
-                                {
-                                    fileID = file.Id;
-                                }
-                                else
-                                    return BadRequest(ResponseError.Create("Can't create file"));
-                            }
+                            FileStorage file = await _fileService.UploadFileAsync(model.File);
+                            file.Id = fileView.FileId;
+                            ResultCode currentFileStatusCode = ResultCode.Error;
+
+                            if (fileView.FileId > 0)
+                                currentFileStatusCode = await _fileService.UpdateFileAsync(file);
                             else
-                            {
-                                return BadRequest(ResponseError.Create($"File big then {_fileSize} bytes "));
-                            }
+                                currentFileStatusCode = await _fileService.AddFileAsync(file);
+
+                            if (currentFileStatusCode != ResultCode.Error)
+                                fileID = file.Id;
+                            else
+                                return BadRequest(ResponseError.Create("Can't create file"));
                         }
-                        else if (currentLanguage.FilesAttachment != null && model.FileName == currentLanguage?.FilesAttachment?.File?.Name)
-                        {
-                            fileID = currentLanguage.FilesAttachment?.File?.Id;
-                        }
-                        Language language = new Language { Id = model.Id, Name = model.Name, Code = model.Code };//TODO ADD FileID
+                
+                        Language language = new Language { Id = model.Id, Name = model.Name, Code = model.Code };
                         var resultCode = await _languageService.UpdateLanguageAsync(language);
                         if (resultCode != ResultCode.Error)
                         {
+                            if (fileID != null)
+                            {
+                                FilesAttachment filesAttachment = new FilesAttachment { LanguageId = language.Id, FileId = (int)fileID, FileType = (byte)FileType.Image };
+                                var CurrentFilesAttachment = await _filesAttachmentService.GetFilesAttachmentAsync(filesAttachment.FileId);
+                                if (CurrentFilesAttachment == null)
+                                    await _filesAttachmentService.AddFilesAttachemntAsync(filesAttachment);
+                            }
                             return Ok(ResponseSuccess.Create("Success"));
                         }
                         return BadRequest(ResponseError.Create("Can't create language"));
                     }
-                    return BadRequest(ResponseError.Create("Can't found language"));
+                    return NotFound(ResponseError.Create("Can't found language"));
 
                 }
                 return BadRequest(ResponseError.Create("Invalid form"));
@@ -160,32 +154,31 @@ namespace Interior.Controllers
                     int? fileID = null;
                     if (model.File != null)
                     {
-                        if (!Directory.Exists("/Files"))
-                            Directory.CreateDirectory("/Files");
-                        var fileName = DateTime.Now.Ticks + Path.GetExtension(model.File.FileName);
-                        string filePath = Path.Combine(_appEnvironment.WebRootPath, "Files", fileName);
-                        if (model.File.Length <= _fileSize)
-                        {
-                            using (var fileStream = new FileStream(filePath, FileMode.Create))
-                            {
-                                await model.File.CopyToAsync(fileStream);
-                            }
-                            FileStorage file = new FileStorage { Name = model.FileName, Path = filePath };
-                            var currentFile = await _fileService.AddFileAsync(file);
-                            if (currentFile != ResultCode.Error)
-                                fileID = file.Id;
-                            else
-                                return BadRequest(ResponseError.Create("Can't create file"));
-                        }
+                        FileViewModel fileView = JsonConvert.DeserializeObject<FileViewModel>(model.CurrentFile);
+
+                        FileStorage file = await _fileService.UploadFileAsync(model.File);
+                        file.Id = fileView.FileId;
+                        ResultCode currentFileStatusCode = ResultCode.Error;
+
+                        if (fileView.FileId > 0)
+                            currentFileStatusCode = await _fileService.UpdateFileAsync(file);
                         else
-                        {
-                            return BadRequest(ResponseError.Create($"File big then {_fileSize} bytes "));
-                        }
+                            currentFileStatusCode = await _fileService.AddFileAsync(file);
+
+                        if (currentFileStatusCode != ResultCode.Error)
+                            fileID = file.Id;
+                        else
+                            return BadRequest(ResponseError.Create("Can't create file"));
                     }
-                    Language language = new Language { Name = model.Name, Code = model.Code };//TODO:Add FileId
+                    Language language = new Language { Name = model.Name, Code = model.Code };
                     var resultCode = await _languageService.AddLanguageAsync(language);
-                    if (resultCode != ResultCode.Error)
+                    if (resultCode == ResultCode.Success)
                     {
+                        if (fileID != null)
+                        {
+                            FilesAttachment filesAttachment = new FilesAttachment { LanguageId = language.Id, FileId = (int)fileID, FileType = (byte)FileType.Image };
+                            await _filesAttachmentService.AddFilesAttachemntAsync(filesAttachment);
+                        }
                         return Ok(ResponseSuccess.Create("Success"));
                     }
                     return BadRequest(ResponseError.Create("Can't create language"));

@@ -1,20 +1,14 @@
+import { FileModel } from './File';
+
 export class LanguageShowModel{
     id:number;
     name:string;
     code:string;
 }
-export class LanguageEditModel{
+export class LanguageModel{
     id:number;
     name:string;
     code:string;
+    currentFile: FileModel;
     file:File;
-    fileName:string;
-}
-export class LanguageGetModel{
-    id:number;
-    name:string;
-    code:string;
-    fileName:string;
-    imageData:Blob;
-    imageMimeType:string;
 }

@@ -1,5 +1,5 @@
 import { CategoryEditModel } from "./../models/Category";
-import { LanguageEditModel } from "src/app/models/Language";
+import { LanguageModel } from "src/app/models/Language";
 import { LanguageEditComponent } from "./../Language/language-edit/language-edit.component";
 import {
   RegisterUserModel,
@@ -11,7 +11,7 @@ import { Injectable } from "@angular/core";
 import { throwError, Observable, BehaviorSubject } from "rxjs";
 import { HttpErrorResponse, HttpClient } from "@angular/common/http";
 import { State, toODataString } from "@progress/kendo-data-query";
-import { ShopEditModel } from "../models/Shop";
+import { ShopModel } from "../models/Shop";
 import { BrandEditModel } from "../models/Brand";
 
 export abstract class BaseService {
@@ -75,29 +75,30 @@ export class LanguageService extends BaseService {
     super();
   }
 
-  public addLanguages(modelCreate: LanguageEditModel) {
+  public addLanguages(modelCreate: LanguageModel) {
     const formData: FormData = new FormData();
     if (modelCreate.file != null)
       formData.append("File", modelCreate.file, modelCreate.file.name);
     formData.append("Name", modelCreate.name);
     formData.append("Code", modelCreate.code);
-    if (modelCreate.fileName != null)
-      formData.append("FileName", modelCreate.fileName);
+    if (modelCreate.currentFile != null)
+      formData.append("CurrentFile", JSON.stringify(modelCreate.currentFile));
     formData.append("Id", modelCreate.id.toString());
 
     return this.http
       .post(`${this.BASE_URL}/Language/create-language`, formData)
       .pipe(catchError(this.handleError));
   }
-  public editLanguages(modelCreate: LanguageEditModel) {
+  public editLanguages(modelCreate: LanguageModel) {
     console.log(modelCreate);
     const formData: FormData = new FormData();
     if (modelCreate.file != null)
       formData.append("File", modelCreate.file, modelCreate.file.name);
-    formData.append("Id", modelCreate.id.toString());
     formData.append("Name", modelCreate.name);
     formData.append("Code", modelCreate.code);
-    formData.append("FileName", modelCreate.fileName);
+    if (modelCreate.currentFile != null)
+      formData.append("CurrentFile", JSON.stringify(modelCreate.currentFile));
+    formData.append("Id", modelCreate.id.toString());
 
     return this.http
       .post(`${this.BASE_URL}/Language/edit-language`, formData)
@@ -165,25 +166,27 @@ export class ShopService extends BaseService {
       .get(`${this.BASE_URL}/Shop/get-byId/${id}`)
       .pipe(catchError(this.handleError));
   }
-  public createShop(model: ShopEditModel) {
+  public createShop(model: ShopModel) {
     console.log(model);
     const formData: FormData = new FormData();
     if (model.file != null)
       formData.append("File", model.file, model.file.name);
     formData.append("Contents", JSON.stringify(model.contents));
-    formData.append("FileName", model.fileName);
+    if (model.currentFile != null)
+      formData.append("CurrentFile", JSON.stringify(model.currentFile));
     formData.append("Id", model.id.toString());
     return this.http
       .post(`${this.BASE_URL}/Shop/create-shop`, formData)
       .pipe(catchError(this.handleError));
   }
-  public editShop(model: ShopEditModel) {
+  public editShop(model: ShopModel) {
     console.log(model);
     const formData: FormData = new FormData();
     if (model.file != null)
       formData.append("File", model.file, model.file.name);
     formData.append("Contents", JSON.stringify(model.contents));
-    formData.append("FileName", model.fileName);
+    if (model.currentFile != null)
+      formData.append("CurrentFile", JSON.stringify(model.currentFile));
     formData.append("Id", model.id.toString());
     return this.http
       .post(`${this.BASE_URL}/Shop/edit-shop`, formData)

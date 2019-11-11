@@ -8,7 +8,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { Form, FormGroup, FormControl, Validators } from "@angular/forms";
 import { BrandEditModel } from "src/app/models/Brand";
-import { LanguageGetModel } from "src/app/models/Language";
+import { LanguageModel } from "src/app/models/Language";
 import { Content } from "src/app/models/Content";
 import { FileModel } from "src/app/models/File";
 
@@ -32,7 +32,7 @@ export class BrandEditComponent implements OnInit {
   fileToUpload: File = null;
   brandId: number;
   form: FormGroup;
-  languageModel: LanguageGetModel;
+  languageModel: LanguageModel;
   brandModel: BrandEditModel = new BrandEditModel();
   contentsModel: Content[] = [];
   currentLanguageId: number;

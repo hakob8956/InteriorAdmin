@@ -80,7 +80,7 @@ namespace Interior.Controllers
                 }
                 var result = new CreateRequestBrandViewModel { Id = model.Id, Contents = modelContents };
 
-                if (model.FilesAttachment.File != null)
+                if (model.FilesAttachment?.File != null)
                 {
                     var currentFile = _fileService.DownloadFile(Path.GetFileName(model.FilesAttachment.File.Path));
                     var fileViewModel = new FileViewModel { FileId = model.FilesAttachment.FileId, FileName = model.FilesAttachment.File.Name, ImageData = currentFile.FileContents, ImageMimeType = currentFile.ContentType };
@@ -181,7 +181,7 @@ namespace Interior.Controllers
 
 
                         if (currentFileStatusCode != ResultCode.Error)
-                            fileID = fileView.FileId;
+                            fileID = file.Id;
                         else
                             return BadRequest(ResponseError.Create("Can't create file"));
 

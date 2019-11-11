@@ -1,8 +1,9 @@
+import { FileModel } from './File';
 import { Content } from './Content';
 
-export class ShopEditModel {
+export class ShopModel {
     id:       number;
-    fileName: string;
+    currentFile: FileModel;
     contents: Content[];
     file:     File;
 }

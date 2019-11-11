@@ -12,18 +12,17 @@ namespace Interior.Models.ViewModels
         public int Id { get; set; }
         public ICollection<Content> Contents { get; set; }
     }
-    public class CreateShopViewModel
+    public class CreateRequestShopViewModel
     {
         public int Id { get; set; }
-        public string FileName { get; set; }
+        public FileViewModel CurrentFile { get; set; }
         public ICollection<ContentViewModel> Contents { get; set; }
-        public IFormFile File { get; set; }
     }
-    public class CreateTakeShopViewModel
+    public class CreateResponseShopViewModel
     {
         public int Id { get; set; }
-        public string FileName { get; set; }
-        public string Contents { get; set; }
+        public string CurrentFile { get; set; }//Json
+        public string Contents { get; set; }//Json
         public IFormFile File { get; set; }
     }
 }

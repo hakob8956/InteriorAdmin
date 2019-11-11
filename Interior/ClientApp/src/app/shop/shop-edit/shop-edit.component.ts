@@ -3,9 +3,10 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Form, FormGroup, FormControl, Validators } from '@angular/forms';
-import { ShopEditModel } from 'src/app/models/Shop';
-import { LanguageGetModel } from 'src/app/models/Language';
+import { ShopModel } from 'src/app/models/Shop';
+import { LanguageModel } from 'src/app/models/Language';
 import { Content } from 'src/app/models/Content';
+import { FileModel } from 'src/app/models/File';
 
 
 @Component({
@@ -29,8 +30,8 @@ export class ShopEditComponent implements OnInit {
   fileToUpload: File = null;
   shopId: number;
   form:FormGroup;
-  languageModel: LanguageGetModel;
-  shopModel: ShopEditModel = new ShopEditModel();
+  languageModel: LanguageModel;
+  shopModel: ShopModel = new ShopModel();
   contentsModel: Content[] = [];
   currentLanguageId: number;
   ngOnInit() {
@@ -56,16 +57,14 @@ export class ShopEditComponent implements OnInit {
     }
   }
   initForm() {
-    console.log(this.languageModel[0].name);
-    // this.form
-    //   .get("language")
-    //   .setValue(
-    //     this.languageModel[0].name != null ? this.languageModel[0].name : ""
-    //   );
-    this.labelImport.nativeElement.innerText =
-      this.shopModel.fileName != null
-        ? this.shopModel.fileName
-        : "Choose file";
+
+    if (
+      this.shopModel.currentFile != null &&
+      this.shopModel.currentFile.fileName != null
+    )
+      this.labelImport.nativeElement.innerText = this.shopModel.currentFile.fileName;
+    else this.labelImport.nativeElement.innerText = "Choose file";
+
   }
   inputTextChange(element: any) {
     if(this.shopModel.contents != null)
@@ -132,8 +131,13 @@ export class ShopEditComponent implements OnInit {
   }
   submitForm() {
     this.shopModel.file = this.fileToUpload;
-    this.shopModel.fileName = this.labelImport.nativeElement.innerText;
-    // console.log(this.shopModel);
+    if (this.shopModel.currentFile != null) {
+      this.shopModel.currentFile.imageData = null;
+      this.shopModel.currentFile.imageMimeType = null;
+    } else {
+      this.shopModel.currentFile = new FileModel();
+    }
+    this.shopModel.currentFile.fileName = this.labelImport.nativeElement.innerText;
     if (this.shopId == 0) {
       this.shopModel.id = 0;
       this.shopService

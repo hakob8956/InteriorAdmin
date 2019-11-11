@@ -8,6 +8,12 @@ using System.Threading.Tasks;
 
 namespace Interior.Models.ViewModels
 {
+    public class LanguageShowViewModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Code { get; set; }
+    }
     public class LanguageEditViewModel
     {
         public int Id { get; set; }
@@ -16,17 +22,14 @@ namespace Interior.Models.ViewModels
         [Required]
         public string Code { get; set; }
 
-        public string FileName { get; set; }
+        public string CurrentFile { get; set; }//Json
         public IFormFile File { get; set; }
     }
-    public class LanguageGetViewModel
+    public class LanguageRequestViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
-       // public FileViewModel File { get; set; }
-        public string FileName { get; set; }
-        public byte[] ImageData { get; set; }
-        public string ImageMimeType { get; set; }
+        public FileViewModel CurrentFile { get; set; }
     }
 }

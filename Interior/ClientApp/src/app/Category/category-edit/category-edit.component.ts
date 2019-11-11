@@ -4,7 +4,7 @@ import {
   CategoryService
 } from "./../../services/DataCenter.service";
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
-import { LanguageGetModel } from "src/app/models/Language";
+import { LanguageModel } from "src/app/models/Language";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -30,7 +30,7 @@ export class CategoryEditComponent implements OnInit {
   form: FormGroup;
   fileToUpload: File = null;
   categoryId: number;
-  languageModel: LanguageGetModel;
+  languageModel: LanguageModel;
   categoryModel: CategoryEditModel = new CategoryEditModel();
   contentsModel: Content[] = [];
   currentLanguageId: number;

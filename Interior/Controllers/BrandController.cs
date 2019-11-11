@@ -23,22 +23,19 @@ namespace Interior.Controllers
     {
         private readonly IBrandService _brandService;
         private readonly IFileService _fileService;
-        private readonly IHostingEnvironment _appEnvironment;
         private readonly IMapper _mapper;
         private readonly IContentService _contentService;
         private readonly IFilesAttachmentService _filesAttachmentService;
         public BrandController(
-            IBrandService brandService, 
-            IMapper mapper, 
+            IBrandService brandService,
+            IMapper mapper,
             IFileService fileService,
-            IHostingEnvironment appEnvironment, 
-            IContentService contentService, 
+            IContentService contentService,
             IFilesAttachmentService filesAttachmentService)
         {
             _brandService = brandService;
             _mapper = mapper;
             _fileService = fileService;
-            _appEnvironment = appEnvironment;
             _contentService = contentService;
             _filesAttachmentService = filesAttachmentService;
         }
@@ -68,20 +65,26 @@ namespace Interior.Controllers
             try
             {
                 var model = await _brandService.GetBrandById(id);
-                List<ContentViewModel> modelContents = new List<ContentViewModel>();
-                foreach (var item in model.Contents)
+                if (model != null)
                 {
-                    modelContents.Add(new ContentViewModel { Text = item.Text, LanguageId = item.LanguageId, Id = item.Id });
-                }
-                var result = new CreateRequestBrandViewModel { Id = model.Id, Contents = modelContents };
 
-                if (model.FilesAttachment.File != null)
-                {
-                    var currentFile = _fileService.DownloadFile(Path.GetFileName(model.FilesAttachment.File.Path));
-                    var fileViewModel = new FileViewModel { FileId = model.FilesAttachment.FileId, FileName = model.FilesAttachment.File.Name, ImageData = currentFile.FileContents, ImageMimeType = currentFile.ContentType };
-                    result.CurrentFile = fileViewModel;
+
+                    List<ContentViewModel> modelContents = new List<ContentViewModel>();
+                    foreach (var item in model.Contents)
+                    {
+                        modelContents.Add(new ContentViewModel { Text = item.Text, LanguageId = item.LanguageId, Id = item.Id });
+                    }
+                    var result = new CreateRequestBrandViewModel { Id = model.Id, Contents = modelContents };
+
+                    if (model.FilesAttachment?.File != null)
+                    {
+                        var currentFile = _fileService.DownloadFile(Path.GetFileName(model.FilesAttachment.File.Path));
+                        var fileViewModel = new FileViewModel { FileId = model.FilesAttachment.FileId, FileName = model.FilesAttachment.File.Name, ImageData = currentFile.FileContents, ImageMimeType = currentFile.ContentType };
+                        result.CurrentFile = fileViewModel;
+                    }
+                    return Ok(ResponseSuccess.Create(result));
                 }
-                return Ok(ResponseSuccess.Create(result));
+                return NotFound(ResponseError.Create("Not found"));
             }
             catch (Exception)
             {
@@ -117,7 +120,7 @@ namespace Interior.Controllers
                             FilesAttachment filesAttachment = new FilesAttachment { BrandId = brand.Id, FileId = (int)fileID, FileType = (byte)FileType.Image };
                             await _filesAttachmentService.AddFilesAttachemntAsync(filesAttachment);
                         }
-                       
+
 
                         if (model.Contents != null)
                         {
@@ -176,7 +179,7 @@ namespace Interior.Controllers
 
 
                         if (currentFileStatusCode != ResultCode.Error)
-                            fileID = fileView.FileId;
+                            fileID = file.Id;
                         else
                             return BadRequest(ResponseError.Create("Can't create file"));
 
@@ -186,14 +189,14 @@ namespace Interior.Controllers
                     if (currentBrand == ResultCode.Success)
                     {
 
-                        if (fileID!=null)
+                        if (fileID != null)
                         {
                             FilesAttachment filesAttachment = new FilesAttachment { BrandId = brand.Id, FileId = (int)fileID, FileType = (byte)FileType.Image };
                             var CurrentFilesAttachment = await _filesAttachmentService.GetFilesAttachmentAsync(filesAttachment.FileId);
                             if (CurrentFilesAttachment == null)
                                 await _filesAttachmentService.AddFilesAttachemntAsync(filesAttachment);
                         }
-                       
+
                         IEnumerable<ContentViewModel> contentModel = JsonConvert.DeserializeObject<IEnumerable<ContentViewModel>>(model.Contents);
                         var currentContents = _mapper.Map<IEnumerable<ContentViewModel>, IEnumerable<Content>>(contentModel);
                         foreach (var content in currentContents)

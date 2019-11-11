@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Interior.Models.Entities;
+using Interior.Models.Interface;
 using Interior.Models.ViewModels;
 
 namespace Interior.Mapping
 {
     public class MapperConfig
     {
+
         public static IMapper CreateMapper()
         {
             var mapperConfig = new MapperConfiguration(conf =>
@@ -32,6 +34,9 @@ namespace Interior.Mapping
 
                 conf.CreateMap<LanguageShowViewModel, Language>();
                 conf.CreateMap<LanguageShowViewModel, Language>().ReverseMap();
+
+  
+
 
                 conf.CreateMap<CategoryShowViewModel, Category>();
                 conf.CreateMap<CategoryShowViewModel, Category>().ReverseMap();

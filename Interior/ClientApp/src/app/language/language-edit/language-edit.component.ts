@@ -8,9 +8,10 @@ import {
 } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { LanguageEditModel, LanguageGetModel } from "src/app/models/Language";
+import { LanguageModel } from "src/app/models/Language";
 import { LanguageService } from "src/app/services/DataCenter.service";
 import { DomSanitizer } from '@angular/platform-browser';
+import { FileModel } from 'src/app/models/File';
 
 @Component({
   selector: "app-language-edit",
@@ -22,8 +23,7 @@ export class LanguageEditComponent implements OnInit {
   faSearch = faSearch;
   @ViewChild("labelImport")
   labelImport: ElementRef;
-  languageEditModel: LanguageEditModel;
-  languageGetModel: LanguageGetModel;
+  languageModel: LanguageModel = new LanguageModel();
   form: FormGroup;
   fileToUpload: File = null;
   isLanguageCreate: boolean;
@@ -44,7 +44,7 @@ export class LanguageEditComponent implements OnInit {
     if (!Number.isNaN(this.languageId) && this.languageId > 0) {
       this.isLanguageCreate = false;
       this.languageService.getLanguage(this.languageId).subscribe(response => {
-        this.languageGetModel = response["data"];
+        this.languageModel = response["data"];
         this.initForm();
       });
       
@@ -54,25 +54,27 @@ export class LanguageEditComponent implements OnInit {
     }
   }
   initForm() {
-    console.log(this.languageGetModel)
+    console.log(this.languageModel)
     this.form
       .get("name")
       .setValue(
-        this.languageGetModel.name != null
-          ? this.languageGetModel.name
+        this.languageModel.name != null
+          ? this.languageModel.name
           : ""
       );
     this.form
       .get("codeName")
       .setValue(
-        this.languageGetModel.code != null
-          ? this.languageGetModel.code
+        this.languageModel.code != null
+          ? this.languageModel.code
           : ""
       );
-    this.labelImport.nativeElement.innerText =
-      this.languageGetModel.fileName != null
-        ? this.languageGetModel.fileName
-        : "Choose file";
+      if (
+        this.languageModel.currentFile != null &&
+        this.languageModel.currentFile.fileName != null
+      )
+        this.labelImport.nativeElement.innerText = this.languageModel.currentFile.fileName;
+      else this.labelImport.nativeElement.innerText = "Choose file";
    
   }
   onFileChange(files: FileList) {
@@ -82,24 +84,27 @@ export class LanguageEditComponent implements OnInit {
     this.fileToUpload = files.item(0);
   }
   submitForm(): void {
-    console.log('Hey')
-    this.languageEditModel = {
-      id: this.languageId,
-      code: this.form.get("codeName").value,
-      name: this.form.get("name").value,
-      file: this.fileToUpload,
-      fileName: this.labelImport.nativeElement.innerText
-    };
-    console.log(this.languageEditModel);
+    this.languageModel.file = this.fileToUpload;
+    if (this.languageModel.currentFile != null) {
+      this.languageModel.currentFile.imageData = null;
+      this.languageModel.currentFile.imageMimeType = null;
+    } else {
+      this.languageModel.currentFile = new FileModel();
+    }
+    this.languageModel.currentFile.fileName = this.labelImport.nativeElement.innerText;
+    this.languageModel.name=this.form.get("name").value;
+    this.languageModel.code=this.form.get("codeName").value;
+
     if(this.isLanguageCreate){
+      this.languageModel.id=0;
       this.languageService
-      .addLanguages(this.languageEditModel)
+      .addLanguages(this.languageModel)
       .subscribe(response => {
         this.checkValidRequest(response["success"])
       });
     }else{
       this.languageService
-      .editLanguages(this.languageEditModel)
+      .editLanguages(this.languageModel)
       .subscribe(response => {
         this.checkValidRequest(response["success"])
       });
