@@ -53,7 +53,7 @@ namespace Interior
             services.AddScoped<IShopService, ShopService>();
             services.AddScoped<IBrandService, BrandService>();
             services.AddScoped<IOptionContent, OptionContentService>();
-            services.AddScoped<IFilesAttachment, FilesAttachmentService>();
+            services.AddScoped<IFilesAttachmentService, FilesAttachmentService>();
 
 
             services.AddSingleton(MapperConfig.CreateMapper());

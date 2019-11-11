@@ -1,11 +1,14 @@
 ﻿using Interior.Enums;
+using Interior.Helpers;
 using Interior.Models.EFContext;
 using Interior.Models.Entities;
 using Interior.Models.Interface;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,30 +17,34 @@ using System.Threading.Tasks;
 
 namespace Interior.Services
 {
-    public class FileService:IFileService
+    public class FileService : IFileService
     {
         private readonly ApplicationContext _context;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly long _fileSize;
 
-        public FileService(ApplicationContext context, IHostingEnvironment hostingEnvironment)
+
+        public FileService(ApplicationContext context, IHostingEnvironment hostingEnvironment, IOptions<AppSettings> settings)
         {
             _context = context;
             this._hostingEnvironment = hostingEnvironment;
+            _fileSize = settings.Value.FileSize;
+
 
         }
 
-        public async Task<FileStorage> AddFileAsync(FileStorage file)
+        public async Task<ResultCode> AddFileAsync(FileStorage file)
         {
             try
             {
                 file.Id = 0;
                 _context.Files.Add(file);
                 await _context.SaveChangesAsync();
-                return file;
+                return ResultCode.Success;
             }
             catch (Exception)
             {
-                return null;
+                return ResultCode.Error;
             }
         }
 
@@ -117,8 +124,39 @@ namespace Interior.Services
                     FileDownloadName = filename
                 };
             }
-            
-            
+
+
+            catch (Exception)
+            {
+
+                return null;
+            }
+        }
+        public async Task<FileStorage> UploadFileAsync(IFormFile fileModel)
+        {
+            try
+            {
+                if (!Directory.Exists("/Files"))
+                    Directory.CreateDirectory("/Files");
+                var fileName = DateTime.Now.Ticks + Path.GetExtension(fileModel.FileName);
+                string filePath = Path.Combine(_hostingEnvironment.WebRootPath, "Files", fileName);
+                if (fileModel.Length <= _fileSize)
+                {
+                    
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                      
+                        await fileModel.CopyToAsync(fileStream);
+                    }
+                    FileStorage file = new FileStorage { Name = fileModel.FileName, Path = filePath };
+                    return file;
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
             catch (Exception)
             {
 

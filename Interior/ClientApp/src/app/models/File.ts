@@ -1,7 +1,7 @@
 export class FileModel
 {
-    FileId: number;
-    FileName: string;
-    ImageData: Blob;
-    ImageMimeType: string;
+    fileId: number;
+    fileName: string;
+    imageData: Blob;
+    imageMimeType: string;
 }

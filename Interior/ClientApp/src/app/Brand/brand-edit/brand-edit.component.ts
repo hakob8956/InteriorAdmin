@@ -6,6 +6,7 @@ import { Form, FormGroup, FormControl, Validators } from '@angular/forms';
 import { BrandEditModel } from 'src/app/models/Brand';
 import { LanguageGetModel } from 'src/app/models/Language';
 import { Content } from 'src/app/models/Content';
+import { FileModel } from 'src/app/models/File';
 
 
 @Component({
@@ -56,15 +57,16 @@ export class BrandEditComponent implements OnInit {
         }
     }
     initForm() {
-        console.log(this.languageModel[0].name);
+        //console.log(this.languageModel[0].name);
         // this.form
         //   .get("language")
         //   .setValue(
         //     this.languageModel[0].name != null ? this.languageModel[0].name : ""
         //   );
+        console.log(this.brandModel.currentFile)
         this.labelImport.nativeElement.innerText =
-            this.brandModel.fileName != null
-                ? this.brandModel.fileName
+            this.brandModel.currentFile.fileName != null
+                ? this.brandModel.currentFile.fileName
                 : "Choose file";
     }
     inputTextChange(element: any) {
@@ -132,14 +134,19 @@ export class BrandEditComponent implements OnInit {
     }
     submitForm() {
         this.brandModel.file = this.fileToUpload;
-        this.brandModel.fileName = this.labelImport.nativeElement.innerText;
         // console.log(this.brandModel);
         if (this.brandId == 0) {
             this.brandModel.id = 0;
+            this.brandModel.currentFile = new FileModel();
+            this.brandModel.currentFile.fileName =  this.labelImport.nativeElement.innerText;
+
             this.brandService
                 .createBrand(this.brandModel)
                 .subscribe(response => this.checkValidRequest(response["success"]));
         } else {
+            this.brandModel.currentFile.imageData=null;
+            this.brandModel.currentFile.imageMimeType=null;
+            this.brandModel.currentFile.fileName = this.labelImport.nativeElement.innerText;
             this.brandService
                 .editBrand(this.brandModel)
                 .subscribe(response => this.checkValidRequest(response["success"]));

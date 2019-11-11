@@ -7,7 +7,7 @@ namespace Interior.Models.ViewModels
 {
     public class FileViewModel
     {
-        public int FileId { get; set; }
+        public int FileId { get; set; } = 0;
         public string FileName { get; set; }
         public byte[] ImageData { get; set; }
         public string ImageMimeType { get; set; }

@@ -2,6 +2,7 @@
 using Interior.Models.EFContext;
 using Interior.Models.Entities;
 using Interior.Models.Interface;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Interior.Services
 {
-    public class FilesAttachmentService : IFilesAttachment
+    public class FilesAttachmentService : IFilesAttachmentService
     {
         private readonly ApplicationContext _context;
         public FilesAttachmentService(ApplicationContext context)
@@ -17,19 +18,60 @@ namespace Interior.Services
             _context = context;
         }
 
-        public Task<ResultCode> AddFilesAttachemntAsync(FilesAttachment fileAttachment)
+        public async  Task<ResultCode> AddFilesAttachemntAsync(FilesAttachment fileAttachment)
         {
-            throw new NotImplementedException();
+            try
+            {
+                fileAttachment.Id = 0;
+                _context.FilesAttachments.Add(fileAttachment);
+                await _context.SaveChangesAsync();
+                return ResultCode.Success;
+            }
+            catch (Exception)
+            {
+                return ResultCode.Error;
+            }
         }
 
-        public Task<ResultCode> DeleteFilesAttachmentAsync(int fileId)
+        public async Task<ResultCode> DeleteFilesAttachmentAsync(int fileId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var model = await _context.FilesAttachments.SingleOrDefaultAsync(f => f.Id == fileId);
+                if (model!=null)
+                {
+                     _context.FilesAttachments.Remove(model);
+                    return ResultCode.Success;
+                }
+                return ResultCode.Error;
+            }
+            catch (Exception)
+            {
+                return ResultCode.Error;
+            }
         }
 
-        public Task<ResultCode> UpdateFilesAttachmentAsync(FilesAttachment fileAttachment)
+        public async Task<FilesAttachment> GetFilesAttachmentAsync(int fileId)
         {
-            throw new NotImplementedException();
+            return await _context.FilesAttachments.Include(s => s.File).SingleOrDefaultAsync(s => s.FileId == fileId);
+        }
+
+        public async Task<ResultCode> UpdateFilesAttachmentAsync(FilesAttachment fileAttachment)
+        {
+            try
+            {
+                var model = await _context.FilesAttachments.SingleOrDefaultAsync(f => f.Id == fileAttachment.Id);
+                if (model != null)
+                {
+                    _context.FilesAttachments.Update(fileAttachment);
+                    return ResultCode.Success;
+                }
+                return ResultCode.Error;
+            }
+            catch (Exception)
+            {
+                return ResultCode.Error;
+            }
         }
     }
 }

@@ -191,7 +191,8 @@ export class BrandService extends BaseService {
         if (model.file != null)
             formData.append('File', model.file, model.file.name);
         formData.append('Contents', JSON.stringify(model.contents));
-        formData.append('FileName', model.fileName);
+        if(model.currentFile != null)
+            formData.append('CurrentFile',JSON.stringify(model.currentFile));//old file
         formData.append('Id', model.id.toString());
         return this.http.post(`${this.BASE_URL}/Brand/create-brand`, formData).pipe(
             catchError(this.handleError)
@@ -203,7 +204,8 @@ export class BrandService extends BaseService {
         if (model.file != null)
             formData.append('File', model.file, model.file.name);
         formData.append('Contents', JSON.stringify(model.contents));
-        formData.append('FileName', model.fileName);
+        if(model.currentFile != null)
+            formData.append('CurrentFile',JSON.stringify(model.currentFile));
         formData.append('Id', model.id.toString());
         return this.http.post(`${this.BASE_URL}/Brand/edit-brand`, formData).pipe(
             catchError(this.handleError)

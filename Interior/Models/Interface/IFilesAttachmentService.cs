@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace Interior.Models.Interface
 {
-    public interface IFilesAttachment
+    public interface IFilesAttachmentService
     {
         Task<ResultCode> AddFilesAttachemntAsync(FilesAttachment fileAttachment);
         Task<ResultCode> DeleteFilesAttachmentAsync(int fileId);
         Task<ResultCode> UpdateFilesAttachmentAsync(FilesAttachment fileAttachment);
+        Task<FilesAttachment> GetFilesAttachmentAsync(int fileId);
 
     }
 }

@@ -114,9 +114,9 @@ namespace Interior.Controllers
                                 if (currentLanguage.FilesAttachment != null)//delete old file
                                     await _fileService.DeleteFileAsync(currentLanguage.FilesAttachment.Id);
 
-                                if (currentFile != null)
+                                if (currentFile != ResultCode.Error)
                                 {
-                                    fileID = currentFile.Id;
+                                    fileID = file.Id;
                                 }
                                 else
                                     return BadRequest(ResponseError.Create("Can't create file"));
@@ -172,8 +172,8 @@ namespace Interior.Controllers
                             }
                             FileStorage file = new FileStorage { Name = model.FileName, Path = filePath };
                             var currentFile = await _fileService.AddFileAsync(file);
-                            if (currentFile != null)
-                                fileID = currentFile.Id;
+                            if (currentFile != ResultCode.Error)
+                                fileID = file.Id;
                             else
                                 return BadRequest(ResponseError.Create("Can't create file"));
                         }

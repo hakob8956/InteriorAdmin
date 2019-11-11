@@ -1,9 +1,9 @@
+import { FileModel } from './File';
 import { Content } from './Content';
 
 export class BrandEditModel {
     id:       number;
-    fileName: string;
+    currentFile: FileModel;
     contents: Content[];
     file:     File;
 }
-
