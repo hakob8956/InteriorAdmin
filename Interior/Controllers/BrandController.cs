@@ -27,7 +27,13 @@ namespace Interior.Controllers
         private readonly IMapper _mapper;
         private readonly IContentService _contentService;
         private readonly IFilesAttachmentService _filesAttachmentService;
-        public BrandController(IBrandService brandService, IMapper mapper, IFileService fileService, IHostingEnvironment appEnvironment, IContentService contentService, IFilesAttachmentService filesAttachmentService)
+        public BrandController(
+            IBrandService brandService, 
+            IMapper mapper, 
+            IFileService fileService,
+            IHostingEnvironment appEnvironment, 
+            IContentService contentService, 
+            IFilesAttachmentService filesAttachmentService)
         {
             _brandService = brandService;
             _mapper = mapper;

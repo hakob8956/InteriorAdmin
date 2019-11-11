@@ -1,4 +1,4 @@
-import { Content } from './../../models/Content';
+import { Content } from "./../../models/Content";
 import {
   LanguageService,
   CategoryService
@@ -9,6 +9,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router, ActivatedRoute } from "@angular/router";
 import { CategoryEditModel } from "src/app/models/Category";
+import { FileModel } from "src/app/models/File";
 
 @Component({
   selector: "app-category-edit",
@@ -56,20 +57,16 @@ export class CategoryEditComponent implements OnInit {
     }
   }
   initForm() {
-    console.log(this.languageModel[0].name);
-    // this.form
-    //   .get("language")
-    //   .setValue(
-    //     this.languageModel[0].name != null ? this.languageModel[0].name : ""
-    //   );
-    this.labelImport.nativeElement.innerText =
-      this.categoryModel.fileName != null
-        ? this.categoryModel.fileName
-        : "Choose file";
+    if (
+      this.categoryModel.currentFile != null &&
+      this.categoryModel.currentFile.fileName != null
+    )
+      this.labelImport.nativeElement.innerText = this.categoryModel.currentFile.fileName;
+    else this.labelImport.nativeElement.innerText = "Choose file";
   }
   inputTextChange(element: any) {
-    if(this.categoryModel.contents != null)
-        this.contentsModel = this.categoryModel.contents;
+    if (this.categoryModel.contents != null)
+      this.contentsModel = this.categoryModel.contents;
     let ispush: boolean = true;
     this.contentsModel.forEach(el => {
       if (el.languageId == +element.name) {
@@ -84,22 +81,37 @@ export class CategoryEditComponent implements OnInit {
         text: element.value
       });
     }
-    this.categoryModel.contents=this.contentsModel;
+    this.categoryModel.contents = this.contentsModel;
     console.log(this.categoryModel);
   }
-  getCurrentIdFromContentModel(languageId:number):number{
-    let result:number = 0;
-    if (this.categoryId > 0)
-    {
-      this.categoryModel.contents.forEach(el=>{
-        if(languageId == el.languageId){
-            result=el.id;
+  getCurrentIdFromContentModel(languageId: number): number {
+    let result: number = 0;
+    if (this.categoryId > 0) {
+      this.categoryModel.contents.forEach(el => {
+        if (languageId == el.languageId) {
+          result = el.id;
         }
       });
     }
     return result;
-    
   }
+  getTextFromCategory(languageId: number): string {
+    let output: string = "";
+    if (this.categoryId == 0) {
+        return output;
+    }
+    try {
+        this.categoryModel.contents.forEach(element => {
+            if (element != null && languageId == element.languageId) {
+                output = element.text;
+            }
+        });
+    } catch {
+        return output;
+    }
+
+    return output;
+}
   onFileChange(files: FileList) {
     this.labelImport.nativeElement.innerText = Array.from(files)
       .map(f => f.name)
@@ -115,14 +127,23 @@ export class CategoryEditComponent implements OnInit {
   }
   submitForm() {
     this.categoryModel.file = this.fileToUpload;
-    this.categoryModel.fileName = this.labelImport.nativeElement.innerText;
+    if(this.categoryModel.currentFile != null){
+      this.categoryModel.currentFile.imageData = null;
+      this.categoryModel.currentFile.imageMimeType = null;
+    }else{
+      this.categoryModel.currentFile = new FileModel();
+    }
+    this.categoryModel.currentFile.fileName = this.labelImport.nativeElement.innerText;
+
     // console.log(this.categoryModel);
     if (this.categoryId == 0) {
       this.categoryModel.id = 0;
+      
       this.categoryServce
         .createCategory(this.categoryModel)
         .subscribe(response => this.checkValidRequest(response["success"]));
     } else {
+    
       this.categoryServce
         .editCategory(this.categoryModel)
         .subscribe(response => this.checkValidRequest(response["success"]));

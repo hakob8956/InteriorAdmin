@@ -1,8 +1,9 @@
 import { Content } from './Content';
+import { FileModel } from './File';
 
 export class CategoryEditModel {
     id:       number;
-    fileName: string;
+    currentFile: FileModel;
     contents: Content[];
     file:     File;
 }
