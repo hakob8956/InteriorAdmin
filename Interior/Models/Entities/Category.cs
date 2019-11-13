@@ -15,7 +15,7 @@ namespace Interior.Models.Entities
         public int Id { get; set; }
         public FilesAttachment FilesAttachment { get; set; }
 
-        public virtual ICollection<Content> Contents { get; set; }
+        public virtual ICollection<ContentAttachment> ContentsAttachment { get; set; }
         public virtual ICollection<Interior> Interiors { get; set; }
         public virtual ICollection<Recommendation> Recommendations { get; set; }
 
@@ -23,7 +23,7 @@ namespace Interior.Models.Entities
         public Category()
         {
             this.CreatedDate = DateTime.UtcNow;
-            Contents = new Collection<Content>();
+            ContentsAttachment = new Collection<ContentAttachment>();
             Interiors = new Collection<Interior>();
             Recommendations = new Collection<Recommendation>();
         }

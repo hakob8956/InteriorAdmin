@@ -23,7 +23,7 @@ namespace Interior.Models.EFContext
         public DbSet<FileStorage> Files { get; set; }
         public DbSet<OptionContent> OptionContents { get; set; }
         public DbSet<FilesAttachment> FilesAttachments { get; set; }
-
+        public DbSet<ContentAttachment> ContentAttachments { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -85,6 +85,8 @@ namespace Interior.Models.EFContext
             modelBuilder.ApplyConfiguration(new Content.ContentMapping());
             modelBuilder.ApplyConfiguration(new OptionContent.OptionContentMapping());
             modelBuilder.ApplyConfiguration(new FilesAttachment.FilesAttachmentMapping());
+            modelBuilder.ApplyConfiguration(new ContentAttachment.ContentAttachmentMapping());
+
         }
     }
 }

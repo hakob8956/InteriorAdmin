@@ -28,15 +28,19 @@ namespace Interior.Controllers
         private readonly IMapper _mapper;
         private readonly IContentService _contentService;
         private readonly IFilesAttachmentService _filesAttachmentService;
+        private readonly IContentAttachmentService _contentAttachmentService;
+
 
         public CategoryController(
             ICategoryService categoryService,
             IMapper mapper,
-            IFileService fileService, 
+            IFileService fileService,
             IHostingEnvironment appEnvironment,
             IOptions<AppSettings> settings,
             IContentService contentService,
-            IFilesAttachmentService filesAttachmentService)
+            IFilesAttachmentService filesAttachmentService,
+            IContentAttachmentService contentAttachmentService)
+
         {
             _categoryService = categoryService;
             _mapper = mapper;
@@ -45,6 +49,8 @@ namespace Interior.Controllers
             _fileSize = settings.Value.FileSize;
             _contentService = contentService;
             _filesAttachmentService = filesAttachmentService;
+            _contentAttachmentService = contentAttachmentService;
+
 
         }
 
@@ -74,12 +80,7 @@ namespace Interior.Controllers
             {
                 var model = await _categoryService.GetCategoryById(id);
                 List<ContentViewModel> modelContents = new List<ContentViewModel>();
-                foreach (var item in model.Contents)
-                {
-                    modelContents.Add(new ContentViewModel { Text = item.Text, LanguageId = item.LanguageId, Id = item.Id });
-                }
-                var result = new CreateRequestBrandViewModel { Id = model.Id, Contents = modelContents };
-
+                var result = _mapper.Map<Category, CreateRequestCategoryViewModel>(model);
                 if (model.FilesAttachment?.File != null)
                 {
                     var currentFile = _fileService.DownloadFile(Path.GetFileName(model.FilesAttachment.File.Path));
@@ -130,14 +131,15 @@ namespace Interior.Controllers
                             var currentContents = _mapper.Map<IEnumerable<ContentViewModel>, IEnumerable<Content>>(contentModel);
                             foreach (var content in currentContents)
                             {
-                                content.CategoryId = category.Id;
                                 if (String.IsNullOrEmpty(content.Text))
                                     await _contentService.DeleteTextToContentAsync(content.Id);
                                 else if (content.Id > 0)
                                     await _contentService.EditTextToContentAsync(content);
                                 else
+                                {
                                     await _contentService.AddTextToContentAsync(content);
-
+                                    await _contentAttachmentService.AddContentAttachmentAsync(new ContentAttachment { CategoryId = category.Id, ContentId = content.Id });
+                                }
                             }
                         }
 
@@ -203,13 +205,15 @@ namespace Interior.Controllers
                         var currentContents = _mapper.Map<IEnumerable<ContentViewModel>, IEnumerable<Content>>(contentModel);
                         foreach (var content in currentContents)
                         {
-                            content.CategoryId = model.Id;
                             if (String.IsNullOrEmpty(content.Text))
                                 await _contentService.DeleteTextToContentAsync(content.Id);
                             else if (content.Id > 0)
                                 await _contentService.EditTextToContentAsync(content);
                             else
+                            {
                                 await _contentService.AddTextToContentAsync(content);
+                                await _contentAttachmentService.AddContentAttachmentAsync(new ContentAttachment { CategoryId = category.Id, ContentId = content.Id });
+                            }
                         }
                         return Ok(ResponseSuccess.Create("Success"));
 

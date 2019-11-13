@@ -4,14 +4,16 @@ using Interior.Models.EFContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Interior.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20191112140550_AddContentAttachment")]
+    partial class AddContentAttachment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,13 +55,9 @@ namespace Interior.Migrations
 
                     b.Property<byte>("ContentType");
 
-                    b.Property<int>("LanguageId");
-
                     b.Property<string>("Text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
 
                     b.ToTable("Contents");
                 });
@@ -76,6 +74,8 @@ namespace Interior.Migrations
 
                     b.Property<int>("ContentId");
 
+                    b.Property<int>("LanguageId");
+
                     b.Property<int?>("RecommendationId");
 
                     b.Property<int?>("ShopId");
@@ -90,6 +90,8 @@ namespace Interior.Migrations
 
                     b.HasIndex("ContentId")
                         .IsUnique();
+
+                    b.HasIndex("LanguageId");
 
                     b.HasIndex("RecommendationId");
 
@@ -342,14 +344,6 @@ namespace Interior.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Interior.Models.Entities.Content", b =>
-                {
-                    b.HasOne("Interior.Models.Entities.Language", "Language")
-                        .WithMany("Content")
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("Interior.Models.Entities.ContentAttachment", b =>
                 {
                     b.HasOne("Interior.Models.Entities.Brand", "Brand")
@@ -365,6 +359,11 @@ namespace Interior.Migrations
                     b.HasOne("Interior.Models.Entities.Content", "Content")
                         .WithOne("ContentAttachment")
                         .HasForeignKey("Interior.Models.Entities.ContentAttachment", "ContentId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Interior.Models.Entities.Language", "Language")
+                        .WithMany("ContentsAttachment")
+                        .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Interior.Models.Entities.Recommendation", "Recommendation")

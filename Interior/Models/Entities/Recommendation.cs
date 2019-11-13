@@ -20,7 +20,7 @@ namespace Interior.Models.Entities
         public Brand Brand { get; set; }
         public int ShopId { get; set; }
         public Shop Shop { get; set; }
-        public virtual ICollection<Content> Contents { get; set; }
+        public virtual ICollection<ContentAttachment> ContentsAttachment { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }

@@ -17,7 +17,7 @@ namespace Interior.Models.Entities
         public string Name { get; set; }
         [Required]
         public string Code { get; set; }
-        public virtual ICollection<Content> Contents { get; set; }
+        public virtual ICollection<Content> Content { get; set; }
         public virtual ICollection<OptionContent> OptionContents { get; set; }
 
         public DateTime CreatedDate { get; set; }
@@ -25,7 +25,7 @@ namespace Interior.Models.Entities
         public Language()
         {
             this.CreatedDate = DateTime.UtcNow;
-            Contents = new Collection<Content>();
+            Content = new Collection<Content>();
             OptionContents = new Collection<OptionContent>();
         }
 

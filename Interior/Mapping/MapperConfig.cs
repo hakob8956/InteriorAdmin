@@ -35,26 +35,33 @@ namespace Interior.Mapping
                 conf.CreateMap<LanguageShowViewModel, Language>();
                 conf.CreateMap<LanguageShowViewModel, Language>().ReverseMap();
 
-  
+
 
 
                 conf.CreateMap<CategoryShowViewModel, Category>();
-                conf.CreateMap<CategoryShowViewModel, Category>().ReverseMap();
+                conf.CreateMap<CategoryShowViewModel, Category>().ReverseMap()
+                .ForMember(s=>s.Contents,opt=>opt.MapFrom(c=>c.ContentsAttachment.Select(s=>s.Content)));
 
                 conf.CreateMap<ContentViewModel, Content>();
                 conf.CreateMap<ContentViewModel, Content>().ReverseMap();
 
                 conf.CreateMap<ShopShowViewModel, Shop>();
-                conf.CreateMap<ShopShowViewModel, Shop>().ReverseMap();
+                conf.CreateMap<ShopShowViewModel, Shop>().ReverseMap()
+                .ForMember(s => s.Contents, opt => opt.MapFrom(c => c.ContentsAttachment.Select(s => s.Content)));
 
                 conf.CreateMap<BrandShowViewModel, Brand>();
-                conf.CreateMap<BrandShowViewModel, Brand>().ReverseMap();
+                conf.CreateMap<BrandShowViewModel, Brand>().ReverseMap()
+                .ForMember(s => s.Contents, opt => opt.MapFrom(c => c.ContentsAttachment.Select(s => s.Content)));
+
+                conf.CreateMap<Brand,CreateRequestBrandViewModel>().ForMember(s => s.Contents, opt => opt.MapFrom(c => c.ContentsAttachment.Select(s => s.Content)));
+                conf.CreateMap<Category, CreateRequestCategoryViewModel>().ForMember(s => s.Contents, opt => opt.MapFrom(c => c.ContentsAttachment.Select(s => s.Content)));
+                conf.CreateMap<Shop, CreateRequestShopViewModel>().ForMember(s => s.Contents, opt => opt.MapFrom(c => c.ContentsAttachment.Select(s => s.Content)));
+
 
                 conf.CreateMap<Interior.Models.Entities.Interior, InteriorShowViewModel>();
                 conf.CreateMap<Interior.Models.Entities.Interior, InteriorShowViewModel>().ReverseMap();
 
-                //conf.CreateMap<CreateTakeInteriorViewModel, Interior.Models.Entities.Interior>();
-                //conf.CreateMap<CreateTakeInteriorViewModel, Interior.Models.Entities.Interior>().ReverseMap();
+               
             });
 
             return mapperConfig.CreateMapper();

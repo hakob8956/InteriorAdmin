@@ -13,7 +13,7 @@ namespace Interior.Models.Entities
         [Key]
         public int Id { get; set; }
         public FilesAttachment FilesAttachment { get; set; }
-        public virtual ICollection<Content> Contents { get; set; }
+        public virtual ICollection<ContentAttachment> ContentsAttachment { get; set; }
         public virtual ICollection<Interior> Interiors { get; set; }
         public virtual ICollection<Recommendation> Recommendations { get; set; }
         public DateTime CreatedDate { get; set; }

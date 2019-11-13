@@ -54,7 +54,7 @@ namespace Interior.Services
         {
             try
             {
-                var model = await _context.Brands.Include(s => s.Contents).AsNoTracking().ToListAsync();
+                var model = await _context.Brands.Include(s => s.ContentsAttachment).ThenInclude(s=>s.Content).AsNoTracking().ToListAsync();
                 return (model, model.Count);
 
             }
@@ -67,7 +67,7 @@ namespace Interior.Services
         }
         public async Task<Brand> GetBrandById(int id)
         {
-            return await _context.Brands.Include(s => s.Contents).Include(s => s.FilesAttachment).ThenInclude(s=>s.File).AsNoTracking().SingleOrDefaultAsync(i => id == i.Id);
+            return await _context.Brands.Include(s => s.ContentsAttachment).ThenInclude(s=>s.Content).Include(s => s.FilesAttachment).ThenInclude(s=>s.File).AsNoTracking().SingleOrDefaultAsync(i => id == i.Id);
         }
         public async Task<ResultCode> UpdateBrandAsync(Brand brand)
         {

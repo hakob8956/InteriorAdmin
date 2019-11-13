@@ -52,7 +52,10 @@ namespace Interior.Services
 
         public async Task<IEnumerable<Recommendation>> GetAllRecommendationsAsync()
         {
-            return await _context.Recommendations.ToListAsync();
+            return await _context.Recommendations
+                .Include(s=>s.ContentsAttachment).ThenInclude(s=>s.Content)
+                .Include(s=>s.FilesAttachment).ThenInclude(s=>s.File)
+                .ToListAsync();
         }
 
         public async Task<ResultCode> UpdateRecommendationAsync(Recommendation recommendation)

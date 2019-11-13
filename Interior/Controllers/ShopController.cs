@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Interior.Enums;
-using Interior.Helpers;
 using Interior.Models.Entities;
 using Interior.Models.Interface;
 using Interior.Models.ViewModels;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Interior.Controllers
 {
@@ -26,14 +21,23 @@ namespace Interior.Controllers
         private readonly IMapper _mapper;
         private readonly IContentService _contentService;
         private readonly IFilesAttachmentService _filesAttachmentService;
+        private readonly IContentAttachmentService _contentAttachmentService;
 
-        public ShopController(IShopService shopService, IMapper mapper, IFileService fileService, IContentService contentService , IFilesAttachmentService filesAttachmentService)
+
+        public ShopController(IShopService shopService,
+            IMapper mapper,
+            IFileService fileService,
+            IContentService contentService,
+            IFilesAttachmentService filesAttachmentService,
+            IContentAttachmentService contentAttachmentService)
         {
             _shopService = shopService;
             _mapper = mapper;
             _fileService = fileService;
             _filesAttachmentService = filesAttachmentService;
             _contentService = contentService;
+            _contentAttachmentService = contentAttachmentService;
+
         }
 
         [HttpGet("get-all")]
@@ -63,14 +67,7 @@ namespace Interior.Controllers
                 var model = await _shopService.GetShopById(id);
                 if (model != null)
                 {
-
-
-                    List<ContentViewModel> modelContents = new List<ContentViewModel>();
-                    foreach (var item in model.Contents)
-                    {
-                        modelContents.Add(new ContentViewModel { Text = item.Text, LanguageId = item.LanguageId, Id = item.Id });
-                    }
-                    var result = new CreateRequestShopViewModel { Id = model.Id, Contents = modelContents };
+                    var result = _mapper.Map<Shop, CreateRequestShopViewModel>(model);
 
                     if (model.FilesAttachment?.File != null)
                     {
@@ -124,13 +121,15 @@ namespace Interior.Controllers
                             var currentContents = _mapper.Map<IEnumerable<ContentViewModel>, IEnumerable<Content>>(contentModel);
                             foreach (var content in currentContents)
                             {
-                                content.ShopId = shop.Id;
                                 if (String.IsNullOrEmpty(content.Text))
                                     await _contentService.DeleteTextToContentAsync(content.Id);
                                 else if (content.Id > 0)
                                     await _contentService.EditTextToContentAsync(content);
                                 else
+                                {
                                     await _contentService.AddTextToContentAsync(content);
+                                    await _contentAttachmentService.AddContentAttachmentAsync(new ContentAttachment { ShopId = shop.Id, ContentId = content.Id });
+                                }
 
                             }
                         }
@@ -197,13 +196,15 @@ namespace Interior.Controllers
                         var currentContents = _mapper.Map<IEnumerable<ContentViewModel>, IEnumerable<Content>>(contentModel);
                         foreach (var content in currentContents)
                         {
-                            content.ShopId = model.Id;
                             if (String.IsNullOrEmpty(content.Text))
                                 await _contentService.DeleteTextToContentAsync(content.Id);
                             else if (content.Id > 0)
                                 await _contentService.EditTextToContentAsync(content);
                             else
+                            {
                                 await _contentService.AddTextToContentAsync(content);
+                                await _contentAttachmentService.AddContentAttachmentAsync(new ContentAttachment { ShopId = shop.Id, ContentId = content.Id });
+                            }
                         }
                         return Ok(ResponseSuccess.Create("Success"));
 
