@@ -54,7 +54,9 @@ namespace Interior.Services
         {
             try
             {
-                var model = await _context.Categories.Include(s=>s.ContentsAttachment).ThenInclude(s=>s.Content).AsNoTracking().ToListAsync();
+                var model = await _context.Categories
+                    .Include(s=>s.ContentsAttachment).ThenInclude(s=>s.Content)
+                    .AsNoTracking().ToListAsync();
                 return (model, model.Count);
 
             }
@@ -69,14 +71,16 @@ namespace Interior.Services
         public async Task<Category> GetCategoryById(int id)
         {
             return await _context.Categories.Include(s => s.ContentsAttachment).ThenInclude(s=>s.Content)
-                .Include(s=>s.FilesAttachment).ThenInclude(s=>s.File).AsNoTracking().SingleOrDefaultAsync(i=>id==i.Id);
+                .Include(s=>s.FilesAttachment).ThenInclude(s=>s.File)
+                .AsNoTracking().SingleOrDefaultAsync(i=>id==i.Id);
         }
 
         public async Task<ResultCode> UpdateCategoryAsync(Category category)
         {
             try
             {
-                var currentCategory = await _context.Categories.AsNoTracking().SingleOrDefaultAsync(n => n.Id == category.Id);
+                var currentCategory = await _context.Categories
+                    .AsNoTracking().SingleOrDefaultAsync(n => n.Id == category.Id);
                 if (currentCategory == null)
                     return ResultCode.Error;
                 _context.Categories.Update(category);

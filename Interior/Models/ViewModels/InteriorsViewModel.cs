@@ -21,8 +21,8 @@ namespace Interior.Models.ViewModels
     public class InteriorRequestModel
     {
         public int Id { get; set; }
-        public Content NameContent { get; set; }
-        public Content DescriptionContent { get; set; }
+        public ICollection<Content> NameContent { get; set; }
+        public ICollection<Content> DescriptionContent { get; set; }
         public FileViewModel ImageFile { get; set; }
 
         public FileViewModel IosFile { get; set; }
@@ -58,7 +58,7 @@ namespace Interior.Models.ViewModels
         public int BrandId { get; set; }
         public int CategoryId { get; set; }
         public bool IsVisible { get; set; }
-        public ICollection<OptionContent> OptionContents { get; set; } //convertJson
+        public string OptionContents { get; set; } //convertJson
     }
 
 }

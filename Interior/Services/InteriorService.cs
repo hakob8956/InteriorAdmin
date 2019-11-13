@@ -79,9 +79,9 @@ namespace Interior.Services
                 var lenght = await _context.Interiors.CountAsync();
                 IQueryable<Interior.Models.Entities.Interior> data = null;
                 if (skip != null || take != null)
-                    data = _context.Interiors.Skip((int)skip).Take((int)take);
+                    data = _context.Interiors.Include(s=>s.ContentAttachments).ThenInclude(s=>s.Content).Skip((int)skip).Take((int)take);
                 else
-                    data = _context.Interiors;
+                    data = _context.Interiors.Include(s=>s.ContentAttachments).ThenInclude(s=>s.Content);
                 if (desc != null && columnName != null)
                     data = OrderTable(data, columnName, (bool)desc);
 
@@ -95,6 +95,9 @@ namespace Interior.Services
         public async Task<Interior.Models.Entities.Interior> GetByIdAsync(int id)
         {
             return await _context.Interiors
+                .Include(s=>s.ContentAttachments).ThenInclude(s=>s.Content)
+                .Include(s=>s.FilesAttachments).ThenInclude(s=>s.File)
+                .Include(s=>s.OptionsContents)
                 .AsNoTracking().SingleOrDefaultAsync(r => r.Id == id);
         }
 

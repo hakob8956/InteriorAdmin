@@ -16,7 +16,7 @@ namespace Interior.Models.Interface
         Task<ResultCode> UpdateFileAsync(FileStorage file);
         Task<FileStorage> GetFileById(int id);
         FileContentResult DownloadFile(string filename);
-        Task<FileStorage> UploadFileAsync(IFormFile fileModel);
+        Task<FileStorage> UploadFileAsync(IFormFile fileMode,FileType currentType);
         string GetMimeType(string fileName);
     }
 }

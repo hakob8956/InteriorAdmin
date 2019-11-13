@@ -102,7 +102,7 @@ namespace Interior.Controllers
                         {
                             FileViewModel fileView = JsonConvert.DeserializeObject<FileViewModel>(model.CurrentFile);
 
-                            FileStorage file = await _fileService.UploadFileAsync(model.File);
+                            FileStorage file = await _fileService.UploadFileAsync(model.File,FileType.Image);
                             file.Id = fileView.FileId;
                             ResultCode currentFileStatusCode = ResultCode.Error;
 
@@ -110,6 +110,7 @@ namespace Interior.Controllers
                                 currentFileStatusCode = await _fileService.UpdateFileAsync(file);
                             else
                                 currentFileStatusCode = await _fileService.AddFileAsync(file);
+                            
 
                             if (currentFileStatusCode != ResultCode.Error)
                                 fileID = file.Id;
@@ -123,7 +124,7 @@ namespace Interior.Controllers
                         {
                             if (fileID != null)
                             {
-                                FilesAttachment filesAttachment = new FilesAttachment { LanguageId = language.Id, FileId = (int)fileID, FileType = (byte)FileType.Image };
+                                FilesAttachment filesAttachment = new FilesAttachment { LanguageId = language.Id, FileId = (int)fileID };
                                 var CurrentFilesAttachment = await _filesAttachmentService.GetFilesAttachmentAsync(filesAttachment.FileId);
                                 if (CurrentFilesAttachment == null)
                                     await _filesAttachmentService.AddFilesAttachemntAsync(filesAttachment);
@@ -156,14 +157,15 @@ namespace Interior.Controllers
                     {
                         FileViewModel fileView = JsonConvert.DeserializeObject<FileViewModel>(model.CurrentFile);
 
-                        FileStorage file = await _fileService.UploadFileAsync(model.File);
+                        FileStorage file = await _fileService.UploadFileAsync(model.File,FileType.Image);
                         file.Id = fileView.FileId;
                         ResultCode currentFileStatusCode = ResultCode.Error;
 
                         if (fileView.FileId > 0)
                             currentFileStatusCode = await _fileService.UpdateFileAsync(file);
                         else
-                            currentFileStatusCode = await _fileService.AddFileAsync(file);
+                             currentFileStatusCode = await _fileService.AddFileAsync(file);
+                        
 
                         if (currentFileStatusCode != ResultCode.Error)
                             fileID = file.Id;
@@ -176,7 +178,7 @@ namespace Interior.Controllers
                     {
                         if (fileID != null)
                         {
-                            FilesAttachment filesAttachment = new FilesAttachment { LanguageId = language.Id, FileId = (int)fileID, FileType = (byte)FileType.Image };
+                            FilesAttachment filesAttachment = new FilesAttachment { LanguageId = language.Id, FileId = (int)fileID };
                             await _filesAttachmentService.AddFilesAttachemntAsync(filesAttachment);
                         }
                         return Ok(ResponseSuccess.Create("Success"));

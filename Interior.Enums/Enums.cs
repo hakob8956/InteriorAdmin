@@ -14,6 +14,11 @@ namespace Interior.Enums
         Image=0,
         AndroidBundle=1,
         IosBundle=2,
-        Glb=3,
+        Glb=3
+    }
+    public enum ContentType : byte
+    {
+        Name=0,
+        Description=1
     }
 }

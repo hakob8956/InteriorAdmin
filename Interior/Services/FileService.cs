@@ -132,7 +132,7 @@ namespace Interior.Services
                 return null;
             }
         }
-        public async Task<FileStorage> UploadFileAsync(IFormFile fileModel)
+        public async Task<FileStorage> UploadFileAsync(IFormFile fileModel,FileType currentType)
         {
             try
             {
@@ -148,7 +148,7 @@ namespace Interior.Services
                       
                         await fileModel.CopyToAsync(fileStream);
                     }
-                    FileStorage file = new FileStorage { Name = fileModel.FileName, Path = filePath };
+                    FileStorage file = new FileStorage { Name = fileModel.FileName, Path = filePath,FileType=(byte)currentType};
                     return file;
                 }
                 else

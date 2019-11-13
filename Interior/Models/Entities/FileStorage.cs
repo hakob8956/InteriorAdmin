@@ -17,6 +17,9 @@ namespace Interior.Models.Entities
         public string Name { get; set; }
         [Required]
         public string Path { get; set; }
+        [Required]
+        public byte FileType { get; set; }
+
         public FilesAttachment FilesAttachment { get; set; }
         public DateTime CreatedDate { get; set; }
         public FileStorage()

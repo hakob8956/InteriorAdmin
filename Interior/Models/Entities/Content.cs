@@ -16,6 +16,7 @@ namespace Interior.Models.Entities
         public string Text { get; set; }
         public int LanguageId { get; set; }
         public Language Language { get; set; }
+        [Required]
         public byte ContentType { get; set; }
 
         public class ContentMapping : IEntityTypeConfiguration<Content>

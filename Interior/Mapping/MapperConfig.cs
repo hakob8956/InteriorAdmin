@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Interior.Enums;
 using Interior.Models.Entities;
 using Interior.Models.Interface;
 using Interior.Models.ViewModels;
+using Newtonsoft.Json;
 
 namespace Interior.Mapping
 {
@@ -35,33 +37,39 @@ namespace Interior.Mapping
                 conf.CreateMap<LanguageShowViewModel, Language>();
                 conf.CreateMap<LanguageShowViewModel, Language>().ReverseMap();
 
-
-
-
-                conf.CreateMap<CategoryShowViewModel, Category>();
-                conf.CreateMap<CategoryShowViewModel, Category>().ReverseMap()
-                .ForMember(s=>s.Contents,opt=>opt.MapFrom(c=>c.ContentsAttachment.Select(s=>s.Content)));
+                conf.CreateMap<Category, CategoryShowViewModel>()
+                .ForMember(s=>s.Contents,opt=>opt.MapFrom(c=>c.ContentsAttachment.Select(s=>s.Content).Where(s => s.ContentType == (byte)ContentType.Name)));
 
                 conf.CreateMap<ContentViewModel, Content>();
                 conf.CreateMap<ContentViewModel, Content>().ReverseMap();
 
-                conf.CreateMap<ShopShowViewModel, Shop>();
-                conf.CreateMap<ShopShowViewModel, Shop>().ReverseMap()
-                .ForMember(s => s.Contents, opt => opt.MapFrom(c => c.ContentsAttachment.Select(s => s.Content)));
+                conf.CreateMap<Shop, ShopShowViewModel>()
+                .ForMember(s => s.Contents, opt => opt.MapFrom(c => c.ContentsAttachment.Select(s => s.Content).Where(s => s.ContentType == (byte)ContentType.Name)));
 
-                conf.CreateMap<BrandShowViewModel, Brand>();
-                conf.CreateMap<BrandShowViewModel, Brand>().ReverseMap()
-                .ForMember(s => s.Contents, opt => opt.MapFrom(c => c.ContentsAttachment.Select(s => s.Content)));
+                conf.CreateMap<Brand, BrandShowViewModel>()
+                .ForMember(s => s.Contents, opt => opt.MapFrom(c => c.ContentsAttachment.Select(s => s.Content).Where(s => s.ContentType == (byte)ContentType.Name)));
 
-                conf.CreateMap<Brand,CreateRequestBrandViewModel>().ForMember(s => s.Contents, opt => opt.MapFrom(c => c.ContentsAttachment.Select(s => s.Content)));
-                conf.CreateMap<Category, CreateRequestCategoryViewModel>().ForMember(s => s.Contents, opt => opt.MapFrom(c => c.ContentsAttachment.Select(s => s.Content)));
-                conf.CreateMap<Shop, CreateRequestShopViewModel>().ForMember(s => s.Contents, opt => opt.MapFrom(c => c.ContentsAttachment.Select(s => s.Content)));
+                conf.CreateMap<Brand,CreateRequestBrandViewModel>()
+                .ForMember(s => s.Contents, opt => opt.MapFrom(c => c.ContentsAttachment.Select(s => s.Content).Where(s => s.ContentType == (byte)ContentType.Name)));
+
+                conf.CreateMap<Category, CreateRequestCategoryViewModel>()
+                .ForMember(s => s.Contents, opt => opt.MapFrom(c => c.ContentsAttachment.Select(s => s.Content).Where(s => s.ContentType == (byte)ContentType.Name)));
+
+                conf.CreateMap<Shop, CreateRequestShopViewModel>()
+                .ForMember(s => s.Contents, opt => opt.MapFrom(c => c.ContentsAttachment.Select(s => s.Content).Where(s => s.ContentType == (byte)ContentType.Name)));
 
 
-                conf.CreateMap<Interior.Models.Entities.Interior, InteriorShowViewModel>();
-                conf.CreateMap<Interior.Models.Entities.Interior, InteriorShowViewModel>().ReverseMap();
+                conf.CreateMap<Interior.Models.Entities.Interior, InteriorShowViewModel>()
+                .ForMember(s => s.Contents, opt => opt.MapFrom(c => c.ContentAttachments.Select(s => s.Content).Where(s => s.ContentType == (byte)ContentType.Name)));
 
-               
+                conf.CreateMap<Models.Entities.Interior, InteriorRequestModel>()
+                .ForMember(s => s.NameContent, opt => opt.MapFrom(
+                    c => c.ContentAttachments.Select(s => s.Content).Where(s=>s.ContentType==(byte)ContentType.Name)))
+                .ForMember(s=>s.DescriptionContent,opt=>opt.MapFrom(
+                    c=>c.ContentAttachments.Select(s=>s.Content).Where(s=>s.ContentType==(byte)ContentType.Description))
+                 );
+                conf.CreateMap<InteriorResponseModel, Models.Entities.Interior>();
+
             });
 
             return mapperConfig.CreateMapper();

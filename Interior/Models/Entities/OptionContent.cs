@@ -30,6 +30,10 @@ namespace Interior.Models.Entities
                 .WithMany(s => s.OptionContents)
                 .HasForeignKey(s => s.LanguageId)
                 .OnDelete(DeleteBehavior.Cascade);
+                builder.HasOne<Entities.Interior>(s => s.Interior)
+               .WithMany(s => s.OptionsContents)
+               .HasForeignKey(s => s.InteriorId)
+               .OnDelete(DeleteBehavior.Cascade);
             }
         }
 

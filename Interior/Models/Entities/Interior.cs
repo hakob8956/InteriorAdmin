@@ -27,6 +27,7 @@ namespace Interior.Models.Entities
         public int? CategoryId { get; set; }
         public Category Category { get; set; }
 
+        public ICollection<ContentAttachment> ContentAttachments { get; set; }
         public ICollection<FilesAttachment> FilesAttachments { get; set; }
 
         public virtual ICollection<Recommendation> Recommendations { get; set; }
