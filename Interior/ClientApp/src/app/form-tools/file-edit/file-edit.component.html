@@ -1,0 +1,8 @@
+<div class="custom-file form-group">
+    <input type="file"
+           class="custom-file-input"
+           multiple
+           (change)="onFileChange($event.target.files)"
+           accept="image/*" />
+    <label class="custom-file-label" #labelImport for="importFile"><fa-icon [icon]="faSearch"></fa-icon>Choose file</label>
+  </div>

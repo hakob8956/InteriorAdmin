@@ -70,7 +70,7 @@ namespace Interior.Controllers
                     if (currentLanguage.FilesAttachment?.File != null)
                     {
                         var currentFile = _fileService.DownloadFile(Path.GetFileName(currentLanguage.FilesAttachment.File.Path));
-                        var fileViewModel = new FileViewModel { FileId = currentLanguage.FilesAttachment.FileId, FileName = currentLanguage.FilesAttachment.File.Name, ImageData = currentFile.FileContents, ImageMimeType = currentFile.ContentType };
+                        var fileViewModel = new FileViewModel { FileId = currentLanguage.FilesAttachment.FileId, FileName = currentLanguage.FilesAttachment.File.Name, ImageData = currentFile.FileContents, ImageMimeType = currentFile.ContentType ,FileType=(byte)FileType.Image};
                         result.CurrentFile = fileViewModel;
                     }
 

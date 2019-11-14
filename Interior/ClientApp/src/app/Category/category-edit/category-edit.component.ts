@@ -32,7 +32,6 @@ export class CategoryEditComponent implements OnInit {
   categoryId: number;
   languageModel: LanguageModel;
   categoryModel: CategoryEditModel = new CategoryEditModel();
-  contentsModel: Content[] = [];
   currentLanguageId: number;
   ngOnInit() {
     this.form = new FormGroup({
@@ -64,64 +63,17 @@ export class CategoryEditComponent implements OnInit {
       this.labelImport.nativeElement.innerText = this.categoryModel.currentFile.fileName;
     else this.labelImport.nativeElement.innerText = "Choose file";
   }
-  inputTextChange(element: any) {
-    if (this.categoryModel.contents != null)
-      this.contentsModel = this.categoryModel.contents;
-    let ispush: boolean = true;
-    this.contentsModel.forEach(el => {
-      if (el.languageId == +element.name) {
-        el.text = element.value;
-        ispush = false;
-      }
-    });
-    if (ispush) {
-      this.contentsModel.push({
-        id: this.getCurrentIdFromContentModel(+element.name),
-        languageId: +element.name,
-        text: element.value
-      });
-    }
-    this.categoryModel.contents = this.contentsModel;
-    console.log(this.categoryModel);
+  changeContents(currentContents:Content[]){
+    this.categoryModel.contents=currentContents;
+    console.log(this.categoryModel.contents)
   }
-  getCurrentIdFromContentModel(languageId: number): number {
-    let result: number = 0;
-    if (this.categoryId > 0) {
-      this.categoryModel.contents.forEach(el => {
-        if (languageId == el.languageId) {
-          result = el.id;
-        }
-      });
-    }
-    return result;
-  }
-  getTextFromCategory(languageId: number): string {
-    let output: string = "";
-    if (this.categoryId == 0) {
-        return output;
-    }
-    try {
-        this.categoryModel.contents.forEach(element => {
-            if (element != null && languageId == element.languageId) {
-                output = element.text;
-            }
-        });
-    } catch {
-        return output;
-    }
-
-    return output;
-}
-  onFileChange(files: FileList) {
+  changeFile(files: FileList) {
     this.labelImport.nativeElement.innerText = Array.from(files)
       .map(f => f.name)
       .join(", ");
     this.fileToUpload = files.item(0);
   }
-  onChange(value) {
-    this.currentLanguageId = +value;
-    console.log(this.currentLanguageId);
-  }
+  
   cancelButton() {
     this.router.navigate(["/categoryView"]);
   }

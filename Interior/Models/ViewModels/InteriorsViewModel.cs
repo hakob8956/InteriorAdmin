@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -42,7 +43,9 @@ namespace Interior.Models.ViewModels
     public class InteriorResponseModel
     {
         public int Id { get; set; }
+        [Required]
         public string NameContent { get; set; } // Convert Json
+        [Required]
         public string DescriptionContent { get; set; } //Convert Json
         public IFormFile ImageFile { get; set; }
 
@@ -50,13 +53,18 @@ namespace Interior.Models.ViewModels
         public IFormFile AndroidFile { get; set; }
 
         public IFormFile GlbFile { get; set; }
+        [Required]
         public decimal Price { get; set; }
-
+        [Required]
         public bool IsAvailable { get; set; }
         public string BuyUrl { get; set; }
+        [Required]
         public int ShopId { get; set; }
+        [Required]
         public int BrandId { get; set; }
+        [Required]
         public int CategoryId { get; set; }
+        [Required]
         public bool IsVisible { get; set; }
         public string OptionContents { get; set; } //convertJson
     }

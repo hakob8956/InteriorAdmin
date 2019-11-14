@@ -10,6 +10,7 @@ namespace Interior.Models.ViewModels
         public int Id { get; set; }
         public int LanguageId { get; set; }
         public string Text { get; set; }
+        public byte Type { get; set; }
     }
     public class ContentShowViewModel
     {

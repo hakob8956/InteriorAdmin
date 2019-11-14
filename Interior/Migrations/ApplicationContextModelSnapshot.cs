@@ -76,7 +76,7 @@ namespace Interior.Migrations
 
                     b.Property<int>("ContentId");
 
-                    b.Property<int>("InteriorId");
+                    b.Property<int?>("InteriorId");
 
                     b.Property<int?>("RecommendationId");
 
@@ -110,6 +110,8 @@ namespace Interior.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
+                    b.Property<byte>("FileType");
+
                     b.Property<string>("Name")
                         .IsRequired();
 
@@ -127,13 +129,12 @@ namespace Interior.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("BrandId");
+                    b.Property<int?>("BrandId")
+                        .IsRequired();
 
                     b.Property<int?>("CategoryId");
 
                     b.Property<int>("FileId");
-
-                    b.Property<byte>("FileType");
 
                     b.Property<int?>("InteriorId");
 
@@ -146,8 +147,7 @@ namespace Interior.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId")
-                        .IsUnique()
-                        .HasFilter("[BrandId] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("CategoryId")
                         .IsUnique()

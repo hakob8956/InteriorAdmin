@@ -3,40 +3,13 @@
     <div class="card-body">
       <h4 class="card-title">Edit form</h4>
       <form [formGroup]="form" (ngSubmit)="submitForm()" class="forms-sample">
-        <div class="form-group">
-          <label>Name</label><br />
-          <select
-            (change)="onChange($event.target.value)"
-            formControlName="language"
-            class="form-control border-primary"
-            style="margin-bottom:15px;height: 30px;padding: 5px;width: 30%;display:inline-block"
-          >
-            <option 
-            *ngFor="let item of languageModel" 
-            [value]="item.id" 
-            [selected]="item.id == currentLanguageId"
-            >
-              {{ item.name }}
-            </option>
-          </select>
-
-          <ng-container *ngFor="let item of languageModel">
-              <input
-              type="text"
-              class="form-control"
-              style="width: 70%;"
-              [value]="getTextFromCategory(item.id)"
-              placeholder="Text for {{item.name}}"
-              [name]="item.id"
-              [ngStyle]="{
-                display:
-                  item.id == currentLanguageId ? 'inline-block' : 'none'
-              }"
-              (change)=(inputTextChange($event.target))
-            />
-          </ng-container>
-          
-        </div>
+        <app-content-edit
+          [labelName]="'Name'"
+          [currentContent]="categoryModel.contents"
+          [isCreate]="categoryId > 0"
+          (changeContents)="changeContents($event)"
+          [contentType]="0"
+        ></app-content-edit>
         <div class="custom-file form-group">
           <input
             type="file"

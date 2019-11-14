@@ -22,114 +22,48 @@ export class BrandEditComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private languageService: LanguageService,
     private brandService: BrandService
   ) {}
-
   @ViewChild("labelImport")
   labelImport: ElementRef;
   faSearch = faSearch;
-  fileToUpload: File = null;
   brandId: number;
-  form: FormGroup;
-  languageModel: LanguageModel;
   brandModel: BrandEditModel = new BrandEditModel();
-  contentsModel: Content[] = [];
   currentLanguageId: number;
+  fileName:string="Choose File";
   ngOnInit() {
-    this.form = new FormGroup({
-      language: new FormControl("Loading...", Validators.required),
-      importFile: new FormControl("")
-    });
-
-    this.languageService.getAllLanguages().subscribe(response => {
-      this.languageModel = response;
-      this.currentLanguageId = this.languageModel[0].id;
-      console.log(this.currentLanguageId);
-    });
     this.brandId = +this.route.snapshot.params["id"];
     if (!Number.isNaN(this.brandId) && this.brandId > 0) {
       this.brandService.getBrandbyId(this.brandId).subscribe(response => {
         this.brandModel = response["data"];
-        console.log(this.brandModel);
         this.initForm();
       });
     } else {
       this.brandId = 0;
     }
   }
-  initForm() {
-    console.log(this.brandModel.currentFile);
+
+  initForm(){
     if (
       this.brandModel.currentFile != null &&
       this.brandModel.currentFile.fileName != null
     )
-      this.labelImport.nativeElement.innerText = this.brandModel.currentFile.fileName;
-    else this.labelImport.nativeElement.innerText = "Choose file";
+      this.fileName= this.brandModel.currentFile.fileName;
+    else this.fileName= "Choose file";
   }
-  inputTextChange(element: any) {
-    if (this.brandModel.contents != null)
-      this.contentsModel = this.brandModel.contents;
-    let ispush: boolean = true;
-    this.contentsModel.forEach(el => {
-      if (el.languageId == +element.name) {
-        el.text = element.value;
-        ispush = false;
-      }
-    });
-    if (ispush) {
-      this.contentsModel.push({
-        id: this.getCurrentIdFromContentModel(+element.name),
-        languageId: +element.name,
-        text: element.value
-      });
-    }
-    this.brandModel.contents = this.contentsModel;
-    console.log(this.brandModel);
-  }
-  getCurrentIdFromContentModel(languageId: number): number {
-    let result: number = 0;
-    if (this.brandId > 0) {
-      this.brandModel.contents.forEach(el => {
-        if (languageId == el.languageId) {
-          result = el.id;
-        }
-      });
-    }
-    return result;
-  }
-  getTextFromBrand(languageId: number): string {
-    let output: string = "";
-    if (this.brandId == 0) {
-      return output;
-    }
-    try {
-      this.brandModel.contents.forEach(element => {
-        if (element != null && languageId == element.languageId) {
-          output = element.text;
-        }
-      });
-    } catch {
-      return output;
-    }
+  changeContents(currentContents:Content[]){
+    this.brandModel.contents=currentContents;
 
-    return output;
+  
   }
-  onFileChange(files: FileList) {
-    this.labelImport.nativeElement.innerText = Array.from(files)
-      .map(f => f.name)
-      .join(", ");
-    this.fileToUpload = files.item(0);
-  }
-  onChange(value) {
-    this.currentLanguageId = +value;
-    console.log(this.currentLanguageId);
+  onFileChange(currentFile:File){
+    this.brandModel.file=currentFile;
+    console.log(this.brandModel.file)
   }
   cancelButton() {
     this.router.navigate(["/brandView"]);
   }
   submitForm() {
-    this.brandModel.file = this.fileToUpload;
     if (this.brandModel.currentFile != null) {
       this.brandModel.currentFile.imageData = null;
       this.brandModel.currentFile.imageMimeType = null;

@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace Interior.Controllers
 {
@@ -27,12 +28,16 @@ namespace Interior.Controllers
         private readonly IMapper _mapper;
         private readonly IContentService _contentService;
         private readonly IFilesAttachmentService _filesAttachmentService;
+        private readonly IOptionContent _optionContent;
+        private readonly IContentAttachmentService _contentAttachmentService;
         public InteriorController(IInteriorService interiorService,
-            IMapper mapper, 
+            IMapper mapper,
             IFileService fileService,
             IHostingEnvironment appEnvironment,
             IContentService contentService,
-            IFilesAttachmentService filesAttachmentService)
+            IFilesAttachmentService filesAttachmentService,
+            IOptionContent optionContent,
+            IContentAttachmentService contentAttachmentService)
         {
             _interiorService = interiorService;
             _mapper = mapper;
@@ -40,6 +45,7 @@ namespace Interior.Controllers
             _appEnvironment = appEnvironment;
             _contentService = contentService;
             _filesAttachmentService = filesAttachmentService;
+            _optionContent = optionContent;
         }
 
         [HttpGet("get-all")]
@@ -83,7 +89,7 @@ namespace Interior.Controllers
                             if (item.File != null)
                             {
                                 var currentFile = _fileService.DownloadFile(Path.GetFileName(item.File.Path));
-                                var fileViewModel = new FileViewModel { FileId = item.FileId, FileName = item.File.Name, ImageData = currentFile.FileContents, ImageMimeType = currentFile.ContentType };
+                                var fileViewModel = new FileViewModel { FileId = item.FileId, FileName = item.File.Name, ImageData = currentFile.FileContents, ImageMimeType = currentFile.ContentType ,FileType=item.File.FileType};
                                 switch ((FileType)item.File.FileType)
                                 {
                                     case FileType.Image:
@@ -132,14 +138,34 @@ namespace Interior.Controllers
                     var resultCode = await _interiorService.AddInteriorAsync(currentInterior);
                     if (resultCode == ResultCode.Success)
                     {
-                        foreach(var file in files)
+                        foreach (var file in files)
                         {
                             await _filesAttachmentService.AddFilesAttachemntAsync(new FilesAttachment { InteriorId = currentInterior.Id, FileId = file.Id });
                         }
 
+                        IEnumerable<OptionContent> optionContents = JsonConvert.DeserializeObject<IEnumerable<OptionContent>>(model.OptionContents);
+                        foreach (var item in optionContents)
+                        {
+                            item.InteriorId = currentInterior.Id;
+                            if (String.IsNullOrEmpty(item.Name) && String.IsNullOrEmpty(item.Value))
+                                await _optionContent.DeleteOptionContentsAsync(item.Id);
+                            else if (item.Id > 0)
+                                await _optionContent.EditOptionContentsAsync(item);
+                            else
+                                await _optionContent.AddOptionContentsAsync(item);
+                        }
+                        var contentNameStatusCode = await UploadContentsAsync(model.NameContent, ContentType.Name, model.Id);
+                        var contentDescriptionStatusCode = await UploadContentsAsync(model.DescriptionContent, ContentType.Description, model.Id);
+                        if (contentNameStatusCode == ResultCode.Error || contentDescriptionStatusCode == ResultCode.Error)
+                            return BadRequest(ResponseError.Create("can't upload content"));
+
+                        return Ok(ResponseSuccess.Create("Success"));
                     }
-                    currentInterior.OptionsContents.Select(s => s.InteriorId=currentInterior.I);
+                    return BadRequest(ResponseError.Create("Can't create interior"));
+
                 }
+                return BadRequest(ResponseError.Create("Invalid form"));
+
 
             }
             catch (Exception)
@@ -148,7 +174,7 @@ namespace Interior.Controllers
             }
         }
 
-        private async Task<List<FileStorage>> UploadFilesAsync(IFormFile ImageFile,IFormFile IosFile,IFormFile AndroidFile,IFormFile GlbFile)
+        private async Task<List<FileStorage>> UploadFilesAsync(IFormFile ImageFile, IFormFile IosFile, IFormFile AndroidFile, IFormFile GlbFile)
         {
             List<FileStorage> files = new List<FileStorage>();
 
@@ -161,6 +187,29 @@ namespace Interior.Controllers
             if (GlbFile != null)
                 files.Add(await _fileService.UploadFileAsync(GlbFile, FileType.Glb));
             return files;
+        }
+        private async Task<ResultCode> UploadContentsAsync(string content, ContentType contentType, int id)
+        {
+            var resultCode = ResultCode.Success;
+            if (content != null)
+            {
+                IEnumerable<Content> contentModel = JsonConvert.DeserializeObject<IEnumerable<Content>>(content);
+                foreach (var item in contentModel)
+                {
+                    if (String.IsNullOrEmpty(item.Text))
+                        resultCode = await _contentService.DeleteTextToContentAsync(item.Id);
+                    else if (item.Id > 0)
+                        resultCode = await _contentService.EditTextToContentAsync(item);
+                    else
+                    {
+                        item.ContentType = (byte)contentType;
+                        resultCode = await _contentService.AddTextToContentAsync(item);
+                        resultCode = await _contentAttachmentService.AddContentAttachmentAsync(new ContentAttachment { InteriorId = id, ContentId = item.Id });
+                    }
+                }
+
+            }
+            return resultCode;
         }
 
     }

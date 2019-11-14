@@ -1,1 +1,143 @@
-<p>Work...</p>
+<div class="col-md-11 grid-margin stretch-card">
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Edit form</h4>
+      <form [formGroup]="form" (ngSubmit)="submitForm()" class="forms-sample">
+        <div class="form-group">
+          <label>Name</label><br />
+          <select
+            (change)="onChange($event.target.value)"
+            class="form-control border-primary"
+            style="margin-bottom:15px;height: 30px;padding: 5px;width: 30%;display:inline-block"
+          >
+            <option
+              *ngFor="let item of languageModel"
+              [value]="item.id"
+              [selected]="item.id == currentLanguageId"
+            >
+              {{ item.name }}
+            </option>
+          </select>
+
+          <ng-container *ngFor="let item of languageModel">
+            <input
+              type="text"
+              class="form-control"
+              style="width: 70%;"
+              [value]="getTextFromCategory(item.id)"
+              placeholder="Text for {{ item.name }}"
+              [name]="item.id"
+              [ngStyle]="{
+                display: item.id == currentLanguageId ? 'inline-block' : 'none'
+              }"
+              (change)="inputTextChange($event.target)"
+            />
+          </ng-container>
+        </div>
+        <div class="form-group">
+          <label>Description</label><br />
+          <select
+            (change)="onChange($event.target.value)"
+            class="form-control border-primary"
+            style="margin-bottom:15px;height: 30px;padding: 5px;width: 30%;display:inline-block"
+          >
+            <option
+              *ngFor="let item of languageModel"
+              [value]="item.id"
+              [selected]="item.id == currentLanguageId"
+            >
+              {{ item.name }}
+            </option>
+          </select>
+
+          <ng-container *ngFor="let item of languageModel">
+            <input
+              type="text"
+              class="form-control"
+              style="width: 70%;"
+              [value]="getTextFromCategory(item.id)"
+              placeholder="Text for {{ item.name }}"
+              [name]="item.id"
+              [ngStyle]="{
+                display: item.id == currentLanguageId ? 'inline-block' : 'none'
+              }"
+              (change)="inputTextChange($event.target)"
+            />
+          </ng-container>
+        </div>
+        <div class="custom-file form-group">
+          <label>Image</label>
+          <input
+            type="file"
+            class="custom-file-input"
+            multiple
+            (change)="onFileChange($event.target.files)"
+            accept="image/*"
+          />
+          <label class="custom-file-label" #labelImport for="importFile"
+            ><fa-icon [icon]="faSearch"></fa-icon>Choose file</label
+          >
+        </div>
+        <div class="custom-file form-group">
+          <label>IOS Bundle</label>
+          <input
+            type="file"
+            class="custom-file-input"
+            multiple
+            (change)="onFileChange($event.target.files)"
+            accept="image/*"
+          />
+          <label class="custom-file-label" #labelImport for="importFile"
+            ><fa-icon [icon]="faSearch"></fa-icon>Choose file</label
+          >
+        </div>
+        <div class="custom-file form-group">
+          <label>Android Bundle</label>
+          <input
+            type="file"
+            class="custom-file-input"
+            multiple
+            (change)="onFileChange($event.target.files)"
+            accept="image/*"
+          />
+          <label class="custom-file-label" #labelImport for="importFile"
+            ><fa-icon [icon]="faSearch"></fa-icon>Choose file</label
+          >
+        </div>
+        <div class="custom-file form-group">
+          <label>GLB(GLTF) File</label>
+          <input
+            type="file"
+            class="custom-file-input"
+            multiple
+            (change)="onFileChange($event.target.files)"
+            accept="image/*"
+          />
+          <label class="custom-file-label" #labelImport for="importFile"
+            ><fa-icon [icon]="faSearch"></fa-icon>Choose file</label
+          >
+        </div>
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-addon">$</span>
+            <span class="input-group-addon">0.00</span>
+            <input
+              type="text"
+              class="form-control"
+              aria-label="Amount (to the nearest dollar)"
+              formControlName="price"
+            />
+          </div>
+        </div>
+        <button
+          type="submit"
+          class="btn btn-success mr-2"
+          [disabled]="form.invalid"
+        >
+          Submit
+        </button>
+        <button class="btn btn-light" (click)="cancelButton()">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>

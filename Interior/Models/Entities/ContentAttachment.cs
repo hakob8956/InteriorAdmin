@@ -22,7 +22,7 @@ namespace Interior.Models.Entities
         public Shop Shop { get; set; }
         public int? RecommendationId { get; set; }
         public Recommendation Recommendation { get; set; }
-        public int InteriorId { get; set; }
+        public int? InteriorId { get; set; }
         public Entities.Interior Interior { get; set; }
 
         public class ContentAttachmentMapping : IEntityTypeConfiguration<ContentAttachment>

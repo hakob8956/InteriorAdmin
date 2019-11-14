@@ -1,26 +1,22 @@
-import { CategoryEditModel } from './Category';
-import { ShopModel } from './Shop';
-import { Content } from './Content';
-import { FileModel } from './File';
-import { BrandEditModel } from './Brand';
+import { FileModel } from 'src/app/models/File';
+import { Content } from '@angular/compiler/src/render3/r3_ast';
+import { OptionContentModel } from './OptionDescription';
 
-export class InteriorModelTake
+export class InteriorRequestModel
 {
     Id: number;
-    FileName: string;
-    NameContents: Content[];
-    DescriptionContents: Content[];
+    NameContent: Content[];
+    DescriptionContent: Content[];
     ImageFile: FileModel;
-
     IosFile: FileModel;
     AndroidFile: FileModel;
-
     GlbFile: FileModel;
     Price: number;
-    Shops: ShopModel[];
     IsAvailable: boolean;
     BuyUrl: string;
-    Brands: BrandEditModel[];
-    Categories: CategoryEditModel[];
-
+    ShopId: number;
+    BrandId: number;
+    CategoryId: number;
+    IsVisible: boolean;
+    OptionContents: OptionContentModel[];
 }

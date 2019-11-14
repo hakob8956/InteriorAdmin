@@ -83,7 +83,7 @@ namespace Interior.Controllers
                 if (model.FilesAttachment?.File != null)
                 {
                     var currentFile = _fileService.DownloadFile(Path.GetFileName(model.FilesAttachment.File.Path));
-                    var fileViewModel = new FileViewModel { FileId = model.FilesAttachment.FileId, FileName = model.FilesAttachment.File.Name, ImageData = currentFile.FileContents, ImageMimeType = currentFile.ContentType };
+                    var fileViewModel = new FileViewModel { FileId = model.FilesAttachment.FileId, FileName = model.FilesAttachment.File.Name, ImageData = currentFile.FileContents, ImageMimeType = currentFile.ContentType,FileType=(byte)FileType.Image };
                     result.CurrentFile = fileViewModel;
                 }
                 return Ok(ResponseSuccess.Create(result));

@@ -31,6 +31,9 @@ import { BrandViewComponent } from './Brand/brand-view/brand-view.component';
 import { BrandEditComponent } from './Brand/brand-edit/brand-edit.component';
 import { InteriorViewComponent } from './Interior/interior-view/interior-view.component';
 import { InteriorEditComponent } from './Interior/interior-edit/interior-edit.component';
+import { ContentEditComponent } from './form-tools/content-edit/content-edit.component';
+import { MyTestComponent } from './test/my-test/my-test.component';
+import { FileEditComponent } from './form-tools/file-edit/file-edit.component';
 
 
 
@@ -54,7 +57,10 @@ import { InteriorEditComponent } from './Interior/interior-edit/interior-edit.co
     BrandViewComponent,
     BrandEditComponent,
     InteriorViewComponent,
-    InteriorEditComponent
+    InteriorEditComponent,
+    ContentEditComponent,
+    MyTestComponent,
+    FileEditComponent
   ],
   imports: [
     BrowserModule,
