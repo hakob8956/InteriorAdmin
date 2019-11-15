@@ -100,32 +100,35 @@ namespace Interior.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    model.Id = 0;
-                    int? fileID = null;
-                    if (model.File != null)
-                    {
-
-                        FileStorage file = await _fileService.UploadFileAsync(model.File,FileType.Image);
-                        file.FileType = (byte)FileType.Image;
-
-                        var currentFile = await _fileService.AddFileAsync(file);
-                        if (currentFile != ResultCode.Error)
-                            fileID = file.Id;
-                        else
-                            return BadRequest(ResponseError.Create("Can't create file"));
-
-                    }
+                    model.Id = 0;                   
                     Category category = new Category { Id = 0 };
                     var currentCategory = await _categoryService.AddCategoryAsync(category);
                     if (currentCategory == ResultCode.Success)
                     {
+                        int? fileID = null;
+                        if (model.File != null)
+                        {
+
+                            FileStorage file = await _fileService.UploadFileAsync(model.File, FileType.Image);
+                            file.FileType = (byte)FileType.Image;
+
+                            var currentFile = await _fileService.AddFileAsync(file);
+                            if (currentFile != ResultCode.Error)
+                                fileID = file.Id;
+                            else
+                                return BadRequest(ResponseError.Create("Can't create file"));
+
+                        }
                         if (fileID != null)
                         {
                             FilesAttachment filesAttachment = new FilesAttachment { CategoryId = category.Id, FileId = (int)fileID };
-                            await _filesAttachmentService.AddFilesAttachemntAsync(filesAttachment);
+                            var resultfilesCode = await _filesAttachmentService.AddFilesAttachemntAsync(filesAttachment);
+                            if (resultfilesCode != ResultCode.Success)
+                            {
+                                await _fileService.DeleteFileAsync(filesAttachment.FileId);
+                                return BadRequest("Cant create file");
+                            };
                         }
-
-
                         if (model.Contents != null)
                         {
                             IEnumerable<ContentViewModel> contentModel = JsonConvert.DeserializeObject<IEnumerable<ContentViewModel>>(model.Contents);
@@ -169,36 +172,44 @@ namespace Interior.Controllers
                 {
                     var oldCategory = await _categoryService.GetCategoryById(model.Id);
                     if (oldCategory == null)
-                        return BadRequest(ResponseError.Create("not found category"));
-                    int? fileID = null;
-                    if (model.File != null)
-                    {
-                        FileViewModel fileView = JsonConvert.DeserializeObject<FileViewModel>(model.CurrentFile);
-
-                        FileStorage file = await _fileService.UploadFileAsync(model.File,FileType.Image);
-                        file.Id = fileView.FileId;
-                        ResultCode currentFileStatusCode = ResultCode.Error;
-                        if (fileView.FileId > 0)
-                            currentFileStatusCode = await _fileService.UpdateFileAsync(file);
-                        else
-                            currentFileStatusCode = await _fileService.AddFileAsync(file);                      
-                        if (currentFileStatusCode != ResultCode.Error)
-                            fileID = file.Id;
-                        else
-                            return BadRequest(ResponseError.Create("Can't create file"));
-
-                    }
+                        return BadRequest(ResponseError.Create("not found category"));                 
                     Category category = new Category { Id = model.Id };
                     var currentCategory = await _categoryService.UpdateCategoryAsync(category);
                     if (currentCategory == ResultCode.Success)
                     {
+                        int? fileID = null;
+                        if (model.File != null)
+                        {
+                            FileViewModel fileView = JsonConvert.DeserializeObject<FileViewModel>(model.CurrentFile);
 
+                            FileStorage file = await _fileService.UploadFileAsync(model.File, FileType.Image);
+                            file.Id = fileView.FileId;
+                            ResultCode currentFileStatusCode = ResultCode.Error;
+                            if (fileView.FileId > 0)
+                                currentFileStatusCode = await _fileService.UpdateFileAsync(file);
+                            else
+                                currentFileStatusCode = await _fileService.AddFileAsync(file);
+                            if (currentFileStatusCode != ResultCode.Error)
+                                fileID = file.Id;
+                            else
+                                return BadRequest(ResponseError.Create("Can't create file"));
+
+                        }
                         if (fileID != null)
                         {
                             FilesAttachment filesAttachment = new FilesAttachment { CategoryId = category.Id, FileId = (int)fileID};
                             var CurrentFilesAttachment = await _filesAttachmentService.GetFilesAttachmentAsync(filesAttachment.FileId);
                             if (CurrentFilesAttachment == null)
+                            {
                                 await _filesAttachmentService.AddFilesAttachemntAsync(filesAttachment);
+
+                                var resultfilesCode = await _filesAttachmentService.AddFilesAttachemntAsync(filesAttachment);
+                                if (resultfilesCode != ResultCode.Success)
+                                {
+                                    await _fileService.DeleteFileAsync(filesAttachment.FileId);
+                                    return BadRequest("Cant create file");
+                                };
+                            }
                         }
 
                         IEnumerable<ContentViewModel> contentModel = JsonConvert.DeserializeObject<IEnumerable<ContentViewModel>>(model.Contents);

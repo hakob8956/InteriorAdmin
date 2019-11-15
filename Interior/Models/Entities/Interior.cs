@@ -32,7 +32,7 @@ namespace Interior.Models.Entities
 
         public virtual ICollection<Recommendation> Recommendations { get; set; }
 
-        public virtual ICollection<OptionContent> OptionsContents { get; set; }
+        public virtual ICollection<OptionContent> OptionContents { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public Interior()

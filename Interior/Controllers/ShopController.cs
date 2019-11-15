@@ -92,27 +92,33 @@ namespace Interior.Controllers
                 if (ModelState.IsValid)
                 {
                     model.Id = 0;
-                    int? fileID = null;
-                    if (model.File != null)
-                    {
-
-                        FileStorage file = await _fileService.UploadFileAsync(model.File,FileType.Image);
-
-                        var currentFile = await _fileService.AddFileAsync(file);
-                        if (currentFile != ResultCode.Error)
-                            fileID = file.Id;
-                        else
-                            return BadRequest(ResponseError.Create("Can't create file"));
-
-                    }
+                   
                     Shop shop = new Shop { Id = 0 };
                     var currentShop = await _shopService.AddShopAsync(shop);
                     if (currentShop == ResultCode.Success)
                     {
+                        int? fileID = null;
+                        if (model.File != null)
+                        {
+
+                            FileStorage file = await _fileService.UploadFileAsync(model.File, FileType.Image);
+
+                            var currentFile = await _fileService.AddFileAsync(file);
+                            if (currentFile != ResultCode.Error)
+                                fileID = file.Id;
+                            else
+                                return BadRequest(ResponseError.Create("Can't create file"));
+
+                        }
                         if (fileID != null)
                         {
                             FilesAttachment filesAttachment = new FilesAttachment { ShopId = shop.Id, FileId = (int)fileID };
-                            await _filesAttachmentService.AddFilesAttachemntAsync(filesAttachment);
+                            var resultfilesCode = await _filesAttachmentService.AddFilesAttachemntAsync(filesAttachment);
+                            if (resultfilesCode != ResultCode.Success)
+                            {
+                                await _fileService.DeleteFileAsync(filesAttachment.FileId);
+                                return BadRequest("Cant create file");
+                            };
                         }
 
 
@@ -161,40 +167,48 @@ namespace Interior.Controllers
                     var oldShop = await _shopService.GetShopById(model.Id);
                     if (oldShop == null)
                         return BadRequest(ResponseError.Create("not found shop"));
-                    int? fileID = null;
-                    if (model.File != null)
-                    {
-                        FileViewModel fileView = JsonConvert.DeserializeObject<FileViewModel>(model.CurrentFile);
-
-                        FileStorage file = await _fileService.UploadFileAsync(model.File,FileType.Image);
-                        file.Id = fileView.FileId;
-                        ResultCode currentFileStatusCode = ResultCode.Error;
-                        if (fileView.FileId > 0)
-                            currentFileStatusCode = await _fileService.UpdateFileAsync(file);
-                        else
-                        {
-                            file.FileType = (byte)FileType.Image;
-                            currentFileStatusCode = await _fileService.AddFileAsync(file);
-                        }
-
-
-                        if (currentFileStatusCode != ResultCode.Error)
-                            fileID = file.Id;
-                        else
-                            return BadRequest(ResponseError.Create("Can't create file"));
-
-                    }
+                   
                     Shop shop = new Shop { Id = model.Id };
                     var currentShop = await _shopService.UpdateShopAsync(shop);
                     if (currentShop == ResultCode.Success)
                     {
+                        int? fileID = null;
+                        if (model.File != null)
+                        {
+                            FileViewModel fileView = JsonConvert.DeserializeObject<FileViewModel>(model.CurrentFile);
+
+                            FileStorage file = await _fileService.UploadFileAsync(model.File, FileType.Image);
+                            file.Id = fileView.FileId;
+                            ResultCode currentFileStatusCode = ResultCode.Error;
+                            if (fileView.FileId > 0)
+                                currentFileStatusCode = await _fileService.UpdateFileAsync(file);
+                            else
+                            {
+                                file.FileType = (byte)FileType.Image;
+                                currentFileStatusCode = await _fileService.AddFileAsync(file);
+                            }
+
+
+                            if (currentFileStatusCode != ResultCode.Error)
+                                fileID = file.Id;
+                            else
+                                return BadRequest(ResponseError.Create("Can't create file"));
+
+                        }
 
                         if (fileID != null)
                         {
                             FilesAttachment filesAttachment = new FilesAttachment { ShopId = shop.Id, FileId = (int)fileID };
                             var CurrentFilesAttachment = await _filesAttachmentService.GetFilesAttachmentAsync(filesAttachment.FileId);
                             if (CurrentFilesAttachment == null)
-                                await _filesAttachmentService.AddFilesAttachemntAsync(filesAttachment);
+                            {
+                                var resultfilesCode = await _filesAttachmentService.AddFilesAttachemntAsync(filesAttachment);
+                                if (resultfilesCode != ResultCode.Success)
+                                {
+                                    await _fileService.DeleteFileAsync(filesAttachment.FileId);
+                                    return BadRequest("Cant create file");
+                                };
+                            }
                         }
 
                         IEnumerable<ContentViewModel> contentModel = JsonConvert.DeserializeObject<IEnumerable<ContentViewModel>>(model.Contents);

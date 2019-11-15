@@ -97,7 +97,7 @@ namespace Interior.Services
             return await _context.Interiors
                 .Include(s=>s.ContentAttachments).ThenInclude(s=>s.Content)
                 .Include(s=>s.FilesAttachments).ThenInclude(s=>s.File)
-                .Include(s=>s.OptionsContents)
+                .Include(s=>s.OptionContents)
                 .AsNoTracking().SingleOrDefaultAsync(r => r.Id == id);
         }
 

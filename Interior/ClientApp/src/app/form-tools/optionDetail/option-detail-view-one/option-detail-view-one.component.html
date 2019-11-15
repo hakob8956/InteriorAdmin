@@ -1,0 +1,6 @@
+<div style="display: flex;">
+  <input type="text" class="form-control" [(ngModel)]="option.name" ngDefaultControl (ngModelChange)="onChangeOption.emit(option)" placeholder="Name">
+  <input type="text" class="form-control"  [(ngModel)]="option.value" ngDefaultControl (ngModelChange)="onChangeOption.emit(option)" placeholder="Value">
+  <input type="text" class="form-control" [(ngModel)]="option.link" ngDefaultControl (ngModelChange)="onChangeOption.emit(option)" placeholder="Link">
+  <button (click)="onDeleteOption.emit(option)">Delete</button>
+</div>

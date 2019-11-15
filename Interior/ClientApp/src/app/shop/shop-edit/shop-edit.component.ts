@@ -1,7 +1,6 @@
 import {  LanguageService,ShopService} from './../../services/DataCenter.service';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Form, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ShopModel } from 'src/app/models/Shop';
 import { LanguageModel } from 'src/app/models/Language';
@@ -20,31 +19,18 @@ export class ShopEditComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private languageService: LanguageService,
     private shopService:ShopService
   ) {}
 
-  @ViewChild("labelImport")
-  labelImport: ElementRef;
-  faSearch = faSearch;
-  fileToUpload: File = null;
   shopId: number;
-  form:FormGroup;
   languageModel: LanguageModel;
   shopModel: ShopModel = new ShopModel();
   currentLanguageId: number;
+  fileName:string;
   ngOnInit() {
-    this.form = new FormGroup({
-      language: new FormControl("Loading...", Validators.required),
-      importFile: new FormControl("")
-    });
 
-    this.languageService.getAllLanguages().subscribe(response => {
-      this.languageModel = response;
-      this.currentLanguageId = this.languageModel[0].id;
-      console.log(this.currentLanguageId);
-    });
-    this.shopId = +this.route.snapshot.params["id"];
+
+   this.shopId = +this.route.snapshot.params["id"];
     if (!Number.isNaN(this.shopId) && this.shopId > 0) {
       this.shopService.getShopbyId(this.shopId).subscribe(response => {
         this.shopModel = response["data"];
@@ -56,21 +42,16 @@ export class ShopEditComponent implements OnInit {
     }
   }
   initForm() {
-
     if (
       this.shopModel.currentFile != null &&
       this.shopModel.currentFile.fileName != null
     )
-      this.labelImport.nativeElement.innerText = this.shopModel.currentFile.fileName;
-    else this.labelImport.nativeElement.innerText = "Choose file";
-
+      this.fileName = this.shopModel.currentFile.fileName;
+    else this.fileName = "Choose file";
   }
   
-  onFileChange(files: FileList) {
-    this.labelImport.nativeElement.innerText = Array.from(files)
-      .map(f => f.name)
-      .join(", ");
-    this.fileToUpload = files.item(0);
+  onFileChange(currentFile:File){
+    this.shopModel.file=currentFile;
   }
   changeContents(currentContents:Content[]){
     this.shopModel.contents=currentContents;
@@ -79,14 +60,12 @@ export class ShopEditComponent implements OnInit {
     this.router.navigate(["/shopView"]);
   }
   submitForm() {
-    this.shopModel.file = this.fileToUpload;
     if (this.shopModel.currentFile != null) {
       this.shopModel.currentFile.imageData = null;
       this.shopModel.currentFile.imageMimeType = null;
     } else {
       this.shopModel.currentFile = new FileModel();
     }
-    this.shopModel.currentFile.fileName = this.labelImport.nativeElement.innerText;
     if (this.shopId == 0) {
       this.shopModel.id = 0;
       this.shopService

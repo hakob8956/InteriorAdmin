@@ -5,7 +5,6 @@ import {
 } from "./../../services/DataCenter.service";
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { LanguageModel } from "src/app/models/Language";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router, ActivatedRoute } from "@angular/router";
 import { CategoryEditModel } from "src/app/models/Category";
@@ -21,29 +20,16 @@ export class CategoryEditComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private languageService: LanguageService,
     private categoryServce: CategoryService
   ) {}
   @ViewChild("labelImport")
   labelImport: ElementRef;
-  faSearch = faSearch;
-  form: FormGroup;
-  fileToUpload: File = null;
   categoryId: number;
   languageModel: LanguageModel;
   categoryModel: CategoryEditModel = new CategoryEditModel();
   currentLanguageId: number;
+  fileName:string;
   ngOnInit() {
-    this.form = new FormGroup({
-      language: new FormControl("Loading...", Validators.required),
-      importFile: new FormControl("")
-    });
-
-    this.languageService.getAllLanguages().subscribe(response => {
-      this.languageModel = response;
-      this.currentLanguageId = this.languageModel[0].id;
-      console.log(this.currentLanguageId);
-    });
     this.categoryId = +this.route.snapshot.params["id"];
     if (!Number.isNaN(this.categoryId) && this.categoryId > 0) {
       this.categoryServce.getCategory(this.categoryId).subscribe(response => {
@@ -60,36 +46,29 @@ export class CategoryEditComponent implements OnInit {
       this.categoryModel.currentFile != null &&
       this.categoryModel.currentFile.fileName != null
     )
-      this.labelImport.nativeElement.innerText = this.categoryModel.currentFile.fileName;
-    else this.labelImport.nativeElement.innerText = "Choose file";
+      this.fileName = this.categoryModel.currentFile.fileName;
+    else this.fileName= "Choose file";
   }
   changeContents(currentContents:Content[]){
     this.categoryModel.contents=currentContents;
     console.log(this.categoryModel.contents)
   }
-  changeFile(files: FileList) {
-    this.labelImport.nativeElement.innerText = Array.from(files)
-      .map(f => f.name)
-      .join(", ");
-    this.fileToUpload = files.item(0);
+  onFileChange(currentFile:File){
+    this.categoryModel.file=currentFile;
   }
   
   cancelButton() {
     this.router.navigate(["/categoryView"]);
   }
   submitForm() {
-    this.categoryModel.file = this.fileToUpload;
-    if(this.categoryModel.currentFile != null){
+    if (this.categoryModel.currentFile != null) {
       this.categoryModel.currentFile.imageData = null;
       this.categoryModel.currentFile.imageMimeType = null;
-    }else{
+    } else {
       this.categoryModel.currentFile = new FileModel();
     }
-    this.categoryModel.currentFile.fileName = this.labelImport.nativeElement.innerText;
-
-    // console.log(this.categoryModel);
     if (this.categoryId == 0) {
-      this.categoryModel.id = 0;
+       this.categoryModel.id = 0;
       
       this.categoryServce
         .createCategory(this.categoryModel)

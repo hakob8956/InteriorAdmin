@@ -27,7 +27,7 @@ namespace Interior.Services
                 await _context.SaveChangesAsync();
                 return ResultCode.Success;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return ResultCode.Error;
             }

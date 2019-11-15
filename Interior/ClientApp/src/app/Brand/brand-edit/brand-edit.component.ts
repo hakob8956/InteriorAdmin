@@ -5,7 +5,6 @@ import {
 } from "./../../services/DataCenter.service";
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { Form, FormGroup, FormControl, Validators } from "@angular/forms";
 import { BrandEditModel } from "src/app/models/Brand";
 import { LanguageModel } from "src/app/models/Language";
@@ -26,7 +25,6 @@ export class BrandEditComponent implements OnInit {
   ) {}
   @ViewChild("labelImport")
   labelImport: ElementRef;
-  faSearch = faSearch;
   brandId: number;
   brandModel: BrandEditModel = new BrandEditModel();
   currentLanguageId: number;
@@ -50,15 +48,13 @@ export class BrandEditComponent implements OnInit {
     )
       this.fileName= this.brandModel.currentFile.fileName;
     else this.fileName= "Choose file";
+    console.log(this.fileName);
   }
   changeContents(currentContents:Content[]){
-    this.brandModel.contents=currentContents;
-
-  
+    this.brandModel.contents=currentContents; 
   }
   onFileChange(currentFile:File){
     this.brandModel.file=currentFile;
-    console.log(this.brandModel.file)
   }
   cancelButton() {
     this.router.navigate(["/brandView"]);
@@ -70,7 +66,7 @@ export class BrandEditComponent implements OnInit {
     } else {
       this.brandModel.currentFile = new FileModel();
     }
-    this.brandModel.currentFile.fileName = this.labelImport.nativeElement.innerText;
+    //this.brandModel.currentFile.fileName = this.labelImport.nativeElement.innerText;
 
     // console.log(this.brandModel);
     if (this.brandId == 0) {

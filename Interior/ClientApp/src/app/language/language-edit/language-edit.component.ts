@@ -7,10 +7,8 @@ import {
   ViewChild
 } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { LanguageModel } from "src/app/models/Language";
 import { LanguageService } from "src/app/services/DataCenter.service";
-import { DomSanitizer } from '@angular/platform-browser';
 import { FileModel } from 'src/app/models/File';
 
 @Component({
@@ -20,15 +18,13 @@ import { FileModel } from 'src/app/models/File';
   providers: [LanguageService]
 })
 export class LanguageEditComponent implements OnInit {
-  faSearch = faSearch;
-  @ViewChild("labelImport")
-  labelImport: ElementRef;
+
   languageModel: LanguageModel = new LanguageModel();
   form: FormGroup;
-  fileToUpload: File = null;
   isLanguageCreate: boolean;
   languageId: number;
   imageSource:any;
+  fileName:string;
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -38,7 +34,6 @@ export class LanguageEditComponent implements OnInit {
     this.form = new FormGroup({
       name: new FormControl("", Validators.required),
       codeName: new FormControl("", Validators.required),
-      importFile: new FormControl("")
     });
     this.languageId = +this.route.snapshot.params["id"];
     if (!Number.isNaN(this.languageId) && this.languageId > 0) {
@@ -54,7 +49,6 @@ export class LanguageEditComponent implements OnInit {
     }
   }
   initForm() {
-    console.log(this.languageModel)
     this.form
       .get("name")
       .setValue(
@@ -73,28 +67,22 @@ export class LanguageEditComponent implements OnInit {
         this.languageModel.currentFile != null &&
         this.languageModel.currentFile.fileName != null
       )
-        this.labelImport.nativeElement.innerText = this.languageModel.currentFile.fileName;
-      else this.labelImport.nativeElement.innerText = "Choose file";
+        this.fileName = this.languageModel.currentFile.fileName;
+      else this.fileName = "Choose file";
    
   }
-  onFileChange(files: FileList) {
-    this.labelImport.nativeElement.innerText = Array.from(files)
-      .map(f => f.name)
-      .join(", ");
-    this.fileToUpload = files.item(0);
+  onFileChange(currentFile:File){
+    this.languageModel.file=currentFile;
   }
   submitForm(): void {
-    this.languageModel.file = this.fileToUpload;
     if (this.languageModel.currentFile != null) {
       this.languageModel.currentFile.imageData = null;
       this.languageModel.currentFile.imageMimeType = null;
     } else {
       this.languageModel.currentFile = new FileModel();
     }
-    this.languageModel.currentFile.fileName = this.labelImport.nativeElement.innerText;
     this.languageModel.name=this.form.get("name").value;
     this.languageModel.code=this.form.get("codeName").value;
-
     if(this.isLanguageCreate){
       this.languageModel.id=0;
       this.languageService

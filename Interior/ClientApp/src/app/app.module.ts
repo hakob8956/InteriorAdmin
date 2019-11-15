@@ -34,6 +34,9 @@ import { InteriorEditComponent } from './Interior/interior-edit/interior-edit.co
 import { ContentEditComponent } from './form-tools/content-edit/content-edit.component';
 import { MyTestComponent } from './test/my-test/my-test.component';
 import { FileEditComponent } from './form-tools/file-edit/file-edit.component';
+import { OptionDetailViewComponent } from './form-tools/optionDetail/option-detail-view/option-detail-view.component';
+import { OptionDetailViewOneComponent } from './form-tools/optionDetail/option-detail-view-one/option-detail-view-one.component';
+import { OptionDetailAddComponent } from './form-tools/optionDetail/option-detail-add/option-detail-add.component';
 
 
 
@@ -60,7 +63,11 @@ import { FileEditComponent } from './form-tools/file-edit/file-edit.component';
     InteriorEditComponent,
     ContentEditComponent,
     MyTestComponent,
-    FileEditComponent
+    FileEditComponent,
+    OptionDetailViewComponent,
+    OptionDetailAddComponent,
+    OptionDetailViewOneComponent,
+    OptionDetailAddComponent,
   ],
   imports: [
     BrowserModule,

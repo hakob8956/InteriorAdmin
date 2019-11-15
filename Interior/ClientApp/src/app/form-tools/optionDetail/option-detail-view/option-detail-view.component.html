@@ -1,0 +1,9 @@
+<app-option-detail-view-one
+  *ngFor="let option of model"
+  [option]="option"
+  (onChangeOption)="onChangeOption($event)"
+  (onDeleteOption)="onDeleteOption($event)"
+></app-option-detail-view-one>
+<app-option-detail-add
+(onAddOption)="onAddOption($event)" 
+></app-option-detail-add>

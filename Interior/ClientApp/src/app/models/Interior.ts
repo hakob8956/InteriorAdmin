@@ -4,19 +4,19 @@ import { OptionContentModel } from './OptionDescription';
 
 export class InteriorRequestModel
 {
-    Id: number;
-    NameContent: Content[];
-    DescriptionContent: Content[];
-    ImageFile: FileModel;
-    IosFile: FileModel;
-    AndroidFile: FileModel;
-    GlbFile: FileModel;
-    Price: number;
-    IsAvailable: boolean;
-    BuyUrl: string;
-    ShopId: number;
-    BrandId: number;
-    CategoryId: number;
-    IsVisible: boolean;
-    OptionContents: OptionContentModel[];
+    id: number;
+    nameContent: Content[];
+    descriptionContent: Content[];
+    imageFile: FileModel;
+    iosFile: FileModel;
+    androidFile: FileModel;
+    glbFile: FileModel;
+    price: number;
+    isAvailable: boolean;
+    buyUrl: string;
+    shopId: number;
+    brandId: number;
+    categoryId: number;
+    isVisible: boolean;
+    optionContents: OptionContentModel[];
 }

@@ -4,5 +4,11 @@
            multiple
            (change)="onFileChange($event.target.files)"
            accept="image/*" />
-    <label class="custom-file-label" #labelImport for="importFile"><fa-icon [icon]="faSearch"></fa-icon>Choose file</label>
+    <label class="custom-file-label"
+     for="importFile" 
+     [(ngModel)]="fileName" 
+     name="fieldName"
+     ngDefaultControl
+     >
+     <fa-icon [icon]="faSearch"></fa-icon>{{fileName}}</label>
   </div>

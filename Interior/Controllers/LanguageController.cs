@@ -97,37 +97,47 @@ namespace Interior.Controllers
                     var currentLanguage = await _languageService.GetLanguageByIdAsync(model.Id);
                     if (currentLanguage != null)
                     {
-                        int? fileID = null;
-                        if (model.File != null)
-                        {
-                            FileViewModel fileView = JsonConvert.DeserializeObject<FileViewModel>(model.CurrentFile);
-
-                            FileStorage file = await _fileService.UploadFileAsync(model.File,FileType.Image);
-                            file.Id = fileView.FileId;
-                            ResultCode currentFileStatusCode = ResultCode.Error;
-
-                            if (fileView.FileId > 0)
-                                currentFileStatusCode = await _fileService.UpdateFileAsync(file);
-                            else
-                                currentFileStatusCode = await _fileService.AddFileAsync(file);
-                            
-
-                            if (currentFileStatusCode != ResultCode.Error)
-                                fileID = file.Id;
-                            else
-                                return BadRequest(ResponseError.Create("Can't create file"));
-                        }
-                
+                      
+              
                         Language language = new Language { Id = model.Id, Name = model.Name, Code = model.Code };
                         var resultCode = await _languageService.UpdateLanguageAsync(language);
                         if (resultCode != ResultCode.Error)
                         {
+                            int? fileID = null;
+                            if (model.File != null)
+                            {
+                                FileViewModel fileView = JsonConvert.DeserializeObject<FileViewModel>(model.CurrentFile);
+
+                                FileStorage file = await _fileService.UploadFileAsync(model.File, FileType.Image);
+                                file.Id = fileView.FileId;
+                                ResultCode currentFileStatusCode = ResultCode.Error;
+
+                                if (fileView.FileId > 0)
+                                    currentFileStatusCode = await _fileService.UpdateFileAsync(file);
+                                else
+                                    currentFileStatusCode = await _fileService.AddFileAsync(file);
+
+
+                                if (currentFileStatusCode != ResultCode.Error)
+                                    fileID = file.Id;
+                                else
+                                    return BadRequest(ResponseError.Create("Can't create file"));
+                            }
                             if (fileID != null)
                             {
                                 FilesAttachment filesAttachment = new FilesAttachment { LanguageId = language.Id, FileId = (int)fileID };
                                 var CurrentFilesAttachment = await _filesAttachmentService.GetFilesAttachmentAsync(filesAttachment.FileId);
                                 if (CurrentFilesAttachment == null)
-                                    await _filesAttachmentService.AddFilesAttachemntAsync(filesAttachment);
+                                {
+                                    var resultfilesCode = await _filesAttachmentService.AddFilesAttachemntAsync(filesAttachment);
+                                    if (resultfilesCode!=ResultCode.Success)
+                                    {
+                                        await _fileService.DeleteFileAsync(filesAttachment.FileId);
+                                        return BadRequest("Cant create file");
+                                    }
+
+                                }
+                               
                             }
                             return Ok(ResponseSuccess.Create("Success"));
                         }
@@ -151,35 +161,40 @@ namespace Interior.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    model.Id = 0;
-                    int? fileID = null;
-                    if (model.File != null)
-                    {
-                        FileViewModel fileView = JsonConvert.DeserializeObject<FileViewModel>(model.CurrentFile);
-
-                        FileStorage file = await _fileService.UploadFileAsync(model.File,FileType.Image);
-                        file.Id = fileView.FileId;
-                        ResultCode currentFileStatusCode = ResultCode.Error;
-
-                        if (fileView.FileId > 0)
-                            currentFileStatusCode = await _fileService.UpdateFileAsync(file);
-                        else
-                             currentFileStatusCode = await _fileService.AddFileAsync(file);
-                        
-
-                        if (currentFileStatusCode != ResultCode.Error)
-                            fileID = file.Id;
-                        else
-                            return BadRequest(ResponseError.Create("Can't create file"));
-                    }
+                    model.Id = 0;                
                     Language language = new Language { Name = model.Name, Code = model.Code };
                     var resultCode = await _languageService.AddLanguageAsync(language);
                     if (resultCode == ResultCode.Success)
                     {
+                        int? fileID = null;
+                        if (model.File != null)
+                        {
+                            FileViewModel fileView = JsonConvert.DeserializeObject<FileViewModel>(model.CurrentFile);
+
+                            FileStorage file = await _fileService.UploadFileAsync(model.File, FileType.Image);
+                            file.Id = fileView.FileId;
+                            ResultCode currentFileStatusCode = ResultCode.Error;
+
+                            if (fileView.FileId > 0)
+                                currentFileStatusCode = await _fileService.UpdateFileAsync(file);
+                            else
+                                currentFileStatusCode = await _fileService.AddFileAsync(file);
+
+
+                            if (currentFileStatusCode != ResultCode.Error)
+                                fileID = file.Id;
+                            else
+                                return BadRequest(ResponseError.Create("Can't create file"));
+                        }
                         if (fileID != null)
                         {
                             FilesAttachment filesAttachment = new FilesAttachment { LanguageId = language.Id, FileId = (int)fileID };
-                            await _filesAttachmentService.AddFilesAttachemntAsync(filesAttachment);
+                            var resultfilesCode = await _filesAttachmentService.AddFilesAttachemntAsync(filesAttachment);
+                            if (resultfilesCode != ResultCode.Success)
+                            {
+                                await _fileService.DeleteFileAsync(filesAttachment.FileId);
+                                return BadRequest("Cant create file");
+                            };
                         }
                         return Ok(ResponseSuccess.Create("Success"));
                     }

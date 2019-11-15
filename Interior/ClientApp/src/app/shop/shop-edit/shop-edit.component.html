@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-body">
       <h4 class="card-title">Edit form</h4>
-      <form [formGroup]="form" (ngSubmit)="submitForm()" class="forms-sample">
+      <form class="forms-sample">
           <app-content-edit
           [labelName]="'Name'"
           [currentContent]="shopModel.contents"
@@ -10,24 +10,14 @@
           (changeContents)="changeContents($event)"
           [contentType]="0"
         ></app-content-edit>
-        <div class="custom-file form-group">
-          <input
-            type="file"
-            class="custom-file-input"
-            multiple
-            formControlName="importFile"
-            id="importFile"
-            (change)="onFileChange($event.target.files)"
-            accept="image/*"
-          />
-          <label class="custom-file-label" #labelImport for="importFile"
-            ><fa-icon [icon]="faSearch"></fa-icon>Choose file</label
-          >
-        </div>
+        <app-file-edit
+        [fileName]="fileName"
+        (changeFile)="onFileChange($event)"
+        ></app-file-edit>
         <button
           type="submit"
           class="btn btn-success mr-2"
-          [disabled]="form.invalid"
+          (click)="submitForm()"
         >
           Submit
         </button>

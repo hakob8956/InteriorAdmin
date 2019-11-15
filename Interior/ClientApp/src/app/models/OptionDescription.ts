@@ -1,9 +1,9 @@
 import { LanguageModel } from 'src/app/models/Language';
 export class OptionContentModel
 {
-    Id: number;
-    Name: string;
-    Value: string;
-    Link: string;
-    LanguageId: number;
+    id: number;
+    name: string;
+    value: string;
+    link: string;
+    languageId: number;
 }

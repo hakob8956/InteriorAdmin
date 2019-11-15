@@ -77,7 +77,7 @@ namespace Interior.Controllers
                     if (model.FilesAttachment?.File != null)
                     {
                         var currentFile = _fileService.DownloadFile(Path.GetFileName(model.FilesAttachment.File.Path));
-                        var fileViewModel = new FileViewModel { FileId = model.FilesAttachment.FileId, FileName = model.FilesAttachment.File.Name, ImageData = currentFile.FileContents, ImageMimeType = currentFile.ContentType,FileType=(byte)FileType.Image };
+                        var fileViewModel = new FileViewModel { FileId = model.FilesAttachment.FileId, FileName = model.FilesAttachment.File.Name, ImageData = currentFile.FileContents, ImageMimeType = currentFile.ContentType, FileType = (byte)FileType.Image };
                         result.CurrentFile = fileViewModel;
                     }
                     return Ok(ResponseSuccess.Create(result));
@@ -97,26 +97,32 @@ namespace Interior.Controllers
                 if (ModelState.IsValid)
                 {
                     model.Id = 0;
-                    int? fileID = null;
-                    if (model.File != null)
-                    {
 
-                        FileStorage file = await _fileService.UploadFileAsync(model.File,FileType.Image);
-                        var currentFile = await _fileService.AddFileAsync(file);
-                        if (currentFile != ResultCode.Error)
-                            fileID = file.Id;
-                        else
-                            return BadRequest(ResponseError.Create("Can't create file"));
-
-                    }
                     Brand brand = new Brand { Id = 0 };
                     var currentBrand = await _brandService.AddBrandAsync(brand);
                     if (currentBrand == ResultCode.Success)
                     {
+                        int? fileID = null;
+                        if (model.File != null)
+                        {
+
+                            FileStorage file = await _fileService.UploadFileAsync(model.File, FileType.Image);
+                            var currentFile = await _fileService.AddFileAsync(file);
+                            if (currentFile != ResultCode.Error)
+                                fileID = file.Id;
+                            else
+                                return BadRequest(ResponseError.Create("Can't create file"));
+
+                        }
                         if (fileID != null)
                         {
                             FilesAttachment filesAttachment = new FilesAttachment { BrandId = brand.Id, FileId = (int)fileID };
-                            await _filesAttachmentService.AddFilesAttachemntAsync(filesAttachment);
+                            var resultfilesCode = await _filesAttachmentService.AddFilesAttachemntAsync(filesAttachment);
+                            if (resultfilesCode != ResultCode.Success)
+                            {
+                                await _fileService.DeleteFileAsync(filesAttachment.FileId);
+                                return BadRequest("Cant create file");
+                            };
                         }
 
 
@@ -166,39 +172,45 @@ namespace Interior.Controllers
                     var oldBrand = await _brandService.GetBrandById(model.Id);
                     if (oldBrand == null)
                         return BadRequest(ResponseError.Create("not found brand"));
-                    int? fileID = null;
-                    if (model.File != null)
-                    {
-                        FileViewModel fileView = JsonConvert.DeserializeObject<FileViewModel>(model.CurrentFile);
-
-                        FileStorage file = await _fileService.UploadFileAsync(model.File,FileType.Image);
-                        file.Id = fileView.FileId;
-                        ResultCode currentFileStatusCode = ResultCode.Error;
-                        if (fileView.FileId > 0)
-                            currentFileStatusCode = await _fileService.UpdateFileAsync(file);
-                        else
-                        {
-                            currentFileStatusCode = await _fileService.AddFileAsync(file);
-                        }
-
-
-                        if (currentFileStatusCode != ResultCode.Error)
-                            fileID = file.Id;
-                        else
-                            return BadRequest(ResponseError.Create("Can't create file"));
-
-                    }
                     Brand brand = new Brand { Id = model.Id };
                     var currentBrand = await _brandService.UpdateBrandAsync(brand);
                     if (currentBrand == ResultCode.Success)
                     {
+                        int? fileID = null;
+                        if (model.File != null)
+                        {
+                            FileViewModel fileView = JsonConvert.DeserializeObject<FileViewModel>(model.CurrentFile);
 
+                            FileStorage file = await _fileService.UploadFileAsync(model.File, FileType.Image);
+                            file.Id = fileView.FileId;
+                            ResultCode currentFileStatusCode = ResultCode.Error;
+                            if (fileView.FileId > 0)
+                                currentFileStatusCode = await _fileService.UpdateFileAsync(file);
+                            else
+                            {
+                                currentFileStatusCode = await _fileService.AddFileAsync(file);
+                            }
+
+
+                            if (currentFileStatusCode != ResultCode.Error)
+                                fileID = file.Id;
+                            else
+                                return BadRequest(ResponseError.Create("Can't create file"));
+
+                        }
                         if (fileID != null)
                         {
-                            FilesAttachment filesAttachment = new FilesAttachment { BrandId = brand.Id, FileId = (int)fileID};
+                            FilesAttachment filesAttachment = new FilesAttachment { BrandId = brand.Id, FileId = (int)fileID };
                             var CurrentFilesAttachment = await _filesAttachmentService.GetFilesAttachmentAsync(filesAttachment.FileId);
                             if (CurrentFilesAttachment == null)
-                                await _filesAttachmentService.AddFilesAttachemntAsync(filesAttachment);
+                            {
+                                var resultfilesCode = await _filesAttachmentService.AddFilesAttachemntAsync(filesAttachment);
+                                if (resultfilesCode != ResultCode.Success)
+                                {
+                                    await _fileService.DeleteFileAsync(filesAttachment.FileId);
+                                    return BadRequest("Cant create file");
+                                };
+                            }
                         }
 
                         IEnumerable<ContentViewModel> contentModel = JsonConvert.DeserializeObject<IEnumerable<ContentViewModel>>(model.Contents);
