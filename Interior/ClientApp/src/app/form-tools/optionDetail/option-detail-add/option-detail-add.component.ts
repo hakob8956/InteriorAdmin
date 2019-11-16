@@ -9,9 +9,11 @@ import { Component, OnInit, Output,EventEmitter} from '@angular/core';
 export class OptionDetailAddComponent  {
  @Output() onAddOption=new EventEmitter<OptionContentModel>();
  option:OptionContentModel = new OptionContentModel();
-
+ disableSubmitButton:boolean=true;
  AddOption(){
+
     this.onAddOption.emit(this.option);
     this.option=new OptionContentModel();
  }
+  
 }

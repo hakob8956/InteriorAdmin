@@ -1,6 +1,6 @@
 <div class="addBox">
-  <input type="text" class="form-control" [(ngModel)]="option.name" ngDefaultControl>
-  <input type="text" class="form-control"  [(ngModel)]="option.value" ngDefaultControl>
-  <input type="text" class="form-control" [(ngModel)]="option.link" ngDefaultControl>
-  <button (click)="AddOption()">Add</button>
+  <input type="text" class="form-control" [(ngModel)]="option.name" ngDefaultControl placeholder="Name*">
+  <input type="text" class="form-control"  [(ngModel)]="option.value" ngDefaultControl placeholder="Value*">
+  <input type="text" class="form-control" [(ngModel)]="option.link" ngDefaultControl placeholder="Link">
+  <button  [disabled]="!(option.name && option.value)"  (click)="AddOption()">Add</button>
 </div>

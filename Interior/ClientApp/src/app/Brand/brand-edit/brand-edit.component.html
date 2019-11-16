@@ -4,7 +4,6 @@
       <h4 class="card-title">Edit form</h4>
       <form class="forms-sample">
         <app-content-edit
-          [labelName]="'Name'"
           [currentContent]="brandModel.contents"
           [isCreate]="brandId > 0"
           (changeContents)="changeContents($event)"

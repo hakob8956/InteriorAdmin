@@ -1,9 +1,13 @@
-<app-option-detail-view-one
-  *ngFor="let option of model"
+<button *ngFor="let item of languageModel" (click)="changeIdLanguage(item.id)">{{item.name}}</button>
+
+<ng-container  *ngFor="let option of model">
+  <app-option-detail-view-one
+  *ngIf="option.languageId == languageId"
   [option]="option"
   (onChangeOption)="onChangeOption($event)"
   (onDeleteOption)="onDeleteOption($event)"
 ></app-option-detail-view-one>
+</ng-container>
 <app-option-detail-add
 (onAddOption)="onAddOption($event)" 
 ></app-option-detail-add>

@@ -1,4 +1,4 @@
-import { FileModel } from 'src/app/models/File';
+import { FileType } from './../../models/Enums';
 import { Component, OnInit, ViewChild, ElementRef, Input,Output,EventEmitter, AfterContentInit, AfterViewInit } from '@angular/core';
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
@@ -10,7 +10,9 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 export class FileEditComponent {
 
   @Input() fileName:string="";
-  @Output() changeFile = new EventEmitter<File>();
+  @Input() fileType:FileType;
+  @Output() changeFile = new EventEmitter();
+
 
   fileToUpload: File = null;
   faSearch = faSearch;
@@ -21,7 +23,7 @@ export class FileEditComponent {
       .map(f => f.name)
       .join(", ");
     this.fileToUpload = files.item(0);
-    this.changeFile.emit(this.fileToUpload);
+    this.changeFile.emit({file:this.fileToUpload,fileType:this.fileType});
   }
 
 

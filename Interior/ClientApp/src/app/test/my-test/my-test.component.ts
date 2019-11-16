@@ -1,8 +1,9 @@
 import { OptionContentModel } from './../../models/OptionDescription';
-import { CategoryService, InteriorService } from './../../services/DataCenter.service';
+import { CategoryService, InteriorService, LanguageService } from './../../services/DataCenter.service';
 import { Component, OnInit } from '@angular/core';
-import { Content } from 'src/app/models/Content';
+import { ContentModel } from "src/app/models/ContentModel";
 import { InteriorRequestModel } from 'src/app/models/Interior';
+import { LanguageModel } from 'src/app/models/Language';
 
 @Component({
   selector: 'app-my-test',
@@ -12,18 +13,17 @@ import { InteriorRequestModel } from 'src/app/models/Interior';
 })
 export class MyTestComponent  implements OnInit{
   constructor(private interiorService:InteriorService){}
-  model:OptionContentModel[]=[];
+  model:OptionContentModel[]=Array<OptionContentModel>();
   ngOnInit(): void {
-    this.interiorService.getInteriorbyId(2).subscribe(s=>{
+    this.interiorService.getInteriorbyId(3).subscribe(s=>{
       this.model=s["data"].optionContents;
       console.log(this.model)
     });
   }
   onChangeOptionContent(model:OptionContentModel[]){
-     this.model=model;
-     console.log(this.model)
+    console.log(model);
   }
-  
+
 
  
 

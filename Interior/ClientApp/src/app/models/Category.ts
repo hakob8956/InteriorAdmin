@@ -1,10 +1,10 @@
-import { Content } from './Content';
+import { ContentModel } from "./ContentModel";
 import { FileModel } from './File';
 
 export class CategoryEditModel {
     id:       number;
     currentFile: FileModel;
-    contents: Content[];
+    contents: ContentModel[];
     file:     File;
 }
 

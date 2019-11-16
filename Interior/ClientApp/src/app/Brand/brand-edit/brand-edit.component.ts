@@ -8,7 +8,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { Form, FormGroup, FormControl, Validators } from "@angular/forms";
 import { BrandEditModel } from "src/app/models/Brand";
 import { LanguageModel } from "src/app/models/Language";
-import { Content } from "src/app/models/Content";
+import { ContentModel } from "src/app/models/ContentModel";
 import { FileModel } from "src/app/models/File";
 
 @Component({
@@ -50,7 +50,7 @@ export class BrandEditComponent implements OnInit {
     else this.fileName= "Choose file";
     console.log(this.fileName);
   }
-  changeContents(currentContents:Content[]){
+  changeContents(currentContents:ContentModel[]){
     this.brandModel.contents=currentContents; 
   }
   onFileChange(currentFile:File){

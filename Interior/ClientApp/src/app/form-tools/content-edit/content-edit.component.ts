@@ -1,7 +1,8 @@
 import { LanguageService } from 'src/app/services/DataCenter.service';
 import { Component, OnInit, Input,Output,EventEmitter } from '@angular/core';
-import { Content } from 'src/app/models/Content';
+import { ContentModel } from "src/app/models/ContentModel";
 import { LanguageModel } from 'src/app/models/Language';
+import { ContentType } from 'src/app/models/Enums';
 
 @Component({
   selector: 'app-content-edit',
@@ -11,11 +12,10 @@ import { LanguageModel } from 'src/app/models/Language';
 })
 export class ContentEditComponent implements OnInit{
    constructor(private languageService:LanguageService) { }
-   @Input() currentContent:Content[]=[];
+   @Input() currentContent:ContentModel[]=[];
    @Input() contentType:ContentType;
    @Input() isCreate:boolean;
-   @Input() labelName:string;
-   @Output() changeContents =new EventEmitter<Content[]>();
+   @Output() changeContents =new EventEmitter<ContentModel[]>();
   currentLanguageId:number;
   languageModel:LanguageModel;
   ngOnInit() {
@@ -64,6 +64,7 @@ export class ContentEditComponent implements OnInit{
         type:this.contentType
       });
     }
+    this.currentContent.forEach(s=>s.type=this.contentType);
     this.changeContents.emit(this.currentContent);
   }
   getCurrentIdFromContentModel(languageId: number): number {

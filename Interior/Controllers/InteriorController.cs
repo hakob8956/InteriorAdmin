@@ -93,16 +93,16 @@ namespace Interior.Controllers
                                 switch ((FileType)item.File.FileType)
                                 {
                                     case FileType.Image:
-                                        result.ImageFile = fileViewModel;
+                                        result.CurrentImageFIle = fileViewModel;
                                         break;
                                     case FileType.AndroidBundle:
-                                        result.AndroidFile = fileViewModel;
+                                        result.CurrentAndroidFile = fileViewModel;
                                         break;
                                     case FileType.IosBundle:
-                                        result.IosFile = fileViewModel;
+                                        result.CurrentIosFile = fileViewModel;
                                         break;
                                     case FileType.Glb:
-                                        result.GlbFile = fileViewModel;
+                                        result.CurrentGlbFile = fileViewModel;
                                         break;
                                 }
                             }

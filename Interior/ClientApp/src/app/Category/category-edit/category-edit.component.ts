@@ -1,4 +1,4 @@
-import { Content } from "./../../models/Content";
+import { ContentModel } from "../../models/ContentModel";
 import {
   LanguageService,
   CategoryService
@@ -49,7 +49,7 @@ export class CategoryEditComponent implements OnInit {
       this.fileName = this.categoryModel.currentFile.fileName;
     else this.fileName= "Choose file";
   }
-  changeContents(currentContents:Content[]){
+  changeContents(currentContents:ContentModel[]){
     this.categoryModel.contents=currentContents;
     console.log(this.categoryModel.contents)
   }

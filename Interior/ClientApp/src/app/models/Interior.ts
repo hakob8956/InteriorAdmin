@@ -1,16 +1,16 @@
 import { FileModel } from 'src/app/models/File';
-import { Content } from '@angular/compiler/src/render3/r3_ast';
 import { OptionContentModel } from './OptionDescription';
+import { ContentModel } from './ContentModel';
 
 export class InteriorRequestModel
 {
     id: number;
-    nameContent: Content[];
-    descriptionContent: Content[];
-    imageFile: FileModel;
-    iosFile: FileModel;
-    androidFile: FileModel;
-    glbFile: FileModel;
+    nameContent: ContentModel[];
+    descriptionContent: ContentModel[];
+    currentImageFile: FileModel;
+    currentIosFile: FileModel;
+    currentAndroidFile: FileModel;
+    currentGlbFile: FileModel;
     price: number;
     isAvailable: boolean;
     buyUrl: string;
@@ -19,4 +19,8 @@ export class InteriorRequestModel
     categoryId: number;
     isVisible: boolean;
     optionContents: OptionContentModel[];
+    imageFile:File;
+    iosFile: File;
+    androidFile: File;
+    glbFile: File;
 }

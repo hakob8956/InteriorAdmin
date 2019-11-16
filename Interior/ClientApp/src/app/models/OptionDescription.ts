@@ -6,4 +6,5 @@ export class OptionContentModel
     value: string;
     link: string;
     languageId: number;
+    isCreate:boolean;
 }

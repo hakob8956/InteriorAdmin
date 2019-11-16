@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Form, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ShopModel } from 'src/app/models/Shop';
 import { LanguageModel } from 'src/app/models/Language';
-import { Content } from 'src/app/models/Content';
+import { ContentModel } from "src/app/models/ContentModel";
 import { FileModel } from 'src/app/models/File';
 
 
@@ -53,7 +53,7 @@ export class ShopEditComponent implements OnInit {
   onFileChange(currentFile:File){
     this.shopModel.file=currentFile;
   }
-  changeContents(currentContents:Content[]){
+  changeContents(currentContents:ContentModel[]){
     this.shopModel.contents=currentContents;
   } 
   cancelButton() {

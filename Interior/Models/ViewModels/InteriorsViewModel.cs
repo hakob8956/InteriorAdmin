@@ -24,12 +24,12 @@ namespace Interior.Models.ViewModels
         public int Id { get; set; }
         public ICollection<Content> NameContent { get; set; }
         public ICollection<Content> DescriptionContent { get; set; }
-        public FileViewModel ImageFile { get; set; }
+        public FileViewModel CurrentImageFIle { get; set; }
 
-        public FileViewModel IosFile { get; set; }
-        public FileViewModel AndroidFile { get; set; }
+        public FileViewModel CurrentIosFile { get; set; }
+        public FileViewModel CurrentAndroidFile { get; set; }
 
-        public FileViewModel GlbFile { get; set; }
+        public FileViewModel CurrentGlbFile { get; set; }
         public decimal Price { get; set; }
 
         public bool IsAvailable { get; set; }

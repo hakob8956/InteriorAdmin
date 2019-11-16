@@ -1,9 +1,9 @@
-enum ContentType
+export enum ContentType
 {
     Name=0,
     Description=1
 }
- enum FileType
+export enum FileType
 {
     Image=0,
     AndroidBundle=1,

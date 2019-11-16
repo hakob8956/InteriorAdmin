@@ -67,7 +67,7 @@ import { OptionDetailAddComponent } from './form-tools/optionDetail/option-detai
     OptionDetailViewComponent,
     OptionDetailAddComponent,
     OptionDetailViewOneComponent,
-    OptionDetailAddComponent,
+    OptionDetailAddComponent  
   ],
   imports: [
     BrowserModule,
