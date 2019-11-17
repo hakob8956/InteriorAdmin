@@ -1,13 +1,21 @@
-<button *ngFor="let item of languageModel" (click)="changeIdLanguage(item.id)">{{item.name}}</button>
 
-<ng-container  *ngFor="let option of model">
+<div style="margin-bottom: 10px;">
+    <button *ngFor="let item of languageModel" 
+    (click)="changeIdLanguage(item.id)"
+    class="btn "
+    [ngClass]="item.id == languageId ? 'btn btn-outline-primary' : 'btn-outline-secondary'"
+    >
+      {{ item.name }}
+    </button>
+</div>
+<ng-container *ngFor="let option of model">
   <app-option-detail-view-one
-  *ngIf="option.languageId == languageId"
-  [option]="option"
-  (onChangeOption)="onChangeOption($event)"
-  (onDeleteOption)="onDeleteOption($event)"
-></app-option-detail-view-one>
+    *ngIf="option.languageId == languageId"
+    [option]="option"
+    (onChangeOption)="onChangeOption($event)"
+    (onDeleteOption)="onDeleteOption($event)"
+  ></app-option-detail-view-one>
 </ng-container>
 <app-option-detail-add
-(onAddOption)="onAddOption($event)" 
+  (onAddOption)="onAddOption($event)"
 ></app-option-detail-add>

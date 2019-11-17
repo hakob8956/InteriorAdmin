@@ -201,8 +201,6 @@ namespace Interior.Controllers
                             var CurrentFilesAttachment = await _filesAttachmentService.GetFilesAttachmentAsync(filesAttachment.FileId);
                             if (CurrentFilesAttachment == null)
                             {
-                                await _filesAttachmentService.AddFilesAttachemntAsync(filesAttachment);
-
                                 var resultfilesCode = await _filesAttachmentService.AddFilesAttachemntAsync(filesAttachment);
                                 if (resultfilesCode != ResultCode.Success)
                                 {

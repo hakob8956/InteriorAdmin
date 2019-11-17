@@ -53,8 +53,8 @@ export class BrandEditComponent implements OnInit {
   changeContents(currentContents:ContentModel[]){
     this.brandModel.contents=currentContents; 
   }
-  onFileChange(currentFile:File){
-    this.brandModel.file=currentFile;
+  onFileChange(currentFile:any){
+    this.brandModel.file=currentFile.file;
   }
   cancelButton() {
     this.router.navigate(["/brandView"]);

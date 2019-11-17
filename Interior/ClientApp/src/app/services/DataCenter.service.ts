@@ -1,3 +1,5 @@
+import { InteriorRequestModel } from "./../models/Interior";
+import { GridDataResult } from "@progress/kendo-angular-grid";
 import { CategoryEditModel } from "./../models/Category";
 import { LanguageModel } from "src/app/models/Language";
 import { LanguageEditComponent } from "./../Language/language-edit/language-edit.component";
@@ -122,6 +124,11 @@ export class CategoryService extends BaseService {
   constructor(private http: HttpClient) {
     super();
   }
+  public getCateogryAll() {
+    return this.http
+      .get(`${this.BASE_URL}/Category/get-all`)
+      .pipe(catchError(this.handleError));
+  }
   public getCategory(id: number) {
     return this.http
       .get(`${this.BASE_URL}/Category/get-byId/${id}`)
@@ -161,6 +168,11 @@ export class ShopService extends BaseService {
   constructor(private http: HttpClient) {
     super();
   }
+  public getShopAll() {
+    return this.http
+      .get(`${this.BASE_URL}/Shop/get-all`)
+      .pipe(catchError(this.handleError));
+  }
   public getShopbyId(id: number) {
     return this.http
       .get(`${this.BASE_URL}/Shop/get-byId/${id}`)
@@ -199,6 +211,11 @@ export class ShopService extends BaseService {
 export class BrandService extends BaseService {
   constructor(private http: HttpClient) {
     super();
+  }
+  public getBrandAll() {
+    return this.http
+      .get(`${this.BASE_URL}/Brand/get-all`)
+      .pipe(catchError(this.handleError));
   }
   public getBrandbyId(id: number) {
     return this.http
@@ -244,18 +261,73 @@ export class InteriorService extends BaseService {
       .get(`${this.BASE_URL}/Interior/get-byId/${id}`)
       .pipe(catchError(this.handleError));
   }
-  // public createBrand(model: BrandEditModel) {
-  //     console.log(model)
-  //     const formData: FormData = new FormData();
-  //     if (model.file != null)
-  //         formData.append('File', model.file, model.file.name);
-  //     formData.append('Contents', JSON.stringify(model.contents));
-  //     formData.append('FileName', model.fileName);
-  //     formData.append('Id', model.id.toString());
-  //     return this.http.post(`${this.BASE_URL}/Brand/create-brand`, formData).pipe(
-  //         catchError(this.handleError)
-  //     );
-  // }
+  public createInterior(model: InteriorRequestModel) {
+    console.log(model);
+    const formData: FormData = new FormData();
+    if (model.androidFile != null)
+      formData.append("AndroidFile", model.androidFile, model.androidFile.name);
+    if (model.iosFile != null)
+      formData.append("IosFile", model.iosFile, model.iosFile.name);
+    if (model.glbFile != null)
+      formData.append("GlbFile", model.glbFile, model.glbFile.name);
+    if (model.imageFile != null)
+      formData.append("ImageFile", model.imageFile, model.imageFile.name);
+    if (model.nameContent)
+      formData.append("NameContent", JSON.stringify(model.nameContent));
+    if (model.descriptionContent)
+      formData.append(
+        "DescriptionContent",
+        JSON.stringify(model.descriptionContent)
+      );
+    formData.append("Price", model.price.toString());
+    formData.append("IsAvailable", model.isAvailable.toString());
+    if (model.isVisible)
+      formData.append("IsVisible", model.isVisible.toString());
+    if (model.buyUrl) formData.append("BuyUrl", model.buyUrl.toString());
+    formData.append("ShopId", model.shopId.toString());
+    formData.append("BrandId", model.brandId.toString());
+    formData.append("CategoryId", model.categoryId.toString());
+    if (model.optionContents)
+      formData.append("OptionContents", JSON.stringify(model.optionContents));
+    formData.append("Id", model.id.toString());
+    return this.http
+      .post(`${this.BASE_URL}/Interior/create-interior`, formData)
+      .pipe(catchError(this.handleError));
+  }
+  public editInterior(model: InteriorRequestModel) {
+    console.log(model);
+    const formData: FormData = new FormData();
+    if (model.androidFile != null)
+      formData.append("AndroidFile", model.androidFile, model.androidFile.name);
+    if (model.iosFile != null)
+      formData.append("IosFile", model.iosFile, model.iosFile.name);
+    if (model.glbFile != null)
+      formData.append("GlbFile", model.glbFile, model.glbFile.name);
+    if (model.imageFile != null)
+      formData.append("ImageFile", model.imageFile, model.imageFile.name);
+    if (model.nameContent)
+      formData.append("NameContent", JSON.stringify(model.nameContent));
+    if (model.descriptionContent)
+      formData.append(
+        "DescriptionContent",
+        JSON.stringify(model.descriptionContent)
+      );
+    formData.append("Price", model.price.toString());
+    formData.append("IsAvailable", model.isAvailable.toString());
+    if (model.isVisible)
+      formData.append("IsVisible", model.isVisible.toString());
+    if (model.buyUrl) 
+      formData.append("BuyUrl", model.buyUrl.toString());
+    formData.append("ShopId", model.shopId.toString());
+    formData.append("BrandId", model.brandId.toString());
+    formData.append("CategoryId", model.categoryId.toString());
+    if (model.optionContents)
+      formData.append("OptionContents", JSON.stringify(model.optionContents));
+    formData.append("Id", model.id.toString());
+    return this.http
+      .post(`${this.BASE_URL}/Interior/edit-interior`, formData)
+      .pipe(catchError(this.handleError));
+  }
   // public editBrand(model: BrandEditModel) {
   //     console.log(model)
   //     const formData: FormData = new FormData();

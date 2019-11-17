@@ -2,5 +2,6 @@
   <input type="text" class="form-control" [(ngModel)]="option.name" ngDefaultControl placeholder="Name*">
   <input type="text" class="form-control"  [(ngModel)]="option.value" ngDefaultControl placeholder="Value*">
   <input type="text" class="form-control" [(ngModel)]="option.link" ngDefaultControl placeholder="Link">
-  <button  [disabled]="!(option.name && option.value)"  (click)="AddOption()">Add</button>
+  <button  [disabled]="!(option.name && option.value)"  (click)="AddOption()" class="btn"> <i class="fa fa-plus-circle"></i></button>
+
 </div>

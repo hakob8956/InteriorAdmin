@@ -50,8 +50,8 @@ export class ShopEditComponent implements OnInit {
     else this.fileName = "Choose file";
   }
   
-  onFileChange(currentFile:File){
-    this.shopModel.file=currentFile;
+  onFileChange(currentFile:any){
+    this.shopModel.file=currentFile.file;
   }
   changeContents(currentContents:ContentModel[]){
     this.shopModel.contents=currentContents;

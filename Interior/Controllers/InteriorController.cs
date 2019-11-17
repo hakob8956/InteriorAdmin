@@ -46,6 +46,7 @@ namespace Interior.Controllers
             _contentService = contentService;
             _filesAttachmentService = filesAttachmentService;
             _optionContent = optionContent;
+            _contentAttachmentService = contentAttachmentService;
         }
 
         [HttpGet("get-all")]
@@ -89,7 +90,7 @@ namespace Interior.Controllers
                             if (item.File != null)
                             {
                                 var currentFile = _fileService.DownloadFile(Path.GetFileName(item.File.Path));
-                                var fileViewModel = new FileViewModel { FileId = item.FileId, FileName = item.File.Name, ImageData = currentFile.FileContents, ImageMimeType = currentFile.ContentType ,FileType=item.File.FileType};
+                                var fileViewModel = new FileViewModel { FileId = item.FileId, FileName = item.File.Name, ImageData = currentFile.FileContents, ImageMimeType = currentFile.ContentType, FileType = item.File.FileType };
                                 switch ((FileType)item.File.FileType)
                                 {
                                     case FileType.Image:
@@ -125,19 +126,17 @@ namespace Interior.Controllers
                 if (ModelState.IsValid)
                 {
                     model.Id = 0;
-                    var files = await UploadFilesAsync(model.ImageFile, model.IosFile, model.AndroidFile, model.GlbFile);
-                    foreach (var file in files)
-                    {
-                        if (file == null)
-                            return BadRequest("Not uploade on of files");
-                        await _fileService.AddFileAsync(file);
-                    }
-
-
                     var currentInterior = _mapper.Map<InteriorResponseModel, Interior.Models.Entities.Interior>(model);
                     var resultCode = await _interiorService.AddInteriorAsync(currentInterior);
                     if (resultCode == ResultCode.Success)
                     {
+                        var files = await UploadFilesAsync(model.ImageFile, model.IosFile, model.AndroidFile, model.GlbFile);
+                        foreach (var file in files)
+                        {
+                            if (file == null)
+                                return BadRequest("Not uploade on of files");
+                            await _fileService.AddFileAsync(file);
+                        }
                         foreach (var file in files)
                         {
                             await _filesAttachmentService.AddFilesAttachemntAsync(new FilesAttachment { InteriorId = currentInterior.Id, FileId = file.Id });
@@ -168,7 +167,7 @@ namespace Interior.Controllers
 
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return BadRequest("Unknown Error");
             }
@@ -204,7 +203,8 @@ namespace Interior.Controllers
                     {
                         item.ContentType = (byte)contentType;
                         resultCode = await _contentService.AddTextToContentAsync(item);
-                        resultCode = await _contentAttachmentService.AddContentAttachmentAsync(new ContentAttachment { InteriorId = id, ContentId = item.Id });
+                        if(resultCode==ResultCode.Success)
+                            resultCode = await _contentAttachmentService.AddContentAttachmentAsync(new ContentAttachment { InteriorId = id, ContentId = item.Id });
                     }
                 }
 

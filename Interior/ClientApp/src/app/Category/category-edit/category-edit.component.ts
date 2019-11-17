@@ -53,8 +53,8 @@ export class CategoryEditComponent implements OnInit {
     this.categoryModel.contents=currentContents;
     console.log(this.categoryModel.contents)
   }
-  onFileChange(currentFile:File){
-    this.categoryModel.file=currentFile;
+  onFileChange(currentFile:any){
+    this.categoryModel.file=currentFile.file;
   }
   
   cancelButton() {

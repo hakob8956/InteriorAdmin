@@ -41,6 +41,7 @@ namespace Interior.Services
                 if (model!=null)
                 {
                      _context.FilesAttachments.Remove(model);
+                    await _context.SaveChangesAsync();
                     return ResultCode.Success;
                 }
                 return ResultCode.Error;
@@ -64,11 +65,12 @@ namespace Interior.Services
                 if (model != null)
                 {
                     _context.FilesAttachments.Update(fileAttachment);
+                    await _context.SaveChangesAsync();
                     return ResultCode.Success;
                 }
                 return ResultCode.Error;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return ResultCode.Error;
             }

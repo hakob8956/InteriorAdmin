@@ -71,8 +71,8 @@ export class LanguageEditComponent implements OnInit {
       else this.fileName = "Choose file";
    
   }
-  onFileChange(currentFile:File){
-    this.languageModel.file=currentFile;
+  onFileChange(currentFile:any){
+    this.languageModel.file=currentFile.file;
   }
   submitForm(): void {
     if (this.languageModel.currentFile != null) {

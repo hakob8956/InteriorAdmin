@@ -68,8 +68,13 @@ namespace Interior.Mapping
                 .ForMember(s=>s.DescriptionContent,opt=>opt.MapFrom(
                     c=>c.ContentAttachments.Select(s=>s.Content).Where(s=>s.ContentType==(byte)ContentType.Description))
                  );
-                conf.CreateMap<InteriorResponseModel, Models.Entities.Interior>();
+                conf.CreateMap<InteriorResponseModel, Models.Entities.Interior>().ForMember(s=>s.OptionContents,opt=>opt.MapFrom(o=>""));
 
+//            Missing type map configuration or unsupported mapping.
+
+//Mapping types:
+//Char->OptionContent
+//System.Char->Interior.Models.Entities.OptionContent
             });
 
             return mapperConfig.CreateMapper();

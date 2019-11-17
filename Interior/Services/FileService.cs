@@ -140,7 +140,7 @@ namespace Interior.Services
                     Directory.CreateDirectory("/Files");
                 var fileName = DateTime.Now.Ticks + Path.GetExtension(fileModel.FileName);
                 string filePath = Path.Combine(_hostingEnvironment.WebRootPath, "Files", fileName);
-                if (fileModel.Length <= _fileSize)
+                if (true/*fileModel.Length <= _fileSize*/)
                 {
                     
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -157,7 +157,7 @@ namespace Interior.Services
                 }
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
                 return null;

@@ -14,7 +14,6 @@ namespace Interior.Models.Entities
         public int Id { get; set; }
         public int FileId { get; set; }
         public FileStorage File { get; set; }
-        [Required]
         public int? BrandId { get; set; }
         public Brand Brand { get; set; }
         public int? CategoryId { get; set; }
