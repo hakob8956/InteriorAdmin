@@ -23,4 +23,6 @@ export class InteriorRequestModel
     iosFile: File;
     androidFile: File;
     glbFile: File;
+    
+
 }

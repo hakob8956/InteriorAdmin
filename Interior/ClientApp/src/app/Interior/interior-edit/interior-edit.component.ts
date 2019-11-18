@@ -14,6 +14,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { LanguageModel } from "src/app/models/Language";
 import { ContentModel } from "src/app/models/ContentModel";
 import { ContentType, FileType } from "src/app/models/Enums";
+import { FileModel } from 'src/app/models/File';
 @Component({
   selector: "app-interior-edit",
   templateUrl: "./interior-edit.component.html",
@@ -60,7 +61,7 @@ export class InteriorEditComponent implements OnInit {
       this.interiorService
         .getInteriorbyId(this.interiorId)
         .subscribe(response => {
-          this.interiorGetModel = response["data"];
+          this.interiorGetModel= response["data"];
           console.log(response["data"]);
         });
     } else {
@@ -117,9 +118,51 @@ export class InteriorEditComponent implements OnInit {
     this.interiorGetModel.optionContents = model;
     this.interiorGetModel.optionContents.forEach(e=>e.isCreate?e.id=0:e.id=e.id);
   }
+  cancelButton() {
+    this.router.navigate(["/interiorView"]);
+  }
   submitForm() {
-    this.interiorGetModel.id=0;
-    console.log(this.interiorGetModel);
-    this.interiorService.createInterior(this.interiorGetModel).subscribe(r=>console.log(r));
+   
+    //this.currentFileInit(); TODO SEND FILEID
+    if (this.interiorId == 0) {
+      this.interiorGetModel.id = 0;
+      this.interiorService
+        .createInterior(this.interiorGetModel)
+        .subscribe(response => this.checkValidRequest(response["success"]));
+    } else {
+      this.interiorService
+        .editInterior(this.interiorGetModel)
+        .subscribe(response => this.checkValidRequest(response["success"]));
+    }
+  }
+  private checkValidRequest(success: Boolean) {
+    if (success) this.router.navigate(["/interiorView"]);
+    else alert("Error");
+  }
+  private currentFileInit():void{
+    if (this.interiorGetModel.currentAndroidFile != null) {
+      this.interiorGetModel.currentAndroidFile.imageData = null;
+      this.interiorGetModel.currentAndroidFile.imageMimeType = null;
+    } else {
+      this.interiorGetModel.currentAndroidFile = new FileModel();
+    }
+    if (this.interiorGetModel.currentGlbFile != null) {
+      this.interiorGetModel.currentGlbFile.imageData = null;
+      this.interiorGetModel.currentGlbFile.imageMimeType = null;
+    } else {
+      this.interiorGetModel.currentGlbFile = new FileModel();
+    }
+    if (this.interiorGetModel.currentImageFile != null) {
+      this.interiorGetModel.currentImageFile.imageData = null;
+      this.interiorGetModel.currentImageFile.imageMimeType = null;
+    } else {
+      this.interiorGetModel.currentImageFile = new FileModel();
+    }
+    if (this.interiorGetModel.currentIosFile != null) {
+      this.interiorGetModel.currentIosFile.imageData = null;
+      this.interiorGetModel.currentIosFile.imageMimeType = null;
+    } else {
+      this.interiorGetModel.currentIosFile = new FileModel();
+    }
   }
 }

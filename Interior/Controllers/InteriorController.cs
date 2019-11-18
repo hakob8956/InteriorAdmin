@@ -153,8 +153,8 @@ namespace Interior.Controllers
                             else
                                 await _optionContent.AddOptionContentsAsync(item);
                         }
-                        var contentNameStatusCode = await UploadContentsAsync(model.NameContent, ContentType.Name, model.Id);
-                        var contentDescriptionStatusCode = await UploadContentsAsync(model.DescriptionContent, ContentType.Description, model.Id);
+                        var contentNameStatusCode = await UploadContentsAsync(model.NameContent, ContentType.Name, currentInterior.Id);
+                        var contentDescriptionStatusCode = await UploadContentsAsync(model.DescriptionContent, ContentType.Description, currentInterior.Id);
                         if (contentNameStatusCode == ResultCode.Error || contentDescriptionStatusCode == ResultCode.Error)
                             return BadRequest(ResponseError.Create("can't upload content"));
 
@@ -172,7 +172,72 @@ namespace Interior.Controllers
                 return BadRequest("Unknown Error");
             }
         }
+        [HttpPost("edit-interior")]
+        public async Task<IActionResult> EditInterior([FromForm]InteriorResponseModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var oldInterior = await _interiorService.GetByIdAsync(model.Id);
+                    if (oldInterior == null)
+                        return BadRequest(ResponseError.Create("not found interior"));
 
+                    var currentInterior = _mapper.Map<InteriorResponseModel, Interior.Models.Entities.Interior>(model);
+                    var resultCode = await _interiorService.UpdateInteriorAsync(currentInterior);
+                    if (resultCode == ResultCode.Success)
+                    {
+                        var files = await UploadFilesAsync(model.ImageFile, model.IosFile, model.AndroidFile, model.GlbFile);
+                        foreach (var file in files)
+                        {
+                            if (file == null)
+                                return BadRequest("Not uploade on of files");
+                            await _fileService.AddFileAsync(file);
+                        }
+                        foreach (var file in files)
+                        {
+                            var fileAttach = new FilesAttachment { InteriorId = currentInterior.Id, FileId = file.Id };
+                            var currentFilesAttachment = await _filesAttachmentService.GetFilesAttachmentAsync(fileAttach.FileId);
+                            if (currentFilesAttachment == null)
+                            {
+                                var resultfilesCode = await _filesAttachmentService.AddFilesAttachemntAsync(fileAttach);
+                                if (resultfilesCode == ResultCode.Error)
+                                {
+                                    await _fileService.DeleteFileAsync(fileAttach.FileId);
+                                    return BadRequest("Cant create file");
+                                };
+                            }
+                        }
+                        IEnumerable<OptionContent> optionContents = JsonConvert.DeserializeObject<IEnumerable<OptionContent>>(model.OptionContents);
+                        foreach (var item in optionContents)
+                        {
+                            item.InteriorId = currentInterior.Id;
+                            if (String.IsNullOrEmpty(item.Name) && String.IsNullOrEmpty(item.Value))
+                                await _optionContent.DeleteOptionContentsAsync(item.Id);
+                            else if (item.Id > 0)
+                                await _optionContent.EditOptionContentsAsync(item);
+                            else
+                                await _optionContent.AddOptionContentsAsync(item);
+                        }
+                        var contentNameStatusCode = await UploadContentsAsync(model.NameContent, ContentType.Name, currentInterior.Id);
+                        var contentDescriptionStatusCode = await UploadContentsAsync(model.DescriptionContent, ContentType.Description, currentInterior.Id);
+                        if (contentNameStatusCode == ResultCode.Error || contentDescriptionStatusCode == ResultCode.Error)
+                            return BadRequest(ResponseError.Create("can't upload content"));
+
+                        return Ok(ResponseSuccess.Create("Success"));
+                    }
+                    return BadRequest(ResponseError.Create("Can't update interior"));
+
+                }
+                return BadRequest(ResponseError.Create("Invalid form"));
+
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Unknown Error");
+            }
+        }
         private async Task<List<FileStorage>> UploadFilesAsync(IFormFile ImageFile, IFormFile IosFile, IFormFile AndroidFile, IFormFile GlbFile)
         {
             List<FileStorage> files = new List<FileStorage>();

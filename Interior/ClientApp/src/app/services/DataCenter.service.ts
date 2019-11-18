@@ -295,7 +295,6 @@ export class InteriorService extends BaseService {
       .pipe(catchError(this.handleError));
   }
   public editInterior(model: InteriorRequestModel) {
-    console.log(model);
     const formData: FormData = new FormData();
     if (model.androidFile != null)
       formData.append("AndroidFile", model.androidFile, model.androidFile.name);
@@ -316,8 +315,7 @@ export class InteriorService extends BaseService {
     formData.append("IsAvailable", model.isAvailable.toString());
     if (model.isVisible)
       formData.append("IsVisible", model.isVisible.toString());
-    if (model.buyUrl) 
-      formData.append("BuyUrl", model.buyUrl.toString());
+    if (model.buyUrl) formData.append("BuyUrl", model.buyUrl.toString());
     formData.append("ShopId", model.shopId.toString());
     formData.append("BrandId", model.brandId.toString());
     formData.append("CategoryId", model.categoryId.toString());

@@ -12,7 +12,7 @@ namespace Interior.Models.ViewModels
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string DeepLinkingUrl { get; set; }
+        public string BuyUrl { get; set; }
         public decimal Price { get; set; }
         public bool Avaiable { get; set; }
         public bool IsVisible { get; set; }

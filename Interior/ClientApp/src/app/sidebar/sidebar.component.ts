@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { faUsers,faLanguage,faTrophy,faShoppingBasket,faBandAid,faCouch } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-sidebar',
