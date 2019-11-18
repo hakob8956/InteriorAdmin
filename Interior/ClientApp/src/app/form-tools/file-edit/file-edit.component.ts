@@ -9,6 +9,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 })
 export class FileEditComponent {
 
+
   @Input() fileName:string="";
   @Input() fileType:FileType;
   @Output() changeFile = new EventEmitter();

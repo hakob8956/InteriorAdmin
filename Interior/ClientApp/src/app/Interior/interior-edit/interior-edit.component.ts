@@ -14,7 +14,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { LanguageModel } from "src/app/models/Language";
 import { ContentModel } from "src/app/models/ContentModel";
 import { ContentType, FileType } from "src/app/models/Enums";
-import { FileModel } from 'src/app/models/File';
+import { FileModel, FileIdStorage } from 'src/app/models/File';
 @Component({
   selector: "app-interior-edit",
   templateUrl: "./interior-edit.component.html",
@@ -34,6 +34,7 @@ export class InteriorEditComponent implements OnInit {
   @ViewChild("labelImport")
   labelImport: ElementRef;
   fileToUpload: File = null;
+  fileIdStorage:FileIdStorage[]=new Array<FileIdStorage>();
   interiorId: number;
   languageModel: LanguageModel=new LanguageModel();
   interiorGetModel: InteriorRequestModel = new InteriorRequestModel();
@@ -82,8 +83,6 @@ export class InteriorEditComponent implements OnInit {
     switch (model.fileType) {
       case FileType.Image:
         this.interiorGetModel.imageFile = model.file;
-        console.log(model);
-
         break;
       case FileType.AndroidBundle:
         this.interiorGetModel.androidFile = model.file;
@@ -114,6 +113,10 @@ export class InteriorEditComponent implements OnInit {
       return "Choose File";
     }
   }
+  onClickMe(){
+    console.log(this.interiorGetModel.currentImageFile.fileName)
+    console.log(this.getFileName(FileType.Image));
+  }
   onChangeOptionContent(model: OptionContentModel[]) {
     this.interiorGetModel.optionContents = model;
     this.interiorGetModel.optionContents.forEach(e=>e.isCreate?e.id=0:e.id=e.id);
@@ -123,7 +126,8 @@ export class InteriorEditComponent implements OnInit {
   }
   submitForm() {
    
-    //this.currentFileInit(); TODO SEND FILEID
+    this.currentFileInit();// TODO SEND FILEID
+    console.log(this.interiorGetModel)
     if (this.interiorId == 0) {
       this.interiorGetModel.id = 0;
       this.interiorService
@@ -140,29 +144,27 @@ export class InteriorEditComponent implements OnInit {
     else alert("Error");
   }
   private currentFileInit():void{
-    if (this.interiorGetModel.currentAndroidFile != null) {
-      this.interiorGetModel.currentAndroidFile.imageData = null;
-      this.interiorGetModel.currentAndroidFile.imageMimeType = null;
-    } else {
-      this.interiorGetModel.currentAndroidFile = new FileModel();
-    }
+    let file = new FileIdStorage();
+    if (this.interiorGetModel.currentAndroidFile != null) {    
+      file.fileId=this.interiorGetModel.currentAndroidFile.fileId;
+      file.fileType=FileType.AndroidBundle;
+      this.fileIdStorage.push(file);
+    } 
     if (this.interiorGetModel.currentGlbFile != null) {
-      this.interiorGetModel.currentGlbFile.imageData = null;
-      this.interiorGetModel.currentGlbFile.imageMimeType = null;
-    } else {
-      this.interiorGetModel.currentGlbFile = new FileModel();
-    }
+      file.fileId=this.interiorGetModel.currentGlbFile.fileId;
+      file.fileType=FileType.Glb;
+      this.fileIdStorage.push(file);
+    } 
     if (this.interiorGetModel.currentImageFile != null) {
-      this.interiorGetModel.currentImageFile.imageData = null;
-      this.interiorGetModel.currentImageFile.imageMimeType = null;
-    } else {
-      this.interiorGetModel.currentImageFile = new FileModel();
+      file.fileId=this.interiorGetModel.currentImageFile.fileId;
+      file.fileType=FileType.Image;
+      this.fileIdStorage.push(file);
     }
     if (this.interiorGetModel.currentIosFile != null) {
-      this.interiorGetModel.currentIosFile.imageData = null;
-      this.interiorGetModel.currentIosFile.imageMimeType = null;
-    } else {
-      this.interiorGetModel.currentIosFile = new FileModel();
-    }
+      file.fileId=this.interiorGetModel.currentIosFile.fileId;
+      file.fileType=FileType.IosBundle;
+      this.fileIdStorage.push(file);
+    } 
+    this.interiorGetModel.fileIdStorage=this.fileIdStorage;
   }
 }

@@ -24,7 +24,7 @@ namespace Interior.Models.ViewModels
         public int Id { get; set; }
         public ICollection<Content> NameContent { get; set; }
         public ICollection<Content> DescriptionContent { get; set; }
-        public FileViewModel CurrentImageFIle { get; set; }
+        public FileViewModel CurrentImageFile { get; set; }
 
         public FileViewModel CurrentIosFile { get; set; }
         public FileViewModel CurrentAndroidFile { get; set; }
@@ -53,6 +53,7 @@ namespace Interior.Models.ViewModels
         public IFormFile AndroidFile { get; set; }
 
         public IFormFile GlbFile { get; set; }
+        public string FileIdStorage { get; set; }//Json
         [Required]
         public decimal Price { get; set; }
         [Required]

@@ -188,11 +188,21 @@ namespace Interior.Controllers
                     if (resultCode == ResultCode.Success)
                     {
                         var files = await UploadFilesAsync(model.ImageFile, model.IosFile, model.AndroidFile, model.GlbFile);
+                        var filesId = JsonConvert.DeserializeObject<IEnumerable<FileIdStorageViewModel>>(model.FileIdStorage);
                         foreach (var file in files)
                         {
                             if (file == null)
                                 return BadRequest("Not uploade on of files");
-                            await _fileService.AddFileAsync(file);
+                            ResultCode currentFileStatusCode = ResultCode.Error;
+                            int? fileOldId = filesId.FirstOrDefault(s => s.FileType == file.FileType)?.FileId;
+                            file.Id = fileOldId != null?(int)fileOldId:0;
+                            if (file.Id != 0)
+                                currentFileStatusCode = await _fileService.UpdateFileAsync(file);
+                            else
+                                currentFileStatusCode = await _fileService.AddFileAsync(file);
+                            if (currentFileStatusCode == ResultCode.Error)
+                                return BadRequest(ResponseError.Create("Can't create file"));
+
                         }
                         foreach (var file in files)
                         {

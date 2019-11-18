@@ -321,6 +321,8 @@ export class InteriorService extends BaseService {
     formData.append("CategoryId", model.categoryId.toString());
     if (model.optionContents)
       formData.append("OptionContents", JSON.stringify(model.optionContents));
+    if(model.fileIdStorage)
+        formData.append("FileIdStorage", JSON.stringify(model.fileIdStorage));
     formData.append("Id", model.id.toString());
     return this.http
       .post(`${this.BASE_URL}/Interior/edit-interior`, formData)

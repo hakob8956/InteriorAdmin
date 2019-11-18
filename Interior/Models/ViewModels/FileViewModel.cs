@@ -14,4 +14,10 @@ namespace Interior.Models.ViewModels
         public byte[] ImageData { get; set; }
         public string ImageMimeType { get; set; }
     }
+    public class FileIdStorageViewModel
+    {
+        public int FileId { get; set; }
+        public byte FileType { get; set; }
+    }
 }
+

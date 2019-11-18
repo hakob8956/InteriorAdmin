@@ -1,4 +1,4 @@
-import { FileModel } from 'src/app/models/File';
+import { FileModel, FileIdStorage } from 'src/app/models/File';
 import { OptionContentModel } from './OptionDescription';
 import { ContentModel } from './ContentModel';
 
@@ -23,6 +23,7 @@ export class InteriorRequestModel
     iosFile: File;
     androidFile: File;
     glbFile: File;
+    fileIdStorage:FileIdStorage[];
     
 
 }

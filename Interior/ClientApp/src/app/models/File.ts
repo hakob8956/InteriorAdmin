@@ -8,3 +8,7 @@ export class FileModel
     imageMimeType: string;
     fileType:FileType;
 }
+export class FileIdStorage{
+    fileId: number;
+    fileType:FileType;
+}
