@@ -1,12 +1,16 @@
-export enum ContentType
-{
-    Name=0,
-    Description=1
+export enum ContentType {
+  Name,
+  Description
 }
-export enum FileType
-{
-    Image=0,
-    AndroidBundle=1,
-    IosBundle=2,
-    Glb=3
+export enum FileType {
+  Image,
+  AndroidBundle,
+  IosBundle,
+  Glb
+}
+export enum SectionType {
+  Shop,
+  Interior,
+  Category,
+  Brand
 }

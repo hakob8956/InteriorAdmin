@@ -1,0 +1,111 @@
+<div style="margin-bottom: 10px;">
+  <button
+    (click)="changeSectionType(sectionType.Shop)"
+    class="btn "
+    [ngClass]="
+      currentSectionType == sectionType.Shop
+        ? 'btn btn-outline-primary'
+        : 'btn-outline-secondary'
+    "
+  >
+    Shop
+  </button>
+  <button
+    (click)="currentSectionType = sectionType.Interior"
+    class="btn "
+    [ngClass]="
+      currentSectionType == sectionType.Interior
+        ? 'btn btn-outline-primary'
+        : 'btn-outline-secondary'
+    "
+  >
+    Interior
+  </button>
+  <button
+    (click)="currentSectionType = sectionType.Category"
+    class="btn "
+    [ngClass]="
+      currentSectionType == sectionType.Category
+        ? 'btn btn-outline-primary'
+        : 'btn-outline-secondary'
+    "
+  >
+    Category
+  </button>
+  <button
+    (click)="currentSectionType = sectionType.Brand"
+    class="btn "
+    [ngClass]="
+      currentSectionType == sectionType.Brand
+        ? 'btn btn-outline-primary'
+        : 'btn-outline-secondary'
+    "
+  >
+    Brand
+  </button>
+</div>
+<!-- <div>
+  <select
+    class="form-control border-primary"
+    style="margin-bottom:15px;height: 30px;padding: 5px;width: 30%;display:inline-block"
+    [ngStyle]="{
+      display: currentSectionType == sectionType.Shop ? 'inline-block' : 'none'
+    }"
+  >
+    <option
+      *ngFor="let item of shopModels"
+      [value]="item.id"
+      [selected]="item.id == currentShopId"
+    >
+      {{ item.content[0].text }}
+    </option>
+  </select>
+  <select
+    class="form-control border-primary"
+    style="margin-bottom:15px;height: 30px;padding: 5px;width: 30%;display:inline-block"
+    [ngStyle]="{
+      display:
+        currentSectionType == sectionType.Interior ? 'inline-block' : 'none'
+    }"
+  >
+    <option
+      *ngFor="let item of interiorModels"
+      [value]="item.id"
+      [selected]="item.id == currentInteriorId"
+    >
+      {{ item.content[0].text }}
+    </option>
+  </select>
+  <select
+    class="form-control border-primary"
+    style="margin-bottom:15px;height: 30px;padding: 5px;width: 30%;display:inline-block"
+    [ngStyle]="{
+      display:
+        currentSectionType == sectionType.Category ? 'inline-block' : 'none'
+    }"
+  >
+    <option
+      *ngFor="let item of categoryModels"
+      [value]="item.id"
+      [selected]="item.id == currentCategoryId"
+    >
+      {{ item.content[0].text }}
+    </option>
+  </select>
+  <select
+    class="form-control border-primary"
+    style="margin-bottom:15px;height: 30px;padding: 5px;width: 30%;display:inline-block"
+    [ngStyle]="{
+      display: currentSectionType == sectionType.Brand ? 'inline-block' : 'none'
+    }"
+  >
+    <option
+      *ngFor="let item of brandModels"
+      [value]="item.id"
+      [selected]="item.id == currentBrandId"
+    >
+      {{ item.content[0].text }}
+    </option>
+  </select>
+</div> -->
+<button (click)="onClick(sectionType.Brand)">Click</button>

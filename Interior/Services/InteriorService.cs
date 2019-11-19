@@ -64,9 +64,9 @@ namespace Interior.Services
                         return data.OrderByDescending(x => x.Price);
                 case "DeepLinkUrl":
                     if (desc)
-                        return data.OrderBy(x => x.DeepLinkingUrl);
+                        return data.OrderBy(x => x.BuyUrl);
                     else
-                        return data.OrderByDescending(x => x.DeepLinkingUrl);
+                        return data.OrderByDescending(x => x.BuyUrl);
                 default:
                     return null;
             }

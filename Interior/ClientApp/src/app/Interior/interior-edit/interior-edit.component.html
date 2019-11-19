@@ -95,14 +95,15 @@
             [(ngModel)]="interiorGetModel.isAvailable"
             name="Available"
           >
-            <option [value]="'True'" [selected]="interiorGetModel.isAvailable"
+            <option  [value]="true"
               >Yes</option
             >
-            <option [value]="'False'" [selected]="!interiorGetModel.isAvailable"
+            <option  [value]="false"
               >No</option
             >
           </select>
         </div>
+
         <div class="form-group">
           <label>Visible</label><br />
           <select
@@ -111,10 +112,10 @@
             [(ngModel)]="interiorGetModel.isVisible"
             name="Visible"
           >
-            <option [value]="'True'" [selected]="interiorGetModel.isVisible"
+            <option [value]="true"
               >Yes</option
             >
-            <option [value]="'False'" [selected]="!interiorGetModel.isVisible"
+            <option [value]="false"
               >No</option
             >
           </select>

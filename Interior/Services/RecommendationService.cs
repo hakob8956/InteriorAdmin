@@ -49,13 +49,22 @@ namespace Interior.Services
                 return ResultCode.Error;
             }
         }
-
-        public async Task<IEnumerable<Recommendation>> GetAllRecommendationsAsync()
+        public async Task<Recommendation> GetRecommendationById(int id)
         {
-            return await _context.Recommendations
-                .Include(s=>s.ContentsAttachment).ThenInclude(s=>s.Content)
-                .Include(s=>s.FilesAttachment).ThenInclude(s=>s.File)
-                .ToListAsync();
+            return await _context.Recommendations.Include(s => s.ContentsAttachment).ThenInclude(s => s.Content).Include(s => s.FilesAttachment).ThenInclude(s => s.File).AsNoTracking().SingleOrDefaultAsync(i => id == i.Id);
+        }
+
+        public async Task<(IEnumerable<Recommendation>, int count)> GetAllRecommendationsAsync()
+        {
+            try
+            {
+                var model = await _context.Recommendations.Include(s => s.ContentsAttachment).ThenInclude(s=>s.Content).AsNoTracking().ToListAsync();
+                return (model, model.Count);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
 
         public async Task<ResultCode> UpdateRecommendationAsync(Recommendation recommendation)

@@ -38,7 +38,7 @@ namespace Interior.Mapping
                 conf.CreateMap<LanguageShowViewModel, Language>().ReverseMap();
 
                 conf.CreateMap<Category, CategoryShowViewModel>()
-                .ForMember(s=>s.Contents,opt=>opt.MapFrom(c=>c.ContentsAttachment.Select(s=>s.Content).Where(s => s.ContentType == (byte)ContentType.Name)));
+                .ForMember(s => s.Contents, opt => opt.MapFrom(c => c.ContentsAttachment.Select(s => s.Content).Where(s => s.ContentType == (byte)ContentType.Name)));
 
                 conf.CreateMap<ContentViewModel, Content>();
                 conf.CreateMap<ContentViewModel, Content>().ReverseMap();
@@ -49,7 +49,11 @@ namespace Interior.Mapping
                 conf.CreateMap<Brand, BrandShowViewModel>()
                 .ForMember(s => s.Contents, opt => opt.MapFrom(c => c.ContentsAttachment.Select(s => s.Content).Where(s => s.ContentType == (byte)ContentType.Name)));
 
-                conf.CreateMap<Brand,CreateRequestBrandViewModel>()
+                conf.CreateMap<Recommendation, RecommendationShowViewModel>()
+                .ForMember(s => s.Contents, opt => opt.MapFrom(c => c.ContentsAttachment.Select(s => s.Content).Where(s => s.ContentType == (byte)ContentType.Name)));
+
+
+                conf.CreateMap<Brand, CreateRequestBrandViewModel>()
                 .ForMember(s => s.Contents, opt => opt.MapFrom(c => c.ContentsAttachment.Select(s => s.Content).Where(s => s.ContentType == (byte)ContentType.Name)));
 
                 conf.CreateMap<Category, CreateRequestCategoryViewModel>()
@@ -64,17 +68,12 @@ namespace Interior.Mapping
 
                 conf.CreateMap<Models.Entities.Interior, InteriorRequestModel>()
                 .ForMember(s => s.NameContent, opt => opt.MapFrom(
-                    c => c.ContentAttachments.Select(s => s.Content).Where(s=>s.ContentType==(byte)ContentType.Name)))
-                .ForMember(s=>s.DescriptionContent,opt=>opt.MapFrom(
-                    c=>c.ContentAttachments.Select(s=>s.Content).Where(s=>s.ContentType==(byte)ContentType.Description))
+                    c => c.ContentAttachments.Select(s => s.Content).Where(s => s.ContentType == (byte)ContentType.Name)))
+                .ForMember(s => s.DescriptionContent, opt => opt.MapFrom(
+                       c => c.ContentAttachments.Select(s => s.Content).Where(s => s.ContentType == (byte)ContentType.Description))
                  );
-                conf.CreateMap<InteriorResponseModel, Models.Entities.Interior>().ForMember(s=>s.OptionContents,opt=>opt.MapFrom(o=>""));
+                conf.CreateMap<InteriorResponseModel, Models.Entities.Interior>().ForMember(s => s.OptionContents, opt => opt.MapFrom(o => ""));
 
-//            Missing type map configuration or unsupported mapping.
-
-//Mapping types:
-//Char->OptionContent
-//System.Char->Interior.Models.Entities.OptionContent
             });
 
             return mapperConfig.CreateMapper();

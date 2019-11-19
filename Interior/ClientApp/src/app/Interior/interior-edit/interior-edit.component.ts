@@ -56,7 +56,7 @@ export class InteriorEditComponent implements OnInit {
     });
     this.brandService.getBrandAll().subscribe(r=>this.brandsModel=r["data"]["data"]);
     this.shopService.getShopAll().subscribe(r=>this.shopsModel=r["data"]["data"]);
-    this.categoryService.getCateogryAll().subscribe(r=>this.categoriesModel=r["data"]["data"]);
+    this.categoryService.getCategoryAll().subscribe(r=>this.categoriesModel=r["data"]["data"]);
     this.interiorId = +this.route.snapshot.params["id"];
     if (!Number.isNaN(this.interiorId) && this.interiorId > 0) {
       this.interiorService
@@ -114,8 +114,7 @@ export class InteriorEditComponent implements OnInit {
     }
   }
   onClickMe(){
-    console.log(this.interiorGetModel.currentImageFile.fileName)
-    console.log(this.getFileName(FileType.Image));
+    console.log(this.interiorGetModel.isAvailable)
   }
   onChangeOptionContent(model: OptionContentModel[]) {
     this.interiorGetModel.optionContents = model;

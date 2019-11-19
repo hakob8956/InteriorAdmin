@@ -14,7 +14,7 @@ namespace Interior.Models.Entities
         [Key]
         public int Id { get; set; }
 
-        public string DeepLinkingUrl { get; set; }
+        public string BuyUrl { get; set; }
         [Column(TypeName = "decimal(10,2)")]
         public decimal Price { get; set; }
         public bool Avaiable { get; set; }

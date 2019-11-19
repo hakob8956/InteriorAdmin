@@ -37,6 +37,7 @@ import { FileEditComponent } from './form-tools/file-edit/file-edit.component';
 import { OptionDetailViewComponent } from './form-tools/optionDetail/option-detail-view/option-detail-view.component';
 import { OptionDetailViewOneComponent } from './form-tools/optionDetail/option-detail-view-one/option-detail-view-one.component';
 import { OptionDetailAddComponent } from './form-tools/optionDetail/option-detail-add/option-detail-add.component';
+import { ChooseRecommendViewComponent } from './form-tools/choose-recommend/choose-recommend-view/choose-recommend-view.component';
 
 
 
@@ -67,7 +68,8 @@ import { OptionDetailAddComponent } from './form-tools/optionDetail/option-detai
     OptionDetailViewComponent,
     OptionDetailAddComponent,
     OptionDetailViewOneComponent,
-    OptionDetailAddComponent  
+    OptionDetailAddComponent,
+    ChooseRecommendViewComponent  
   ],
   imports: [
     BrowserModule,

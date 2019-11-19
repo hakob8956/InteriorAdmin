@@ -9,21 +9,13 @@ import { LanguageModel } from 'src/app/models/Language';
   selector: 'app-my-test',
   templateUrl: './my-test.component.html',
   styleUrls: ['./my-test.component.scss'],
-  providers:[InteriorService]
+  providers:[]
 })
-export class MyTestComponent  implements OnInit{
-  constructor(private interiorService:InteriorService){}
-  model:OptionContentModel[]=Array<OptionContentModel>();
-  ngOnInit(): void {
-    this.interiorService.getInteriorbyId(3).subscribe(s=>{
-      this.model=s["data"].optionContents;
-      console.log(this.model)
-    });
-  }
-  onChangeOptionContent(model:OptionContentModel[]){
-    console.log(model);
-  }
+export class MyTestComponent {
 
+  onChange(a:any){
+    console.log(a);
+  }
 
  
 

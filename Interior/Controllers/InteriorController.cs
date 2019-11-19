@@ -94,7 +94,7 @@ namespace Interior.Controllers
                                 switch ((FileType)item.File.FileType)
                                 {
                                     case FileType.Image:
-                                        result.CurrentImageFIle = fileViewModel;
+                                        result.CurrentImageFile = fileViewModel;
                                         break;
                                     case FileType.AndroidBundle:
                                         result.CurrentAndroidFile = fileViewModel;

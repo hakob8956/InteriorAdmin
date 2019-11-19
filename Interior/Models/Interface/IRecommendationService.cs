@@ -12,6 +12,7 @@ namespace Interior.Models.Interface
         Task<ResultCode> AddRecommendationAsync(Recommendation recommendation);
         Task<ResultCode> DeleteRecommendationAsync(Recommendation recommendation);
         Task<ResultCode> UpdateRecommendationAsync(Recommendation recommendation);
-        Task<IEnumerable<Recommendation>> GetAllRecommendationsAsync();
+        Task<(IEnumerable<Recommendation>, int count)> GetAllRecommendationsAsync();
+        Task<Recommendation> GetRecommendationById(int id);
     }
 }

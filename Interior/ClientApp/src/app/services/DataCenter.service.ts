@@ -124,7 +124,7 @@ export class CategoryService extends BaseService {
   constructor(private http: HttpClient) {
     super();
   }
-  public getCateogryAll() {
+  public getCategoryAll() {
     return this.http
       .get(`${this.BASE_URL}/Category/get-all`)
       .pipe(catchError(this.handleError));
@@ -259,6 +259,11 @@ export class InteriorService extends BaseService {
   public getInteriorbyId(id: number) {
     return this.http
       .get(`${this.BASE_URL}/Interior/get-byId/${id}`)
+      .pipe(catchError(this.handleError));
+  }
+  public getAllInterior() {
+    return this.http
+      .get(`${this.BASE_URL}/Interior/get-all`)
       .pipe(catchError(this.handleError));
   }
   public createInterior(model: InteriorRequestModel) {

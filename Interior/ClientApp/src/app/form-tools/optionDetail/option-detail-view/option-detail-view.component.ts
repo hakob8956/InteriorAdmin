@@ -21,7 +21,6 @@ export class OptionDetailViewComponent implements OnInit {
       this.languageId = this.languageModel[0].id;
     });
     if (!this.model) this.model = new Array<OptionContentModel>();
-    this.model[0].languageId;
   }
 
   onChangeOption(option: OptionContentModel) {

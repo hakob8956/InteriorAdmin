@@ -23,7 +23,6 @@ namespace Interior.Models.Entities
         public virtual ICollection<ContentAttachment> ContentsAttachment { get; set; }
 
         public DateTime CreatedDate { get; set; }
-        public DateTime ModifiedDate { get; set; }
         public Recommendation()
         {
             this.CreatedDate = DateTime.UtcNow;
