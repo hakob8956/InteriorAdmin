@@ -26,7 +26,7 @@
       </div>
     </ng-template>
   </kendo-grid-column>
-  <kendo-grid-column field="DeepLinkingUrl">
+  <kendo-grid-column field="BuyUrl">
     <ng-template kendoGridCellTemplate let-dataItem>
       <div style="display: flex">
         <p>{{ dataItem.buyUrl }}</p>
@@ -41,7 +41,7 @@
       </div>
     </ng-template>
   </kendo-grid-column>
-  <kendo-grid-column field="Actions" width="120">
+  <kendo-grid-column field="Actions" width="120" [sortable]="false">
     <ng-template kendoGridHeaderTemplate>
       <div>
         <p style="display: inline-block;">Actions</p>

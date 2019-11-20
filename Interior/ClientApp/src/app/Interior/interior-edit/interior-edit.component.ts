@@ -113,9 +113,6 @@ export class InteriorEditComponent implements OnInit {
       return "Choose File";
     }
   }
-  onClickMe(){
-    console.log(this.interiorGetModel.isAvailable)
-  }
   onChangeOptionContent(model: OptionContentModel[]) {
     this.interiorGetModel.optionContents = model;
     this.interiorGetModel.optionContents.forEach(e=>e.isCreate?e.id=0:e.id=e.id);
@@ -123,8 +120,7 @@ export class InteriorEditComponent implements OnInit {
   cancelButton() {
     this.router.navigate(["/interiorView"]);
   }
-  submitForm() {
-   
+  submitForm() { 
     this.currentFileInit();// TODO SEND FILEID
     console.log(this.interiorGetModel)
     if (this.interiorId == 0) {

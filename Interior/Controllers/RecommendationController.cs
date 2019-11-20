@@ -159,8 +159,8 @@ namespace Interior.Controllers
                 return BadRequest(ResponseError.Create("Unknown error"));
             }
         }
-        [HttpPost("edit-brand")]
-        public async Task<IActionResult> EditBrand([FromForm]CreateResponseRecommendationViewModel model)
+        [HttpPost("edit-recommendation")]
+        public async Task<IActionResult> EditRecommendation([FromForm]CreateResponseRecommendationViewModel model)
         {
             try
             {

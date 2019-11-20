@@ -24,7 +24,6 @@ namespace Interior.Controllers
         private readonly IInteriorService _interiorService;
         private readonly IFileService _fileService;
         private readonly IHostingEnvironment _appEnvironment;
-        private readonly long _fileSize;
         private readonly IMapper _mapper;
         private readonly IContentService _contentService;
         private readonly IFilesAttachmentService _filesAttachmentService;

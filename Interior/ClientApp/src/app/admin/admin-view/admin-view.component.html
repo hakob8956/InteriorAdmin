@@ -1,3 +1,7 @@
+
+<!-- <div >
+  <input class="form-control" type="text" >
+</div> -->
 <kendo-grid
   [data]="view | async"
   [loading]="view.loading"
@@ -11,7 +15,6 @@
   (dataStateChange)="dataStateChange($event)"
 >
   <!-- <app-show-message [statusAlert]="1" [message]="Hello"></app-show-message> -->
-
   <kendo-grid-column field="UserInfo" width="130" [sortable]="false">
     <ng-template kendoGridCellTemplate let-dataItem>
       <div style="display: flex">
@@ -36,7 +39,14 @@
       </div>
     </ng-template>
   </kendo-grid-column>
-  <kendo-grid-column field="Actions" width="120">
+  <kendo-grid-column field="email">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <div style="display: flex">
+        <p>{{ dataItem.email }}</p>
+      </div>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="Actions" width="120" [sortable]="false">
     <ng-template kendoGridHeaderTemplate>
       <div>
         <p style="display: inline-block;">Actions</p>

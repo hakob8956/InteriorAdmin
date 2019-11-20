@@ -84,7 +84,8 @@
           <input
             class="form-control"
             type="text"
-            [value]="interiorGetModel.buyUrl"
+            name="BuyUrl"
+            [(ngModel)]="interiorGetModel.buyUrl"
           />
         </div>
         <div class="form-group">
@@ -188,4 +189,3 @@
     </div>
   </div>
 </div>
-<button (click)="onClickMe()">Click Me</button>

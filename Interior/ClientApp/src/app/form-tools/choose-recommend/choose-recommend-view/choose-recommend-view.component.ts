@@ -43,10 +43,13 @@ export class ChooseRecommendViewComponent implements OnInit {
     this.categoryService.getCategoryAll().subscribe(r=>this.categoryModels=r["data"]["data"]);
     this.brandService.getBrandAll().subscribe(r=>this.brandModels=r["data"]["data"]);
     this.shopService.getShopAll().subscribe(r=>this.shopModels=r["data"]["data"]);
-    this.interiorService.getAllInterior().subscribe(r=>this.categoryModels=r["data"]["data"]);
+    this.interiorService.getAllInterior().subscribe(r=>this.interiorModels=r["data"]["data"]);
   }
   onChange(value){
     console.log(value)
       this.onChangeId.emit({value:value,type:this.currentSectionType});
+  }
+  onClick(){
+    console.log(this.currentInteriorId)
   }
 }

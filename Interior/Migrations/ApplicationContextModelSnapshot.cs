@@ -15,7 +15,7 @@ namespace Interior.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -265,9 +265,7 @@ namespace Interior.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<int?>("InteriorId");
-
-                    b.Property<DateTime>("ModifiedDate");
+                    b.Property<int>("InteriorId");
 
                     b.Property<int>("ShopId");
 
@@ -468,9 +466,10 @@ namespace Interior.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Interior.Models.Entities.Interior")
+                    b.HasOne("Interior.Models.Entities.Interior", "Interior")
                         .WithMany("Recommendations")
-                        .HasForeignKey("InteriorId");
+                        .HasForeignKey("InteriorId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Interior.Models.Entities.Shop", "Shop")
                         .WithMany("Recommendations")

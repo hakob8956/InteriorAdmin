@@ -20,6 +20,8 @@ namespace Interior.Models.Entities
         public Brand Brand { get; set; }
         public int ShopId { get; set; }
         public Shop Shop { get; set; }
+        public int InteriorId { get; set; }
+        public Interior Interior { get; set; }
         public virtual ICollection<ContentAttachment> ContentsAttachment { get; set; }
 
         public DateTime CreatedDate { get; set; }
@@ -50,6 +52,12 @@ namespace Interior.Models.Entities
                     .WithMany(s => s.Recommendations)
                     .HasForeignKey(s => s.ShopId)
                     .OnDelete(DeleteBehavior.Restrict);
+
+                builder
+                   .HasOne<Interior>(s => s.Interior)
+                   .WithMany(s => s.Recommendations)
+                   .HasForeignKey(s => s.InteriorId)
+                   .OnDelete(DeleteBehavior.Restrict);
             }
         }
 

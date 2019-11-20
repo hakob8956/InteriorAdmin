@@ -23,6 +23,7 @@
       Interior
     </button>
     <button
+  
       (click)="currentSectionType = mySectionType.Category"
       class="btn "
       [ngClass]="
@@ -54,6 +55,7 @@
       }"
       (change)="onChange($event.target.value)"
     >
+    <option selected>Select an Option</option>
       <option
         *ngFor="let item of shopModels"
         [value]="item.id"
@@ -70,6 +72,8 @@
       }"
       (change)="onChange($event.target.value)"
     >
+    <option selected>Select an Option</option>
+
       <option
         *ngFor="let item of interiorModels"
         [value]="item.id"
@@ -86,6 +90,8 @@
       }"
       (change)="onChange($event.target.value)"
     >
+    <option selected>Select an Option</option>
+
       <option
         *ngFor="let item of categoryModels"
         [value]="item.id"
@@ -101,6 +107,8 @@
       }"
       (change)="onChange($event.target.value)"
     >
+    <option selected>Select an Option</option>
+
       <option
         *ngFor="let item of brandModels"
         [value]="item.id"
@@ -111,3 +119,4 @@
     </select>
   </div>  
 </div>
+<button (click) ="onClick()"></button>

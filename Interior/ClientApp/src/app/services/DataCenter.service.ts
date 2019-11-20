@@ -289,7 +289,8 @@ export class InteriorService extends BaseService {
     formData.append("IsAvailable", model.isAvailable.toString());
     if (model.isVisible)
       formData.append("IsVisible", model.isVisible.toString());
-    if (model.buyUrl) formData.append("BuyUrl", model.buyUrl.toString());
+    if (model.buyUrl) 
+        formData.append("BuyUrl", model.buyUrl.toString());
     formData.append("ShopId", model.shopId.toString());
     formData.append("BrandId", model.brandId.toString());
     formData.append("CategoryId", model.categoryId.toString());
@@ -321,7 +322,8 @@ export class InteriorService extends BaseService {
     formData.append("IsAvailable", model.isAvailable.toString());
     if (model.isVisible)
       formData.append("IsVisible", model.isVisible.toString());
-    if (model.buyUrl) formData.append("BuyUrl", model.buyUrl.toString());
+    if (model.buyUrl) 
+      formData.append("BuyUrl", model.buyUrl.toString());
     formData.append("ShopId", model.shopId.toString());
     formData.append("BrandId", model.brandId.toString());
     formData.append("CategoryId", model.categoryId.toString());
@@ -362,7 +364,7 @@ export class RecommendationService extends BaseService {
     if (model.currentFile != null)
       formData.append("CurrentFile", JSON.stringify(model.currentFile)); //old file
     formData.append("ShopId", model.shopId.toString());
-    //formData.append("InteriorId", model.interiorId.toString());
+    formData.append("InteriorId", model.interiorId.toString());
     formData.append("CategoryId", model.categoryId.toString());
     formData.append("BrandId", model.brandId.toString());
 
