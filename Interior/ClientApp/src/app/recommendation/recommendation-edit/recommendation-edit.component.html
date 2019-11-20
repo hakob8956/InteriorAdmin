@@ -1,0 +1,36 @@
+<div class="col-md-6 grid-margin stretch-card">
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Edit form</h4>
+      <form class="forms-sample">
+        <app-content-edit
+          [currentContent]="recommendationModel.contents"
+          [isCreate]="brandId > 0"
+          (changeContents)="changeContents($event)"
+          [contentType]="0"
+        ></app-content-edit>
+   
+        <app-file-edit
+          [fileName]="fileName"
+          (changeFile)="onFileChange($event)"
+        ></app-file-edit>
+        
+        <app-choose-recommend-view 
+          [currentShopId]="recommendationModel.shopId"
+          [currentInteriorId]="recommendationModel.interiorId"
+          [currentCategoryId]="recommendationModel.categoryId"
+          [currentBrandId]="recommendationModel.brandId"
+          (onChangeId)="onChangeSelectionId($event)"
+          ></app-choose-recommend-view>
+        <button
+          type="submit"
+          class="btn btn-success mr-2"
+          (click)="submitForm()"
+        >
+          Submit
+        </button>
+        <button class="btn btn-light" (click)="cancelButton()">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>

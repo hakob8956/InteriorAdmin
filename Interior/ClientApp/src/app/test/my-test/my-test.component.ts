@@ -12,8 +12,11 @@ import { LanguageModel } from 'src/app/models/Language';
   providers:[]
 })
 export class MyTestComponent {
-
-  onChange(a:any){
+  currentShopId:number=0;
+  currentInteriorId:number=0;
+  currentCategoryId:number=0;
+  currentBrandId:number=0;
+  onChangeSelectionId(a:any){
     console.log(a);
   }
 

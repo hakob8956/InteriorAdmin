@@ -1,1 +1,7 @@
-<app-choose-recommend-view ></app-choose-recommend-view>
+<app-choose-recommend-view 
+[currentShopId]="currentShopId"
+[currentInteriorId]="currentInteriorId"
+[currentCategoryId]="currentCategoryId"
+[currentBrandId]="currentBrandId"
+(onChangeId)="onChangeSelectionId"
+></app-choose-recommend-view>

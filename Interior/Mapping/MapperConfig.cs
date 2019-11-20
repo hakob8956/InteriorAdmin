@@ -52,6 +52,9 @@ namespace Interior.Mapping
                 conf.CreateMap<Recommendation, RecommendationShowViewModel>()
                 .ForMember(s => s.Contents, opt => opt.MapFrom(c => c.ContentsAttachment.Select(s => s.Content).Where(s => s.ContentType == (byte)ContentType.Name)));
 
+                conf.CreateMap<Recommendation, CreateRequestRecommendationViewModel>()
+               .ForMember(s => s.Contents, opt => opt.MapFrom(c => c.ContentsAttachment.Select(s => s.Content).Where(s => s.ContentType == (byte)ContentType.Name)));
+                conf.CreateMap<Recommendation, CreateResponseRecommendationViewModel>().ReverseMap();
 
                 conf.CreateMap<Brand, CreateRequestBrandViewModel>()
                 .ForMember(s => s.Contents, opt => opt.MapFrom(c => c.ContentsAttachment.Select(s => s.Content).Where(s => s.ContentType == (byte)ContentType.Name)));

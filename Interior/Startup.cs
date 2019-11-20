@@ -55,6 +55,8 @@ namespace Interior
             services.AddScoped<IOptionContent, OptionContentService>();
             services.AddScoped<IFilesAttachmentService, FilesAttachmentService>();
             services.AddScoped<IContentAttachmentService, ContentAttachmentService>();
+            services.AddScoped<IRecommendationService, RecommendationService>();
+
 
 
             services.AddSingleton(MapperConfig.CreateMapper());

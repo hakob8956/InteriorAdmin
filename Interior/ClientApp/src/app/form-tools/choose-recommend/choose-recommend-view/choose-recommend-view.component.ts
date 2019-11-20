@@ -24,19 +24,20 @@ export class ChooseRecommendViewComponent implements OnInit {
     private shopService: ShopService,
     private interiorService: InteriorService
   ) {}
-//  @Output() onChangeShopId = new EventEmitter<number>();
-   currentShopId:number=0;
-   currentInteriorId:number=0;
-   currentCategoryId:number=0;
-   currentBrandId:number=0;
+  @Output() onChangeId = new EventEmitter();
+  @Input() currentShopId:number=0;
+  @Input() currentInteriorId:number=0;
+  @Input() currentCategoryId:number=0;
+  @Input() currentBrandId:number=0;
   
   
   categoryModels:CategoryEditModel[]= new Array<CategoryEditModel>();
   brandModels:BrandEditModel[]= new Array<BrandEditModel>();
   shopModels:ShopModel[]= new Array<ShopModel>();
   interiorModels:InteriorRequestModel[]= new Array<InteriorRequestModel>();
-  currentSectionType:SectionType=SectionType.Shop;
-  sectionType(){return SectionType; }
+  mySectionType = SectionType;
+
+  currentSectionType:SectionType=this.mySectionType.Shop;
 
   ngOnInit() {
     this.categoryService.getCategoryAll().subscribe(r=>this.categoryModels=r["data"]["data"]);
@@ -44,12 +45,8 @@ export class ChooseRecommendViewComponent implements OnInit {
     this.shopService.getShopAll().subscribe(r=>this.shopModels=r["data"]["data"]);
     this.interiorService.getAllInterior().subscribe(r=>this.categoryModels=r["data"]["data"]);
   }
-  onClick(){
-    console.log(this.currentSectionType)
-
-  }
-  changeSectionType(section){
-    console.log(section)
-    this.sectionType =section; 
+  onChange(value){
+    console.log(value)
+      this.onChangeId.emit({value:value,type:this.currentSectionType});
   }
 }

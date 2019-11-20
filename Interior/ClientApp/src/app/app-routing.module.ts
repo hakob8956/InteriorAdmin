@@ -1,3 +1,5 @@
+import { RecommendationViewComponent } from './recommendation/recommendation-view/recommendation-view.component';
+import { RecommendationEditComponent } from './recommendation/recommendation-edit/recommendation-edit.component';
 import { MyTestComponent } from "./test/my-test/my-test.component";
 import { InteriorViewComponent } from "./Interior/interior-view/interior-view.component";
 import { ShopEditComponent } from "./shop/shop-edit/shop-edit.component";
@@ -39,6 +41,9 @@ const routes: Routes = [
   { path: "interiorView", component: InteriorViewComponent },
   { path: "interiorEdit", component: InteriorEditComponent },
   { path: "interiorEdit/:id", component: InteriorEditComponent },
+  { path: "recommendationView", component: RecommendationViewComponent },
+  { path: "recommendationEdit", component: RecommendationEditComponent },
+  { path: "recommendationEdit/:id", component: RecommendationEditComponent },
   { path: "test", component: MyTestComponent }
 ];
 

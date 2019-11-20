@@ -15,6 +15,7 @@ import { HttpErrorResponse, HttpClient } from "@angular/common/http";
 import { State, toODataString } from "@progress/kendo-data-query";
 import { ShopModel } from "../models/Shop";
 import { BrandEditModel } from "../models/Brand";
+import { RecommendationModel } from "../models/Recommendation";
 
 export abstract class BaseService {
   constructor() {}
@@ -326,23 +327,65 @@ export class InteriorService extends BaseService {
     formData.append("CategoryId", model.categoryId.toString());
     if (model.optionContents)
       formData.append("OptionContents", JSON.stringify(model.optionContents));
-    if(model.fileIdStorage)
-        formData.append("FileIdStorage", JSON.stringify(model.fileIdStorage));
+    if (model.fileIdStorage)
+      formData.append("FileIdStorage", JSON.stringify(model.fileIdStorage));
     formData.append("Id", model.id.toString());
     return this.http
       .post(`${this.BASE_URL}/Interior/edit-interior`, formData)
       .pipe(catchError(this.handleError));
   }
-  // public editBrand(model: BrandEditModel) {
-  //     console.log(model)
-  //     const formData: FormData = new FormData();
-  //     if (model.file != null)
-  //         formData.append('File', model.file, model.file.name);
-  //     formData.append('Contents', JSON.stringify(model.contents));
-  //     formData.append('FileName', model.fileName);
-  //     formData.append('Id', model.id.toString());
-  //     return this.http.post(`${this.BASE_URL}/Brand/edit-brand`, formData).pipe(
-  //         catchError(this.handleError)
-  //     );
-  // }
+}
+
+@Injectable({
+  providedIn: "root"
+})
+export class RecommendationService extends BaseService {
+  constructor(private http: HttpClient) {
+    super();
+  }
+  public getRecommendationbyId(id: number) {
+    return this.http
+      .get(`${this.BASE_URL}/Recommendation/get-byId/${id}`)
+      .pipe(catchError(this.handleError));
+  }
+  public getAllRecommendation() {
+    return this.http
+      .get(`${this.BASE_URL}/Recommendation/get-all`)
+      .pipe(catchError(this.handleError));
+  }
+  public createRecommendation(model: RecommendationModel) {
+    console.log(model);
+    const formData: FormData = new FormData();
+    if (model.file != null)
+      formData.append("File", model.file, model.file.name);
+    formData.append("Contents", JSON.stringify(model.contents));
+    if (model.currentFile != null)
+      formData.append("CurrentFile", JSON.stringify(model.currentFile)); //old file
+    formData.append("ShopId", model.shopId.toString());
+    //formData.append("InteriorId", model.interiorId.toString());
+    formData.append("CategoryId", model.categoryId.toString());
+    formData.append("BrandId", model.brandId.toString());
+
+    formData.append("Id", model.id.toString());
+    return this.http
+      .post(`${this.BASE_URL}/Recommendation/create-recommendation`, formData)
+      .pipe(catchError(this.handleError));
+  }
+  public editRecommendation(model: RecommendationModel) {
+    console.log(model);
+    const formData: FormData = new FormData();
+    if (model.file != null)
+      formData.append("File", model.file, model.file.name);
+    formData.append("Contents", JSON.stringify(model.contents));
+    if (model.currentFile != null)
+      formData.append("CurrentFile", JSON.stringify(model.currentFile));
+    formData.append("ShopId", model.shopId.toString());
+    formData.append("InteriorId", model.interiorId.toString());
+    formData.append("CategoryId", model.categoryId.toString());
+    formData.append("BrandId", model.brandId.toString());
+    formData.append("Id", model.id.toString());
+    return this.http
+      .post(`${this.BASE_URL}/Recommendation/edit-recommendation`, formData)
+      .pipe(catchError(this.handleError));
+  }
 }
