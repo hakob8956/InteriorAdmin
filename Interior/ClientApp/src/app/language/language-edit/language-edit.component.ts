@@ -1,3 +1,4 @@
+import { AlertService } from './../../services/alert.service';
 import { Router, ActivatedRoute } from "@angular/router";
 import {
   Component,
@@ -28,7 +29,8 @@ export class LanguageEditComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private languageService: LanguageService
+    private languageService: LanguageService,
+    private alertService:AlertService
   ) {}
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -81,6 +83,7 @@ export class LanguageEditComponent implements OnInit {
     } else {
       this.languageModel.currentFile = new FileModel();
     }
+    this.alertService.clear();
     this.languageModel.name=this.form.get("name").value;
     this.languageModel.code=this.form.get("codeName").value;
     if(this.isLanguageCreate){

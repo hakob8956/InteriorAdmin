@@ -1,3 +1,4 @@
+import { AlertService } from './../../services/alert.service';
 import { CategoryEditModel } from './../../models/Category';
 import { BrandDataService } from './../../services/KendoCenter.service';
 import { BrandEditModel } from './../../models/Brand';
@@ -29,7 +30,8 @@ export class InteriorEditComponent implements OnInit {
     private languageService: LanguageService,
     private shopService: ShopService,
     private brandService:BrandService,
-    private categoryService:CategoryService
+    private categoryService:CategoryService,
+    private alertService:AlertService
   ) {}
   @ViewChild("labelImport")
   labelImport: ElementRef;
@@ -122,7 +124,7 @@ export class InteriorEditComponent implements OnInit {
   }
   submitForm() { 
     this.currentFileInit();// TODO SEND FILEID
-    console.log(this.interiorGetModel)
+    this.alertService.clear();
     if (this.interiorId == 0) {
       this.interiorGetModel.id = 0;
       this.interiorService
@@ -135,8 +137,11 @@ export class InteriorEditComponent implements OnInit {
     }
   }
   private checkValidRequest(success: Boolean) {
-    if (success) this.router.navigate(["/interiorView"]);
-    else alert("Error");
+    if (success){
+      this.alertService.success("Success",true);
+      this.router.navigate(["/interiorView"]);
+    } 
+    else this.alertService.error("Error");
   }
   private currentFileInit():void{
     let file = new FileIdStorage();

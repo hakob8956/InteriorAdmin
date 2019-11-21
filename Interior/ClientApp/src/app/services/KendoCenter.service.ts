@@ -5,12 +5,15 @@ import { HttpErrorResponse,HttpClient } from '@angular/common/http';
 import { State, toODataString } from '@progress/kendo-data-query';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { RegisterUserModel } from '../models/User';
+import { AlertService } from './alert.service';
+import { environment } from 'src/environments/environment';
 
 export abstract class  KendoCenterService extends BehaviorSubject<GridDataResult>{
     public loading:boolean;
-    private BASE_URL = 'https://localhost:44353/api';
+    private BASE_URL = environment.apiUrl;
     constructor(
         private http: HttpClient,
+        private alertSerice:AlertService,
         protected tableName: string
     ) {
         super(null);
@@ -50,7 +53,7 @@ export abstract class  KendoCenterService extends BehaviorSubject<GridDataResult
                     total: parseInt(response['data'].lenght, 10),
                 })),
                 tap(() => this.loading = false),
-                catchError(this.handleError)
+                catchError(this.handleError.bind(this))
             );
     }
     protected fetchWithoutState(tableName: string): Observable<GridDataResult> {
@@ -63,7 +66,7 @@ export abstract class  KendoCenterService extends BehaviorSubject<GridDataResult
                     total: parseInt(response['data'].lenght, 10),
                 })),
                 tap(() => this.loading = false),
-                catchError(this.handleError)
+                catchError(this.handleError.bind(this))
             );
     }
 
@@ -78,12 +81,13 @@ export abstract class  KendoCenterService extends BehaviorSubject<GridDataResult
             errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`;
         }
         console.error(errorMessage);
+        this.alertSerice.error(errorMessage);
         return throwError(errorMessage);
     }
 }
 @Injectable()
 export class UserDataService extends KendoCenterService{
-    constructor(http:HttpClient){super(http,'User');}
+    constructor(http:HttpClient){super(http,null,'User');}
     queryAll(st?: any): Observable<GridDataResult> {
         const state = Object.assign({}, st);
         delete state.skip;
@@ -95,7 +99,7 @@ export class UserDataService extends KendoCenterService{
 }
 @Injectable()
 export class LanguageDataService extends KendoCenterService{
-    constructor(http:HttpClient){super(http,'Language');}
+    constructor(http:HttpClient){super(http,null,'Language');}
     queryAll(st?: any): Observable<GridDataResult> {
         const state = Object.assign({}, st);
         delete state.skip;
@@ -107,7 +111,7 @@ export class LanguageDataService extends KendoCenterService{
 }
 @Injectable()
 export class CategoryDataService extends KendoCenterService{
-    constructor(http:HttpClient){super(http,'Category');}
+    constructor(http:HttpClient){super(http,null,'Category');}
     queryAll(st?: any): Observable<GridDataResult> {
         const state = Object.assign({}, st);
         delete state.skip;
@@ -118,7 +122,7 @@ export class CategoryDataService extends KendoCenterService{
 }
 @Injectable()
 export class ShopDataService extends KendoCenterService{
-    constructor(http:HttpClient){super(http,'Shop');}
+    constructor(http:HttpClient){super(http,null,'Shop');}
     queryAll(st?: any): Observable<GridDataResult> {
         const state = Object.assign({}, st);
         delete state.skip;
@@ -129,7 +133,7 @@ export class ShopDataService extends KendoCenterService{
 }
 @Injectable()
 export class BrandDataService extends KendoCenterService{
-    constructor(http:HttpClient){super(http,'Brand');}
+    constructor(http:HttpClient){super(http,null,'Brand');}
     queryAll(st?: any): Observable<GridDataResult> {
         const state = Object.assign({}, st);
         delete state.skip;
@@ -140,7 +144,7 @@ export class BrandDataService extends KendoCenterService{
 }
 @Injectable()
 export class InteriorDataService extends KendoCenterService{
-    constructor(http:HttpClient){super(http,'Interior');}
+    constructor(http:HttpClient){super(http,null,'Interior');}
     queryAll(st?: any): Observable<GridDataResult> {
         const state = Object.assign({}, st);
         delete state.skip;
@@ -151,7 +155,7 @@ export class InteriorDataService extends KendoCenterService{
 }
 @Injectable()
 export class RecommendationDataService extends KendoCenterService{
-    constructor(http:HttpClient){super(http,'Recommendation');}
+    constructor(http:HttpClient){super(http,null,'Recommendation');}
     queryAll(st?: any): Observable<GridDataResult> {
         const state = Object.assign({}, st);
         delete state.skip;

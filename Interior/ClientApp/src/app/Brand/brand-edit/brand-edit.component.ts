@@ -1,3 +1,4 @@
+import { AlertService } from './../../services/alert.service';
 import { Injectable } from "@angular/core";
 import {
   LanguageService,
@@ -21,7 +22,8 @@ export class BrandEditComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private brandService: BrandService
+    private brandService: BrandService,
+    private alertService:AlertService
   ) {}
   @ViewChild("labelImport")
   labelImport: ElementRef;
@@ -66,9 +68,7 @@ export class BrandEditComponent implements OnInit {
     } else {
       this.brandModel.currentFile = new FileModel();
     }
-    //this.brandModel.currentFile.fileName = this.labelImport.nativeElement.innerText;
-
-    // console.log(this.brandModel);
+    this.alertService.clear();
     if (this.brandId == 0) {
       this.brandModel.id = 0;
       this.brandService
@@ -81,7 +81,10 @@ export class BrandEditComponent implements OnInit {
     }
   }
   private checkValidRequest(success: Boolean) {
-    if (success) this.router.navigate(["/brandView"]);
-    else alert("Error");
+    if (success){
+      this.alertService.success("Success",true);
+      this.router.navigate(["/brandView"]);
+    } 
+    else this.alertService.error("Error");
   }
 }

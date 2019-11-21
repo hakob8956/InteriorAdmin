@@ -1,3 +1,4 @@
+import { AlertService } from './../../services/alert.service';
 import {  LanguageService,ShopService} from './../../services/DataCenter.service';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -19,7 +20,8 @@ export class ShopEditComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private shopService:ShopService
+    private shopService:ShopService,
+    private alertService:AlertService
   ) {}
 
   shopId: number;
@@ -66,6 +68,7 @@ export class ShopEditComponent implements OnInit {
     } else {
       this.shopModel.currentFile = new FileModel();
     }
+    this.alertService.clear();
     if (this.shopId == 0) {
       this.shopModel.id = 0;
       this.shopService
@@ -78,8 +81,11 @@ export class ShopEditComponent implements OnInit {
     }
   }
   private checkValidRequest(success: Boolean) {
-    if (success) this.router.navigate(["/shopView"]);
-    else alert("Error");
+    if (success){
+      this.alertService.success("Success",true);
+      this.router.navigate(["/shopView"]);
+    } 
+    else this.alertService.error("Error");
   }
 }
 

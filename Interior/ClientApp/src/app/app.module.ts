@@ -48,6 +48,9 @@ import { OptionDetailAddComponent } from "./form-tools/optionDetail/option-detai
 import { ChooseRecommendViewComponent } from "./form-tools/choose-recommend/choose-recommend-view/choose-recommend-view.component";
 import { RecommendationViewComponent } from "./recommendation/recommendation-view/recommendation-view.component";
 import { RecommendationEditComponent } from "./recommendation/recommendation-edit/recommendation-edit.component";
+import { LoginComponent } from './authentication/login/login.component';
+import { AlertComponent } from './form-tools/alert/alert.component';
+import { AlertService } from './services/alert.service';
 
 @NgModule({
   declarations: [
@@ -79,7 +82,9 @@ import { RecommendationEditComponent } from "./recommendation/recommendation-edi
     OptionDetailAddComponent,
     ChooseRecommendViewComponent,
     RecommendationViewComponent,
-    RecommendationEditComponent
+    RecommendationEditComponent,
+    LoginComponent,
+    AlertComponent
   ],
   imports: [
     BrowserModule,
@@ -102,7 +107,8 @@ import { RecommendationEditComponent } from "./recommendation/recommendation-edi
     ShopDataService,
     BrandDataService,
     InteriorDataService,
-    RecommendationDataService
+    RecommendationDataService,
+    AlertService
   ],
   bootstrap: [AppComponent]
 })

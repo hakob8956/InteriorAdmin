@@ -1,3 +1,4 @@
+import { AlertService } from './../../services/alert.service';
 import { ContentModel } from "../../models/ContentModel";
 import {
   LanguageService,
@@ -20,7 +21,8 @@ export class CategoryEditComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private categoryServce: CategoryService
+    private categoryServce: CategoryService,
+    private alertService:AlertService
   ) {}
   @ViewChild("labelImport")
   labelImport: ElementRef;
@@ -67,6 +69,7 @@ export class CategoryEditComponent implements OnInit {
     } else {
       this.categoryModel.currentFile = new FileModel();
     }
+    this.alertService.clear();
     if (this.categoryId == 0) {
        this.categoryModel.id = 0;
       
@@ -81,7 +84,10 @@ export class CategoryEditComponent implements OnInit {
     }
   }
   private checkValidRequest(success: Boolean) {
-    if (success) this.router.navigate(["/categoryView"]);
-    else alert("Error");
+    if (success){
+      this.alertService.success("Success",true);
+      this.router.navigate(["/categoryView"]);
+    } 
+    else this.alertService.error("Error");
   }
 }

@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { InteriorRequestModel } from "./../models/Interior";
 import { GridDataResult } from "@progress/kendo-angular-grid";
 import { CategoryEditModel } from "./../models/Category";
@@ -9,17 +10,23 @@ import {
   ChangeUserPasswordModel
 } from "./../models/User";
 import { map, tap, catchError } from "rxjs/operators";
-import { Injectable } from "@angular/core";
+import { Injectable, OnInit } from "@angular/core";
 import { throwError, Observable, BehaviorSubject } from "rxjs";
 import { HttpErrorResponse, HttpClient } from "@angular/common/http";
 import { State, toODataString } from "@progress/kendo-data-query";
 import { ShopModel } from "../models/Shop";
 import { BrandEditModel } from "../models/Brand";
 import { RecommendationModel } from "../models/Recommendation";
+import { AlertService } from './alert.service';
+
+
+
 
 export abstract class BaseService {
-  constructor() {}
-  protected BASE_URL = "https://localhost:44353/api";
+
+  protected BASE_URL = environment.apiUrl;
+  constructor(protected alertService:AlertService){}
+
   protected handleError(err: HttpErrorResponse) {
     let errorMessage = "";
     if (err.error instanceof ErrorEvent) {
@@ -27,55 +34,57 @@ export abstract class BaseService {
     } else {
       errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`;
     }
-    console.error(errorMessage);
+    console.log(errorMessage);
+    this.alertService.error(errorMessage);
     return throwError(errorMessage);
   }
+  
 }
 
 @Injectable()
 export class UserService extends BaseService {
-  constructor(private http: HttpClient) {
-    super();
+  constructor(private http: HttpClient,protected alertService:AlertService) {
+    super(alertService);
   }
 
   public getUserById(id: number) {
     return this.http
       .get(`${this.BASE_URL}/User/get-byId/${id}`)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this)));
   }
   public CreateUser(userModel: RegisterUserModel) {
     return this.http
       .post(`${this.BASE_URL}/User/create-user`, userModel)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this).bind(this)));
   }
   public UpdateUser(userModel: UpdateUserModel) {
     return this.http
       .put(`${this.BASE_URL}/User/update-user`, userModel)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this).bind(this)));
   }
   public ChangePasswordUser(modelChange: ChangeUserPasswordModel) {
     return this.http
       .post(`${this.BASE_URL}/User/change-password`, modelChange)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this).bind(this)));
   }
 }
 @Injectable()
 export class RoleService extends BaseService {
-  constructor(private http: HttpClient) {
-    super();
+  constructor(private http: HttpClient,protected alertService:AlertService) {
+    super(alertService);
   }
 
   public getRoles() {
     return this.http.get(`${this.BASE_URL}/Role/get-roles`).pipe(
       map(reponse => reponse["data"]),
-      catchError(this.handleError)
+      catchError(this.handleError.bind(this).bind(this))
     );
   }
 }
 @Injectable()
 export class LanguageService extends BaseService {
-  constructor(private http: HttpClient) {
-    super();
+  constructor(private http: HttpClient,protected alertService:AlertService) {
+    super(alertService);
   }
 
   public addLanguages(modelCreate: LanguageModel) {
@@ -90,7 +99,7 @@ export class LanguageService extends BaseService {
 
     return this.http
       .post(`${this.BASE_URL}/Language/create-language`, formData)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this).bind(this)));
   }
   public editLanguages(modelCreate: LanguageModel) {
     console.log(modelCreate);
@@ -105,37 +114,38 @@ export class LanguageService extends BaseService {
 
     return this.http
       .post(`${this.BASE_URL}/Language/edit-language`, formData)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this)));
   }
   public getLanguage(id: number) {
     return this.http
       .get(`${this.BASE_URL}/Language/get-byId/${id}`)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this)));
   }
   public getAllLanguages() {
     return this.http.get(`${this.BASE_URL}/Language/get-all`).pipe(
       map(response => response["data"].data),
-      catchError(this.handleError)
+      catchError(this.handleError.bind(this))
     );
   }
 }
 
 @Injectable()
 export class CategoryService extends BaseService {
-  constructor(private http: HttpClient) {
-    super();
+  constructor(private http: HttpClient,protected alertService:AlertService) {
+    super(alertService);
   }
   public getCategoryAll() {
     return this.http
       .get(`${this.BASE_URL}/Category/get-all`)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this)));
   }
   public getCategory(id: number) {
     return this.http
       .get(`${this.BASE_URL}/Category/get-byId/${id}`)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this)));
   }
   public createCategory(model: CategoryEditModel) {
+    //this.test("test");
     console.log(model);
     const formData: FormData = new FormData();
     if (model.file != null)
@@ -146,7 +156,7 @@ export class CategoryService extends BaseService {
     formData.append("Id", model.id.toString());
     return this.http
       .post(`${this.BASE_URL}/Category/create-category`, formData)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this)));
   }
   public editCategory(model: CategoryEditModel) {
     console.log(model);
@@ -159,25 +169,25 @@ export class CategoryService extends BaseService {
     formData.append("Id", model.id.toString());
     return this.http
       .post(`${this.BASE_URL}/Category/edit-category`, formData)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this)));
   }
 }
 @Injectable({
   providedIn: "root"
 })
 export class ShopService extends BaseService {
-  constructor(private http: HttpClient) {
-    super();
+  constructor(private http: HttpClient,protected alertService:AlertService) {
+    super(alertService);
   }
   public getShopAll() {
     return this.http
       .get(`${this.BASE_URL}/Shop/get-all`)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this)));
   }
   public getShopbyId(id: number) {
     return this.http
       .get(`${this.BASE_URL}/Shop/get-byId/${id}`)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this)));
   }
   public createShop(model: ShopModel) {
     console.log(model);
@@ -190,7 +200,7 @@ export class ShopService extends BaseService {
     formData.append("Id", model.id.toString());
     return this.http
       .post(`${this.BASE_URL}/Shop/create-shop`, formData)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this)));
   }
   public editShop(model: ShopModel) {
     console.log(model);
@@ -203,25 +213,25 @@ export class ShopService extends BaseService {
     formData.append("Id", model.id.toString());
     return this.http
       .post(`${this.BASE_URL}/Shop/edit-shop`, formData)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this)));
   }
 }
 @Injectable({
   providedIn: "root"
 })
 export class BrandService extends BaseService {
-  constructor(private http: HttpClient) {
-    super();
+  constructor(private http: HttpClient,protected alertService:AlertService) {
+    super(alertService);
   }
   public getBrandAll() {
     return this.http
       .get(`${this.BASE_URL}/Brand/get-all`)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this)));
   }
   public getBrandbyId(id: number) {
     return this.http
       .get(`${this.BASE_URL}/Brand/get-byId/${id}`)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this)));
   }
   public createBrand(model: BrandEditModel) {
     console.log(model);
@@ -234,7 +244,7 @@ export class BrandService extends BaseService {
     formData.append("Id", model.id.toString());
     return this.http
       .post(`${this.BASE_URL}/Brand/create-brand`, formData)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this)));
   }
   public editBrand(model: BrandEditModel) {
     console.log(model);
@@ -247,25 +257,25 @@ export class BrandService extends BaseService {
     formData.append("Id", model.id.toString());
     return this.http
       .post(`${this.BASE_URL}/Brand/edit-brand`, formData)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this)));
   }
 }
 @Injectable({
   providedIn: "root"
 })
 export class InteriorService extends BaseService {
-  constructor(private http: HttpClient) {
-    super();
+  constructor(private http: HttpClient,protected alertService:AlertService) {
+    super(alertService);
   }
   public getInteriorbyId(id: number) {
     return this.http
       .get(`${this.BASE_URL}/Interior/get-byId/${id}`)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this)));
   }
   public getAllInterior() {
     return this.http
       .get(`${this.BASE_URL}/Interior/get-all`)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this)));
   }
   public createInterior(model: InteriorRequestModel) {
     console.log(model);
@@ -299,7 +309,7 @@ export class InteriorService extends BaseService {
     formData.append("Id", model.id.toString());
     return this.http
       .post(`${this.BASE_URL}/Interior/create-interior`, formData)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this)));
   }
   public editInterior(model: InteriorRequestModel) {
     const formData: FormData = new FormData();
@@ -334,7 +344,7 @@ export class InteriorService extends BaseService {
     formData.append("Id", model.id.toString());
     return this.http
       .post(`${this.BASE_URL}/Interior/edit-interior`, formData)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this)));
   }
 }
 
@@ -342,18 +352,18 @@ export class InteriorService extends BaseService {
   providedIn: "root"
 })
 export class RecommendationService extends BaseService {
-  constructor(private http: HttpClient) {
-    super();
+  constructor(private http: HttpClient,protected alertService:AlertService) {
+    super(alertService);
   }
   public getRecommendationbyId(id: number) {
     return this.http
       .get(`${this.BASE_URL}/Recommendation/get-byId/${id}`)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this)));
   }
   public getAllRecommendation() {
     return this.http
       .get(`${this.BASE_URL}/Recommendation/get-all`)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this)));
   }
   public createRecommendation(model: RecommendationModel) {
     console.log(model);
@@ -371,7 +381,7 @@ export class RecommendationService extends BaseService {
     formData.append("Id", model.id.toString());
     return this.http
       .post(`${this.BASE_URL}/Recommendation/create-recommendation`, formData)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this)));
   }
   public editRecommendation(model: RecommendationModel) {
     console.log(model);
@@ -388,6 +398,6 @@ export class RecommendationService extends BaseService {
     formData.append("Id", model.id.toString());
     return this.http
       .post(`${this.BASE_URL}/Recommendation/edit-recommendation`, formData)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError.bind(this)));
   }
 }

@@ -5,6 +5,7 @@ import { RecommendationModel } from 'src/app/models/Recommendation';
 import { ContentModel } from 'src/app/models/ContentModel';
 import { FileModel } from 'src/app/models/File';
 import { SectionType } from 'src/app/models/Enums';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'app-recommendation-edit',
@@ -16,7 +17,8 @@ export class RecommendationEditComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private recommendationService: RecommendationService
+    private recommendationService: RecommendationService,
+    private alertService:AlertService
   ) {}
   recommendationId: number;
   recommendationModel: RecommendationModel = new RecommendationModel();
@@ -81,7 +83,7 @@ export class RecommendationEditComponent implements OnInit {
       this.recommendationModel.currentFile = new FileModel();
     }
 
-    console.log(this.recommendationModel);
+    this.alertService.clear();
     if (this.recommendationId == 0) {
       this.recommendationModel.id = 0;
       this.recommendationService
@@ -94,7 +96,10 @@ export class RecommendationEditComponent implements OnInit {
     }
   }
   private checkValidRequest(success: Boolean) {
-    if (success) this.router.navigate(["/recommendationView"]);
-    else alert("Error");
+    if (success){
+      this.alertService.success("Success",true);
+      this.router.navigate(["/recommendationView"]);
+    } 
+    else this.alertService.error("Error");
   }
 }
