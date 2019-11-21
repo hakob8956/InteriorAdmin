@@ -8,6 +8,7 @@ using Interior.Enums;
 using Interior.Models.Entities;
 using Interior.Models.Interface;
 using Interior.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -16,6 +17,8 @@ using Newtonsoft.Json;
 namespace Interior.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
+
     public class RecommendationController : Controller
     {
         private readonly IRecommendationService _recommendationService;

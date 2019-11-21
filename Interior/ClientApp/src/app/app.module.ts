@@ -23,7 +23,7 @@ import { AdminViewComponent } from "./Admin/admin-view/admin-view.component";
 import { FooterComponent } from "./footer/footer.component";
 import { GridModule } from "@progress/kendo-angular-grid";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { ButtonsModule } from "@progress/kendo-angular-buttons";
 import { AdminEditComponent } from "./Admin/admin-edit/admin-edit.component";
 import { AdminChangePasswordComponent } from "./Admin/admin-change-password/admin-change-password.component";
@@ -48,9 +48,12 @@ import { OptionDetailAddComponent } from "./form-tools/optionDetail/option-detai
 import { ChooseRecommendViewComponent } from "./form-tools/choose-recommend/choose-recommend-view/choose-recommend-view.component";
 import { RecommendationViewComponent } from "./recommendation/recommendation-view/recommendation-view.component";
 import { RecommendationEditComponent } from "./recommendation/recommendation-edit/recommendation-edit.component";
-import { LoginComponent } from './authentication/login/login.component';
-import { AlertComponent } from './form-tools/alert/alert.component';
-import { AlertService } from './services/alert.service';
+import { LoginComponent } from "./authentication/login/login.component";
+import { AlertComponent } from "./form-tools/alert/alert.component";
+import { AlertService } from "./services/alert.service";
+import { JwtInterceptor } from "./helpers/jwt.interceptor";
+import { ErrorInterceptor } from "./helpers/error.interceptor";
+import { AuthenticationService } from "./services/authentication.service";
 
 @NgModule({
   declarations: [
@@ -101,6 +104,9 @@ import { AlertService } from './services/alert.service';
     FontAwesomeModule
   ],
   providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+
     UserDataService,
     LanguageDataService,
     CategoryDataService,
@@ -108,7 +114,8 @@ import { AlertService } from './services/alert.service';
     BrandDataService,
     InteriorDataService,
     RecommendationDataService,
-    AlertService
+    AlertService,
+    AuthenticationService
   ],
   bootstrap: [AppComponent]
 })

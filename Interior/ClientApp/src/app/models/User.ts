@@ -11,10 +11,9 @@ export class RegisterUserModel
 
 export class LoginUserModel
 {
-    Username: string;
-    Password: string;
-    RoleId: string;
-    Token: string;
+    username: string;
+    password: string;
+    token: string;
 }
 export class UpdateUserModel
 {

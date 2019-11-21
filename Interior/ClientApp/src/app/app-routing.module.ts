@@ -1,5 +1,6 @@
-import { RecommendationViewComponent } from './recommendation/recommendation-view/recommendation-view.component';
-import { RecommendationEditComponent } from './recommendation/recommendation-edit/recommendation-edit.component';
+import { AuthGuard } from "./helpers/auth.guard";
+import { RecommendationViewComponent } from "./recommendation/recommendation-view/recommendation-view.component";
+import { RecommendationEditComponent } from "./recommendation/recommendation-edit/recommendation-edit.component";
 import { MyTestComponent } from "./test/my-test/my-test.component";
 import { InteriorViewComponent } from "./Interior/interior-view/interior-view.component";
 import { ShopEditComponent } from "./shop/shop-edit/shop-edit.component";
@@ -18,33 +19,120 @@ import { LanguageViewComponent } from "./Language/language-view/language-view.co
 import { BrandViewComponent } from "./Brand/brand-view/brand-view.component";
 import { BrandEditComponent } from "./Brand/brand-edit/brand-edit.component";
 import { InteriorEditComponent } from "./Interior/interior-edit/interior-edit.component";
+import { LoginComponent } from "./authentication/login/login.component";
 
 const routes: Routes = [
-  { path: "", redirectTo: "/adminView", pathMatch: "full" },
-  { path: "dashboard", component: DashboardComponent },
-  { path: "adminView", component: AdminViewComponent },
-  { path: "adminEdit", component: AdminEditComponent },
-  { path: "adminEdit/:id", component: AdminEditComponent },
-  { path: "adminChangePassword/:id", component: AdminChangePasswordComponent },
-  { path: "languageView", component: LanguageViewComponent },
-  { path: "languageEdit", component: LanguageEditComponent },
-  { path: "languageEdit/:id", component: LanguageEditComponent },
-  { path: "categoryView", component: CategoryViewComponent },
-  { path: "categoryEdit", component: CategoryEditComponent },
-  { path: "categoryEdit/:id", component: CategoryEditComponent },
-  { path: "shopView", component: ShopViewComponent },
-  { path: "shopEdit", component: ShopEditComponent },
-  { path: "shopEdit/:id", component: ShopEditComponent },
-  { path: "brandView", component: BrandViewComponent },
-  { path: "brandEdit", component: BrandEditComponent },
-  { path: "brandEdit/:id", component: BrandEditComponent },
-  { path: "interiorView", component: InteriorViewComponent },
-  { path: "interiorEdit", component: InteriorEditComponent },
-  { path: "interiorEdit/:id", component: InteriorEditComponent },
-  { path: "recommendationView", component: RecommendationViewComponent },
-  { path: "recommendationEdit", component: RecommendationEditComponent },
-  { path: "recommendationEdit/:id", component: RecommendationEditComponent },
-  { path: "test", component: MyTestComponent }
+  { path: "", component: DashboardComponent, canActivate: [AuthGuard] },
+  {
+    path: "dashboard",
+    component: DashboardComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "adminView",
+    component: AdminViewComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "adminEdit",
+    component: AdminEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "adminEdit/:id",
+    component: AdminEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "adminChangePassword/:id",
+    component: AdminChangePasswordComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "languageView",
+    component: LanguageViewComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "languageEdit",
+    component: LanguageEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "languageEdit/:id",
+    component: LanguageEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "categoryView",
+    component: CategoryViewComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "categoryEdit",
+    component: CategoryEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "categoryEdit/:id",
+    component: CategoryEditComponent,
+    canActivate: [AuthGuard]
+  },
+  { path: "shopView", component: ShopViewComponent, canActivate: [AuthGuard] },
+  { path: "shopEdit", component: ShopEditComponent, canActivate: [AuthGuard] },
+  {
+    path: "shopEdit/:id",
+    component: ShopEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "brandView",
+    component: BrandViewComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "brandEdit",
+    component: BrandEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "brandEdit/:id",
+    component: BrandEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "interiorView",
+    component: InteriorViewComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "interiorEdit",
+    component: InteriorEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "interiorEdit/:id",
+    component: InteriorEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "recommendationView",
+    component: RecommendationViewComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "recommendationEdit",
+    component: RecommendationEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "recommendationEdit/:id",
+    component: RecommendationEditComponent,
+    canActivate: [AuthGuard]
+  },
+  { path: "test", component: MyTestComponent },
+  { path: "login", component: LoginComponent },
+  { path: "**", redirectTo: "" }
 ];
 
 @NgModule({

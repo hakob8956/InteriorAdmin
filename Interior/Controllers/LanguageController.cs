@@ -10,6 +10,7 @@ using Interior.Helpers;
 using Interior.Models.Entities;
 using Interior.Models.Interface;
 using Interior.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,8 @@ namespace Interior.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class LanguageController : ControllerBase
     {
         private readonly ILanguageService _languageService;

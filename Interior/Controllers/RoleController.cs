@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Interior.Enums;
 using Interior.Models.Interface;
 using Interior.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +13,7 @@ namespace Interior.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class RoleController : ControllerBase
     {
         private readonly IRoleService _roleService;

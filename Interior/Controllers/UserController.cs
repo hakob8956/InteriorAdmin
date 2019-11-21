@@ -15,6 +15,7 @@ using AutoMapper;
 namespace Interior.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -27,6 +28,7 @@ namespace Interior.Controllers
             _roleService = roleService;
         }
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateUser([FromForm]UserRegisterByUserViewModel userModel)
         {
             if (ModelState.IsValid)
@@ -53,15 +55,25 @@ namespace Interior.Controllers
         }
 
         [HttpPost("authenticate")]
-        public async Task<IActionResult> Authenticate([FromForm]UserLoginViewModel userLogin)
+        [AllowAnonymous]
+        public async Task<IActionResult> Authenticate([FromBody]UserLoginViewModel userLogin)
         {
-            userLogin.Password = encMD5(userLogin.Password);
-            var user = await _userService.AuthenticateAsync(userLogin.Username, userLogin.Password);
+            try
+            {
+                userLogin.Password = encMD5(userLogin.Password);
+                var user = await _userService.AuthenticateAsync(userLogin.Username, userLogin.Password);
 
-            if (user == null)
-                return BadRequest(ResponseError.Create("Username or password is incorrect"));
+                if (user == null)
+                    return BadRequest(ResponseError.Create("Username or password is incorrect"));
 
-            return Ok(ResponseSuccess.Create(user));
+                return Ok(ResponseSuccess.Create(user));
+            }
+            catch (Exception)
+            {
+
+                return BadRequest("Error");
+            }
+            
         }
         [HttpGet("get-all")]
         public async Task<IActionResult> GetAllUsers(int? skip, int? take, string dir, string field, string roleName)

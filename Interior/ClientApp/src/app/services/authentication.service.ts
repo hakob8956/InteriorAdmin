@@ -22,19 +22,20 @@ export class AuthenticationService {
         return this.currentUserSubject.value;
     }
 
-    login(username, password) {
-        return this.http.post<any>(`${this.BASE_URL}/users/authenticate`, { username, password })
+    login(model:LoginUserModel) {
+        console.log(model)
+        return this.http.post<any>(`${this.BASE_URL}/user/authenticate`, model)
             .pipe(map(user => {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                this.currentUserSubject.next(user);
-                return user;
+                localStorage.setItem('currentUser', JSON.stringify(user["data"]));
+                this.currentUserSubject.next(user["data"]);
+                return user["data"];
             }));
     }
 
     logout() {
         // remove user from local storage and set current user to null
-        localStorage.removeItem('currentUser');
+         localStorage.removeItem('currentUser');
         this.currentUserSubject.next(null);
     }
 }

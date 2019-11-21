@@ -1,4 +1,4 @@
-<div class="container-scroller">
+<div class="container-scroller" *ngIf="currentUser">
   <app-navbar></app-navbar>
   <div class="container-fluid page-body-wrapper">
     <app-sidebar></app-sidebar>
@@ -8,6 +8,15 @@
         <router-outlet></router-outlet>
       </div>
       <app-footer></app-footer>
+    </div>
+  </div>
+</div>
+
+<div class="container-scroller" style="padding:10%" *ngIf="!currentUser">
+  <div class="row">
+    <div class="col-sm-6 offset-sm-3">
+      <alert></alert>
+      <router-outlet></router-outlet>
     </div>
   </div>
 </div>

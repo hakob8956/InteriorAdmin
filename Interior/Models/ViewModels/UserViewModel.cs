@@ -50,7 +50,6 @@ namespace Interior.Models.ViewModels
         public string Username { get; set; }
         [Required]
         public string Password { get; set; }
-        public int RoleId { get; set; }
         public string Token { get; set; }
     }
 }

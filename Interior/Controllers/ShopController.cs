@@ -3,6 +3,7 @@ using Interior.Enums;
 using Interior.Models.Entities;
 using Interior.Models.Interface;
 using Interior.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -14,6 +15,7 @@ namespace Interior.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ShopController : ControllerBase
     {
         private readonly IShopService _shopService;
