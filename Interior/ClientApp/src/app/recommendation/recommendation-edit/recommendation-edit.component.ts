@@ -31,21 +31,15 @@ export class RecommendationEditComponent implements OnInit {
       this.recommendationService.getRecommendationbyId(this.recommendationId).subscribe(response => {
         this.recommendationModel = response["data"];
         console.log(this.recommendationModel)
-        this.initForm();
       });
     } else {
       this.recommendationId = 0;
     }
   }
-
-  initForm(){
-    if (
-      this.recommendationModel.currentFile != null &&
-      this.recommendationModel.currentFile.fileName != null
-    )
-      this.fileName= this.recommendationModel.currentFile.fileName;
-    else this.fileName= "Choose file";
-    console.log(this.fileName);
+  get getFile(){
+    if(this.recommendationModel && this.recommendationModel.currentFile)
+        return this.recommendationModel.currentFile;
+    return null;
   }
   changeContents(currentContents:ContentModel[]){
     this.recommendationModel.contents=currentContents; 

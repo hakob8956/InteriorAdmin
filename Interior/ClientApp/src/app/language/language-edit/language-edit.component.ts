@@ -65,13 +65,11 @@ export class LanguageEditComponent implements OnInit {
           ? this.languageModel.code
           : ""
       );
-      if (
-        this.languageModel.currentFile != null &&
-        this.languageModel.currentFile.fileName != null
-      )
-        this.fileName = this.languageModel.currentFile.fileName;
-      else this.fileName = "Choose file";
-   
+  }
+  get getFile(){
+    if(this.languageModel && this.languageModel.currentFile)
+        return this.languageModel.currentFile;
+    return null;
   }
   onFileChange(currentFile:any){
     this.languageModel.file=currentFile.file;

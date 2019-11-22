@@ -36,20 +36,15 @@ export class CategoryEditComponent implements OnInit {
     if (!Number.isNaN(this.categoryId) && this.categoryId > 0) {
       this.categoryServce.getCategory(this.categoryId).subscribe(response => {
         this.categoryModel = response["data"];
-        console.log(this.categoryModel);
-        this.initForm();
       });
     } else {
       this.categoryId = 0;
     }
   }
-  initForm() {
-    if (
-      this.categoryModel.currentFile != null &&
-      this.categoryModel.currentFile.fileName != null
-    )
-      this.fileName = this.categoryModel.currentFile.fileName;
-    else this.fileName= "Choose file";
+  get getFile(){
+    if(this.categoryModel && this.categoryModel.currentFile)
+        return this.categoryModel.currentFile;
+    return null;
   }
   changeContents(currentContents:ContentModel[]){
     this.categoryModel.contents=currentContents;

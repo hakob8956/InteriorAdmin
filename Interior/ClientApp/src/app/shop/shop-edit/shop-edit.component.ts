@@ -51,7 +51,11 @@ export class ShopEditComponent implements OnInit {
       this.fileName = this.shopModel.currentFile.fileName;
     else this.fileName = "Choose file";
   }
-  
+  get getFile(){
+    if(this.shopModel && this.shopModel.currentFile)
+        return this.shopModel.currentFile;
+    return null;
+  }
   onFileChange(currentFile:any){
     this.shopModel.file=currentFile.file;
   }

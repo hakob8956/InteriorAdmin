@@ -1,14 +1,23 @@
 <div class="custom-file form-group">
-    <input type="file"
-           class="custom-file-input"
-           multiple
-           (change)="onFileChange($event.target.files)"
-           accept="image/*" />
-    <label class="custom-file-label"
-     for="importFile" 
-     [(ngModel)]="fileName" 
-     name="fieldName"
-     ngDefaultControl
-     >
-     <fa-icon [icon]="faSearch"></fa-icon>{{fileName}}</label>
-  </div>
+  <span style="color:red;" *ngIf="message">{{ message }}</span>
+
+  <input
+    type="file"
+    class="custom-file-input"
+    multiple
+    (change)="onFileChange($event.target.files)"
+    accept="image/*"
+  />
+  <button (click)="deleteFile()" class="btn btn-primary">Delete</button>
+  <div style="display: flex;"><img [src]="imgURL" height="200" *ngIf="imgURL" /></div>
+  <label
+    class="custom-file-label"
+    for="importFile"
+    [(ngModel)]="fileName"
+    name="fieldName"
+    ngDefaultControl
+  >
+    <fa-icon [icon]="faSearch"></fa-icon>{{ fileName }}</label
+  >
+
+</div>

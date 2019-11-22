@@ -1,7 +1,3 @@
-
-<!-- <div >
-  <input class="form-control" type="text" >
-</div> -->
 <kendo-grid
   [data]="view | async"
   [loading]="view.loading"
@@ -14,7 +10,17 @@
   [filterable]="false"
   (dataStateChange)="dataStateChange($event)"
 >
-  <!-- <app-show-message [statusAlert]="1" [message]="Hello"></app-show-message> -->
+  <ng-template kendoGridToolbarTemplate>
+    <input
+      placeholder="Search"
+      kendoTextBox
+      (input)="onSearch($event.target.value)"
+      class="form-control"
+      type="search"
+      style="width: 225px;float: right;"
+    />
+
+  </ng-template>
   <kendo-grid-column field="UserInfo" width="130" [sortable]="false">
     <ng-template kendoGridCellTemplate let-dataItem>
       <div style="display: flex">
@@ -60,11 +66,11 @@
         <button (click)="editButtonClick(dataItem.id)" class="btn">
           <i class="fa fa-edit"></i>
         </button>
-        <button (click)="deleteButtonClick(dataItem.id)" class="btn">
-          <i class="fa fa-minus-square"></i>
-        </button>
         <button (click)="changePasswordButtonClick(dataItem.id)" class="btn">
           <i class="fa fa-key"></i>
+        </button>
+        <button (click)="deleteButtonClick(dataItem.id)" class="btn">
+          <i class="fa fa-minus-square"></i>
         </button>
       </div>
     </ng-template>

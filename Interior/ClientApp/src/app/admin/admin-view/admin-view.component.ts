@@ -15,7 +15,7 @@ export class AdminViewComponent implements OnInit {
 
   public view: Observable<GridDataResult>;
   public sort:Array<SortDescriptor>=[];
-  public pageSize=5;
+  public pageSize=10;
   public skip=0;
   public messageBox:MessageBox;
   // public state: State = {
@@ -48,6 +48,9 @@ export class AdminViewComponent implements OnInit {
   }
   createButtonClick(){
     this.router.navigate(['/adminEdit']);
+  }
+  onSearch(text:string){
+      console.log(text)
   }
 
 }

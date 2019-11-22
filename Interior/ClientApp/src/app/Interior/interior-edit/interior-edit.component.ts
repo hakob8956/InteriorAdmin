@@ -81,8 +81,9 @@ export class InteriorEditComponent implements OnInit {
         break;
     }
   }
+
   onFileChange(model: any) {
-    switch (model.fileType) {
+    switch (model.oldFile.fileType) {
       case FileType.Image:
         this.interiorGetModel.imageFile = model.file;
         break;
@@ -97,22 +98,22 @@ export class InteriorEditComponent implements OnInit {
         break;
     }
   }
-  getFileName(fileType: FileType): string {
+  getFile(fileType: FileType): FileModel {
     try {
       switch (fileType) {
         case FileType.Image:
-          return this.interiorGetModel.currentImageFile.fileName;
+          return this.interiorGetModel.currentImageFile;
         case FileType.AndroidBundle:
-          return this.interiorGetModel.currentAndroidFile.fileName;
+          return this.interiorGetModel.currentAndroidFile;
         case FileType.IosBundle:
-          return this.interiorGetModel.currentIosFile.fileName;
+          return this.interiorGetModel.currentIosFile;
         case FileType.Glb:
-          return this.interiorGetModel.currentGlbFile.fileName;
+          return this.interiorGetModel.currentGlbFile;
         default:
-          return "Choose File";
+          return null;
       }
     } catch {
-      return "Choose File";
+      return null;
     }
   }
   onChangeOptionContent(model: OptionContentModel[]) {

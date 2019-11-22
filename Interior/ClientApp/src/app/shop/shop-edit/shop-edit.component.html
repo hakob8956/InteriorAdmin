@@ -10,7 +10,7 @@
           [contentType]="0"
         ></app-content-edit>
         <app-file-edit
-        [fileName]="fileName"
+        [fileModel]="getFile"
         (changeFile)="onFileChange($event)"
         ></app-file-edit>
         <button

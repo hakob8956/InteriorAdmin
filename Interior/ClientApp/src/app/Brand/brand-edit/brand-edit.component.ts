@@ -36,21 +36,15 @@ export class BrandEditComponent implements OnInit {
     if (!Number.isNaN(this.brandId) && this.brandId > 0) {
       this.brandService.getBrandbyId(this.brandId).subscribe(response => {
         this.brandModel = response["data"];
-        this.initForm();
       });
     } else {
       this.brandId = 0;
     }
   }
-
-  initForm(){
-    if (
-      this.brandModel.currentFile != null &&
-      this.brandModel.currentFile.fileName != null
-    )
-      this.fileName= this.brandModel.currentFile.fileName;
-    else this.fileName= "Choose file";
-    console.log(this.fileName);
+  get getFile(){
+    if(this.brandModel && this.brandModel.currentFile)
+        return this.brandModel.currentFile;
+    return null;
   }
   changeContents(currentContents:ContentModel[]){
     this.brandModel.contents=currentContents; 
