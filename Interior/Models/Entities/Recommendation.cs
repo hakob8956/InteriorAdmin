@@ -14,8 +14,6 @@ namespace Interior.Models.Entities
         public int Id { get; set; }
 
         public FilesAttachment FilesAttachment { get; set; }
-        public int CategoryId { get; set; }
-        public Category Category { get; set; }
         public int BrandId { get; set; }
         public Brand Brand { get; set; }
         public int ShopId { get; set; }
@@ -23,6 +21,8 @@ namespace Interior.Models.Entities
         public int InteriorId { get; set; }
         public Interior Interior { get; set; }
         public virtual ICollection<ContentAttachment> ContentsAttachment { get; set; }
+        public ICollection<CategoryAttachment> CategoryAttachments { get; set; }
+
 
         public DateTime CreatedDate { get; set; }
         public Recommendation()
@@ -34,12 +34,6 @@ namespace Interior.Models.Entities
 
             public void Configure(EntityTypeBuilder<Recommendation> builder)
             {
-
-                    builder
-                   .HasOne<Category>(s => s.Category)
-                   .WithMany(s => s.Recommendations)
-                   .HasForeignKey(s => s.CategoryId)
-                   .OnDelete(DeleteBehavior.Restrict);
 
                 builder
                     .HasOne<Brand>(s => s.Brand)

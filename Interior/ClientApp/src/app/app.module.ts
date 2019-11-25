@@ -54,6 +54,11 @@ import { AlertService } from "./services/alert.service";
 import { JwtInterceptor } from "./helpers/jwt.interceptor";
 import { ErrorInterceptor } from "./helpers/error.interceptor";
 import { AuthenticationService } from "./services/authentication.service";
+import { SubCategoryEditComponent } from './subCategory/sub-category-edit/sub-category-edit.component';
+import { SubCategoryViewComponent } from './subCategory/sub-category-view/sub-category-view.component';
+import { CategoryAttachmentComponent } from './form-tools/category-attachment/category-attachment.component';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { ModelSelectOneViewComponent } from './form-tools/model-select-one-view/model-select-one-view.component';
 
 @NgModule({
   declarations: [
@@ -87,7 +92,11 @@ import { AuthenticationService } from "./services/authentication.service";
     RecommendationViewComponent,
     RecommendationEditComponent,
     LoginComponent,
-    AlertComponent
+    AlertComponent,
+    SubCategoryEditComponent,
+    SubCategoryViewComponent,
+    CategoryAttachmentComponent,
+    ModelSelectOneViewComponent
   ],
   imports: [
     BrowserModule,
@@ -95,6 +104,7 @@ import { AuthenticationService } from "./services/authentication.service";
     AppRoutingModule,
     FormsModule,
     NgbModule.forRoot(),
+    NgMultiSelectDropDownModule.forRoot(),
     GridModule,
     HttpClientModule,
     BrowserAnimationsModule,

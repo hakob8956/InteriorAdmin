@@ -24,10 +24,11 @@ namespace Interior.Models.Entities
         public Brand Brand { get; set; }
         public int? ShopId { get; set; }
         public Shop Shop { get; set; }
-        public int? CategoryId { get; set; }
-        public Category Category { get; set; }
+
 
         public ICollection<ContentAttachment> ContentAttachments { get; set; }
+        public ICollection<CategoryAttachment> CategoryAttachments { get; set; }
+
         public ICollection<FilesAttachment> FilesAttachments { get; set; }
 
         public virtual ICollection<Recommendation> Recommendations { get; set; }
@@ -56,11 +57,6 @@ namespace Interior.Models.Entities
                  .HasForeignKey(s => s.ShopId)
                  .OnDelete(DeleteBehavior.Restrict);
 
-                builder
-                 .HasOne<Category>(s => s.Category)
-                 .WithMany(s => s.Interiors)
-                 .HasForeignKey(s => s.CategoryId)
-                 .OnDelete(DeleteBehavior.Restrict);
 
             }
         }

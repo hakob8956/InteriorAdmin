@@ -13,6 +13,6 @@ namespace Interior.Models.Interface
         Task<ResultCode> DeleteCategoryAsync(Category category);
         Task<ResultCode> UpdateCategoryAsync(Category category);
         Task<Category> GetCategoryById(int id);
-        Task<(IEnumerable<Category>, int count)> GetAllCategoriesAsync();
+        Task<(IEnumerable<Category>, int count)> GetAllCategoriesAsync(bool onlySubCategories = false, bool onlyCategories = false);
     }
 }

@@ -1,3 +1,4 @@
+import { SubCategoryEditComponent } from './subCategory/sub-category-edit/sub-category-edit.component';
 import { AuthGuard } from "./helpers/auth.guard";
 import { RecommendationViewComponent } from "./recommendation/recommendation-view/recommendation-view.component";
 import { RecommendationEditComponent } from "./recommendation/recommendation-edit/recommendation-edit.component";
@@ -20,6 +21,7 @@ import { BrandViewComponent } from "./Brand/brand-view/brand-view.component";
 import { BrandEditComponent } from "./Brand/brand-edit/brand-edit.component";
 import { InteriorEditComponent } from "./Interior/interior-edit/interior-edit.component";
 import { LoginComponent } from "./authentication/login/login.component";
+import { SubCategoryViewComponent } from './subCategory/sub-category-view/sub-category-view.component';
 
 const routes: Routes = [
   { path: "", component: DashboardComponent, canActivate: [AuthGuard] },
@@ -71,6 +73,21 @@ const routes: Routes = [
   {
     path: "categoryEdit",
     component: CategoryEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "subCategoryView",
+    component: SubCategoryViewComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "subCategoryEdit",
+    component: SubCategoryEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "subCategoryEdit/:id",
+    component: SubCategoryEditComponent,
     canActivate: [AuthGuard]
   },
   {

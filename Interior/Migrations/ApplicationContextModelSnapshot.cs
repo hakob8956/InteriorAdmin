@@ -15,7 +15,7 @@ namespace Interior.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -40,9 +40,36 @@ namespace Interior.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
+                    b.Property<int?>("ParentId");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("ParentId");
+
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("Interior.Models.Entities.CategoryAttachment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CategoryId");
+
+                    b.Property<int?>("InteriorId");
+
+                    b.Property<int?>("RecommendationId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("InteriorId");
+
+                    b.HasIndex("RecommendationId");
+
+                    b.ToTable("CategoryAttachment");
                 });
 
             modelBuilder.Entity("Interior.Models.Entities.Content", b =>
@@ -185,8 +212,6 @@ namespace Interior.Migrations
 
                     b.Property<string>("BuyUrl");
 
-                    b.Property<int?>("CategoryId");
-
                     b.Property<DateTime>("CreatedDate");
 
                     b.Property<bool>("IsVisible");
@@ -199,8 +224,6 @@ namespace Interior.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
-
-                    b.HasIndex("CategoryId");
 
                     b.HasIndex("ShopId");
 
@@ -261,8 +284,6 @@ namespace Interior.Migrations
 
                     b.Property<int>("BrandId");
 
-                    b.Property<int>("CategoryId");
-
                     b.Property<DateTime>("CreatedDate");
 
                     b.Property<int>("InteriorId");
@@ -272,8 +293,6 @@ namespace Interior.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
-
-                    b.HasIndex("CategoryId");
 
                     b.HasIndex("InteriorId");
 
@@ -342,6 +361,30 @@ namespace Interior.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Interior.Models.Entities.Category", b =>
+                {
+                    b.HasOne("Interior.Models.Entities.Category", "Parent")
+                        .WithMany("Parents")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.SetNull);
+                });
+
+            modelBuilder.Entity("Interior.Models.Entities.CategoryAttachment", b =>
+                {
+                    b.HasOne("Interior.Models.Entities.Category", "Category")
+                        .WithMany("CategoryAttachments")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Interior.Models.Entities.Interior", "Interior")
+                        .WithMany("CategoryAttachments")
+                        .HasForeignKey("InteriorId");
+
+                    b.HasOne("Interior.Models.Entities.Recommendation", "Recommendation")
+                        .WithMany("CategoryAttachments")
+                        .HasForeignKey("RecommendationId");
                 });
 
             modelBuilder.Entity("Interior.Models.Entities.Content", b =>
@@ -430,11 +473,6 @@ namespace Interior.Migrations
                         .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Interior.Models.Entities.Category", "Category")
-                        .WithMany("Interiors")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Interior.Models.Entities.Shop", "Shop")
                         .WithMany("Interiors")
                         .HasForeignKey("ShopId")
@@ -459,11 +497,6 @@ namespace Interior.Migrations
                     b.HasOne("Interior.Models.Entities.Brand", "Brand")
                         .WithMany("Recommendations")
                         .HasForeignKey("BrandId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Interior.Models.Entities.Category", "Category")
-                        .WithMany("Recommendations")
-                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Interior.Models.Entities.Interior", "Interior")

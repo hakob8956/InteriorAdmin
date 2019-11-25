@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Interior.Services
 {
-    public class CategoryService:ICategoryService
+    public class CategoryService : ICategoryService
     {
         private readonly ApplicationContext _context;
         public CategoryService(ApplicationContext context)
@@ -50,31 +50,36 @@ namespace Interior.Services
             }
         }
 
-        public async Task<(IEnumerable<Category>, int count)> GetAllCategoriesAsync()
+        public async Task<(IEnumerable<Category>, int count)> GetAllCategoriesAsync(bool onlySubCategories = false, bool onlyCategories = false)
         {
             try
             {
-                var model = await _context.Categories
-                    .Include(s=>s.ContentsAttachment).ThenInclude(s=>s.Content)
-                    .AsNoTracking().ToListAsync();
+                var baseModel = _context.Categories
+                    .Include(s => s.ContentsAttachment).ThenInclude(s => s.Content)
+                    .AsNoTracking();
+                IList<Category> model;
+                if (onlySubCategories)
+                    model = await baseModel.Where(s => s.ParentId != null).ToListAsync();
+                else if (onlyCategories)
+                    model = await baseModel.Where(s => s.ParentId == null).ToListAsync();
+                else
+                    model = await baseModel.ToListAsync();
+
                 return (model, model.Count);
 
             }
             catch (Exception e)
             {
-
                 throw;
             }
-            
-        }
 
+        }
         public async Task<Category> GetCategoryById(int id)
         {
-            return await _context.Categories.Include(s => s.ContentsAttachment).ThenInclude(s=>s.Content)
-                .Include(s=>s.FilesAttachment).ThenInclude(s=>s.File)
-                .AsNoTracking().SingleOrDefaultAsync(i=>id==i.Id);
-        }
+            return await _context.Categories.Include(s => s.ContentsAttachment).ThenInclude(s => s.Content)
+            .Include(s => s.FilesAttachment).ThenInclude(s => s.File).AsNoTracking().SingleOrDefaultAsync(s => s.Id == id);
 
+        }
         public async Task<ResultCode> UpdateCategoryAsync(Category category)
         {
             try

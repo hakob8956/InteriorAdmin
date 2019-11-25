@@ -134,10 +134,14 @@ export class CategoryService extends BaseService {
   constructor(private http: HttpClient,protected alertService:AlertService) {
     super(alertService);
   }
-  public getCategoryAll() {
+  public getCategoryAll(onlySubCategories:any=false,onlyCategories:any=false) {
     return this.http
-      .get(`${this.BASE_URL}/Category/get-all`)
-      .pipe(catchError(this.handleError.bind(this)));
+      .get(`${this.BASE_URL}/Category/get-all`,{
+        params:{
+            onlySubCategories:onlySubCategories,
+            onlyCategories:onlyCategories
+        },
+      }).pipe(catchError(this.handleError.bind(this)));
   }
   public getCategory(id: number) {
     return this.http

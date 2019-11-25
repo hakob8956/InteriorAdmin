@@ -58,11 +58,11 @@ namespace Interior.Controllers
         }
 
         [HttpGet("get-all")]
-        public async Task<IActionResult> GetCategories()
+        public async Task<IActionResult> GetCategories(bool onlySubCategories = false, bool onlyCategories = false)
         {
             try
             {
-                var (data, count) = await _categoryService.GetAllCategoriesAsync();
+                var (data, count) = await _categoryService.GetAllCategoriesAsync(onlySubCategories,onlyCategories);
                 var newData = _mapper.Map<IEnumerable<Category>, IEnumerable<CategoryShowViewModel>>(data);
                 var result = new
                 {
@@ -86,7 +86,7 @@ namespace Interior.Controllers
                 if (model.FilesAttachment?.File != null)
                 {
                     var currentFile = _fileService.DownloadFile(Path.GetFileName(model.FilesAttachment.File.Path));
-                    var fileViewModel = new FileViewModel { FileId = model.FilesAttachment.FileId, FileName = model.FilesAttachment.File.Name, ImageData = currentFile.FileContents, ImageMimeType = currentFile.ContentType,FileType=(byte)FileType.Image };
+                    var fileViewModel = new FileViewModel { FileId = model.FilesAttachment.FileId, FileName = model.FilesAttachment.File.Name, ImageData = currentFile.FileContents, ImageMimeType = currentFile.ContentType, FileType = (byte)FileType.Image };
                     result.CurrentFile = fileViewModel;
                 }
                 return Ok(ResponseSuccess.Create(result));
@@ -103,7 +103,7 @@ namespace Interior.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    model.Id = 0;                   
+                    model.Id = 0;
                     Category category = new Category { Id = 0 };
                     var currentCategory = await _categoryService.AddCategoryAsync(category);
                     if (currentCategory == ResultCode.Success)
@@ -175,7 +175,7 @@ namespace Interior.Controllers
                 {
                     var oldCategory = await _categoryService.GetCategoryById(model.Id);
                     if (oldCategory == null)
-                        return BadRequest(ResponseError.Create("not found category"));                 
+                        return BadRequest(ResponseError.Create("not found category"));
                     Category category = new Category { Id = model.Id };
                     var currentCategory = await _categoryService.UpdateCategoryAsync(category);
                     if (currentCategory == ResultCode.Success)
@@ -200,7 +200,7 @@ namespace Interior.Controllers
                         }
                         if (fileID != null)
                         {
-                            FilesAttachment filesAttachment = new FilesAttachment { CategoryId = category.Id, FileId = (int)fileID};
+                            FilesAttachment filesAttachment = new FilesAttachment { CategoryId = category.Id, FileId = (int)fileID };
                             var CurrentFilesAttachment = await _filesAttachmentService.GetFilesAttachmentAsync(filesAttachment.FileId);
                             if (CurrentFilesAttachment == null)
                             {

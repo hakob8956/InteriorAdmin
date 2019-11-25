@@ -27,11 +27,18 @@ namespace Interior.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ParentId = table.Column<int>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Categories_Categories_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -42,6 +49,7 @@ namespace Interior.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: false),
                     Path = table.Column<string>(nullable: false),
+                    FileType = table.Column<byte>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -92,6 +100,27 @@ namespace Interior.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Contents",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Text = table.Column<string>(nullable: true),
+                    LanguageId = table.Column<int>(nullable: false),
+                    ContentType = table.Column<byte>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Contents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Contents_Languages_LanguageId",
+                        column: x => x.LanguageId,
+                        principalTable: "Languages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -123,13 +152,12 @@ namespace Interior.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    DeepLinkingUrl = table.Column<string>(nullable: true),
+                    BuyUrl = table.Column<string>(nullable: true),
                     Price = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     Avaiable = table.Column<bool>(nullable: false),
                     IsVisible = table.Column<bool>(nullable: false),
                     BrandId = table.Column<int>(nullable: true),
                     ShopId = table.Column<int>(nullable: true),
-                    CategoryId = table.Column<int>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -139,12 +167,6 @@ namespace Interior.Migrations
                         name: "FK_Interiors_Brands_BrandId",
                         column: x => x.BrandId,
                         principalTable: "Brands",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Interiors_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -190,12 +212,10 @@ namespace Interior.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CategoryId = table.Column<int>(nullable: false),
                     BrandId = table.Column<int>(nullable: false),
                     ShopId = table.Column<int>(nullable: false),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    ModifiedDate = table.Column<DateTime>(nullable: false),
-                    InteriorId = table.Column<int>(nullable: true)
+                    InteriorId = table.Column<int>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -204,12 +224,6 @@ namespace Interior.Migrations
                         name: "FK_Recommendations_Brands_BrandId",
                         column: x => x.BrandId,
                         principalTable: "Brands",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Recommendations_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -227,47 +241,87 @@ namespace Interior.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Contents",
+                name: "CategoryAttachment",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    LanguageId = table.Column<int>(nullable: false),
-                    Text = table.Column<string>(nullable: true),
-                    CategoryId = table.Column<int>(nullable: true),
-                    BrandId = table.Column<int>(nullable: true),
-                    ShopId = table.Column<int>(nullable: true),
+                    CategoryId = table.Column<int>(nullable: false),
+                    InteriorId = table.Column<int>(nullable: true),
                     RecommendationId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Contents", x => x.Id);
+                    table.PrimaryKey("PK_CategoryAttachment", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Contents_Brands_BrandId",
-                        column: x => x.BrandId,
-                        principalTable: "Brands",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Contents_Categories_CategoryId",
+                        name: "FK_CategoryAttachment_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Contents_Languages_LanguageId",
-                        column: x => x.LanguageId,
-                        principalTable: "Languages",
+                        name: "FK_CategoryAttachment_Interiors_InteriorId",
+                        column: x => x.InteriorId,
+                        principalTable: "Interiors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CategoryAttachment_Recommendations_RecommendationId",
+                        column: x => x.RecommendationId,
+                        principalTable: "Recommendations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ContentAttachments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ContentId = table.Column<int>(nullable: false),
+                    Text = table.Column<string>(nullable: true),
+                    CategoryId = table.Column<int>(nullable: true),
+                    BrandId = table.Column<int>(nullable: true),
+                    ShopId = table.Column<int>(nullable: true),
+                    RecommendationId = table.Column<int>(nullable: true),
+                    InteriorId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ContentAttachments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ContentAttachments_Brands_BrandId",
+                        column: x => x.BrandId,
+                        principalTable: "Brands",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Contents_Recommendations_RecommendationId",
+                        name: "FK_ContentAttachments_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ContentAttachments_Contents_ContentId",
+                        column: x => x.ContentId,
+                        principalTable: "Contents",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ContentAttachments_Interiors_InteriorId",
+                        column: x => x.InteriorId,
+                        principalTable: "Interiors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ContentAttachments_Recommendations_RecommendationId",
                         column: x => x.RecommendationId,
                         principalTable: "Recommendations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Contents_Shops_ShopId",
+                        name: "FK_ContentAttachments_Shops_ShopId",
                         column: x => x.ShopId,
                         principalTable: "Shops",
                         principalColumn: "Id",
@@ -281,7 +335,6 @@ namespace Interior.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     FileId = table.Column<int>(nullable: false),
-                    FileType = table.Column<byte>(nullable: false),
                     BrandId = table.Column<int>(nullable: true),
                     CategoryId = table.Column<int>(nullable: true),
                     InteriorId = table.Column<int>(nullable: true),
@@ -337,29 +390,60 @@ namespace Interior.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Contents_BrandId",
-                table: "Contents",
+                name: "IX_Categories_ParentId",
+                table: "Categories",
+                column: "ParentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CategoryAttachment_CategoryId",
+                table: "CategoryAttachment",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CategoryAttachment_InteriorId",
+                table: "CategoryAttachment",
+                column: "InteriorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CategoryAttachment_RecommendationId",
+                table: "CategoryAttachment",
+                column: "RecommendationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ContentAttachments_BrandId",
+                table: "ContentAttachments",
                 column: "BrandId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Contents_CategoryId",
-                table: "Contents",
+                name: "IX_ContentAttachments_CategoryId",
+                table: "ContentAttachments",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ContentAttachments_ContentId",
+                table: "ContentAttachments",
+                column: "ContentId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ContentAttachments_InteriorId",
+                table: "ContentAttachments",
+                column: "InteriorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ContentAttachments_RecommendationId",
+                table: "ContentAttachments",
+                column: "RecommendationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ContentAttachments_ShopId",
+                table: "ContentAttachments",
+                column: "ShopId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Contents_LanguageId",
                 table: "Contents",
                 column: "LanguageId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Contents_RecommendationId",
-                table: "Contents",
-                column: "RecommendationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Contents_ShopId",
-                table: "Contents",
-                column: "ShopId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FilesAttachments_BrandId",
@@ -413,11 +497,6 @@ namespace Interior.Migrations
                 column: "BrandId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Interiors_CategoryId",
-                table: "Interiors",
-                column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Interiors_ShopId",
                 table: "Interiors",
                 column: "ShopId");
@@ -436,11 +515,6 @@ namespace Interior.Migrations
                 name: "IX_Recommendations_BrandId",
                 table: "Recommendations",
                 column: "BrandId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Recommendations_CategoryId",
-                table: "Recommendations",
-                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Recommendations_InteriorId",
@@ -467,7 +541,10 @@ namespace Interior.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Contents");
+                name: "CategoryAttachment");
+
+            migrationBuilder.DropTable(
+                name: "ContentAttachments");
 
             migrationBuilder.DropTable(
                 name: "FilesAttachments");
@@ -479,25 +556,28 @@ namespace Interior.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
+                name: "Contents");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
+
+            migrationBuilder.DropTable(
                 name: "Files");
 
             migrationBuilder.DropTable(
                 name: "Recommendations");
 
             migrationBuilder.DropTable(
-                name: "Languages");
+                name: "Roles");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "Languages");
 
             migrationBuilder.DropTable(
                 name: "Interiors");
 
             migrationBuilder.DropTable(
                 name: "Brands");
-
-            migrationBuilder.DropTable(
-                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Shops");

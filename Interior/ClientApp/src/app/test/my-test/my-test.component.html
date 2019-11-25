@@ -1,17 +1,4 @@
-<div class="col-md-6">
-  <p class="card-description">
-    Typeahead on focus
-  </p>
-  <input
-    id="typeahead-focus"
-    type="text"
-    class="form-control"
-    [(ngModel)]="typeaheadFocusModel"
-    [ngbTypeahead]="focusSearch"
-    (focus)="focus$.next($event.target.value)"
-    (click)="click$.next($event.target.value)"
-    #instance="ngbTypeahead"
-  />
-</div>
-
-<button (click)="clickMe()">Click Me</button>
+<app-model-select-one-view
+[model]="categoryModels"
+[selectedId]="'1'"
+></app-model-select-one-view>

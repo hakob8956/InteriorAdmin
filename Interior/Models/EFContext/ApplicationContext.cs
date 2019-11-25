@@ -86,7 +86,7 @@ namespace Interior.Models.EFContext
             modelBuilder.ApplyConfiguration(new OptionContent.OptionContentMapping());
             modelBuilder.ApplyConfiguration(new FilesAttachment.FilesAttachmentMapping());
             modelBuilder.ApplyConfiguration(new ContentAttachment.ContentAttachmentMapping());
-
+            modelBuilder.ApplyConfiguration(new Category.CategoryMapping());
         }
     }
 }
