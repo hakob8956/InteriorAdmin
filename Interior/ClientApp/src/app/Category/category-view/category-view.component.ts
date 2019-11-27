@@ -20,7 +20,7 @@ export class CategoryViewComponent implements OnInit {
   }
   private loadData():void{
     //this.service.queryAll().subscribe(response=>console.log(response));
-    this.service.query(null);
+    this.service.query({onlyCategories:true});
     
   }
   editButtonClick(id:any){

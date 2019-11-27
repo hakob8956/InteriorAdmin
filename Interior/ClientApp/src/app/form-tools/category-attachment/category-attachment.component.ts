@@ -1,6 +1,6 @@
 import { CategoryService } from './../../services/DataCenter.service';
 import { CategoryEditModel } from './../../models/Category';
-import { Component, OnInit, Input, AfterContentChecked } from '@angular/core';
+import { Component, OnInit, Input, AfterContentChecked, Output,EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-category-attachment',
@@ -11,11 +11,13 @@ import { Component, OnInit, Input, AfterContentChecked } from '@angular/core';
 export class CategoryAttachmentComponent implements AfterContentChecked {
 
   categoryModels = new Array<CategoryEditModel>();
+  @Input() selectedItemsFromSubCategory = [];
+  @Input() selectedItemsFromCategory = [];
+  @Output() onChangeItems=new EventEmitter();
   dropdownListFromCategory = [];
-  selectedItemsFromCategory = [];
   dropdownListFromSubCategory = [];
-  selectedItemsFromSubCategory = [];
-  dropdownSettings = {};
+  dropdownCategorySettings = {};
+  dropdownSubCategorySettings={};
   constructor(private categoryService:CategoryService){
     this.categoryService.getCategoryAll().subscribe(s=>this.categoryModels = s["data"]["data"]);
   }
@@ -23,20 +25,32 @@ export class CategoryAttachmentComponent implements AfterContentChecked {
     this.dropdownListFromCategory = this.categoryModels.filter(s=>s.parentId==null);
     this.dropdownListFromCategory.forEach(e=>e.text=e.contents[0].text);
    
-    this.dropdownSettings = {
+    this.dropdownCategorySettings = {
       singleSelection: false,
       idField: 'id',
       textField: 'text',
       itemsShowLimit: 5,
-      allowSearchFilter: true
+      allowSearchFilter: true,
+      enableCheckAll:false
     };
+    this.dropdownSubCategorySettings = {
+      singleSelection: false,
+      idField: 'id',
+      textField: 'text',
+      itemsShowLimit: 5,
+      allowSearchFilter: true,
+      closeDropDownOnSelection:false,
+      enableCheckAll:false
+    };
+    console.log(this.selectedItemsFromCategory)
 
   }
-  onItemSelectCategory(item: any) {
-    console.log(this.selectedItemsFromCategory.map(s=>s.id))
-    this.dropdownListFromSubCategory= this.categoryModels.filter(s=> this.selectedItemsFromCategory.map(s=>s.id).includes(s.id));
+  onItemDropDownCategory(item: any) {
+    this.dropdownListFromSubCategory= this.categoryModels.filter(d=> this.selectedItemsFromCategory.map(s=>s.id).includes(d.parentId));
     this.dropdownListFromSubCategory.forEach(e=>e.text=e.contents[0].text);
+    this.onChangeItems.emit(this.dropdownListFromSubCategory)
   }
+
 
   
 

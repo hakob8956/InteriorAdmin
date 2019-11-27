@@ -1,17 +1,19 @@
+<div style="display: flex;">
 <ng-multiselect-dropdown
-  [placeholder]="'custom placeholder'"
+  [placeholder]="'Select category'"
   [data]="dropdownListFromCategory"
   [(ngModel)]="selectedItemsFromCategory"
-  [settings]="dropdownSettings"
-  (onSelect)="onItemSelectCategory($event)"
+  [settings]="dropdownCategorySettings"
+  (onDropDownClose)="onItemDropDownCategory($event)"
 >
 </ng-multiselect-dropdown>
 <ng-multiselect-dropdown
-  [placeholder]="'custom placeholder'"
+  [placeholder]="'Select subCategory'"
   [data]="dropdownListFromSubCategory"
   [(ngModel)]="selectedItemsFromSubCategory"
-  [settings]="dropdownSettings"
+  [settings]="dropdownSubCategorySettings"
   (onSelect)="onItemSelectSubCategory($event)"
-  *ngIf="dropdownListFromSubCategory"
+  *ngIf="selectedItemsFromCategory.lenght!=0"
 >
 </ng-multiselect-dropdown>
+</div>

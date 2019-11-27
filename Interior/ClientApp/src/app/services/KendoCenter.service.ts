@@ -34,7 +34,9 @@ export abstract class  KendoCenterService extends BehaviorSubject<GridDataResult
         this.loading = true;
         var dir = "";
         var field = "";
-        if(state.sort.length > 0){
+        var onlySubCategories=state.onlySubCategories?state.onlySubCategories:false;
+        var onlyCategories=state.onlyCategories?state.onlyCategories:false;
+        if(state.sort && state.sort.length > 0){
              dir=state.sort[0]["dir"];
              field=state.sort[0]["field"];
         }
@@ -44,7 +46,9 @@ export abstract class  KendoCenterService extends BehaviorSubject<GridDataResult
                     skip:state.skip,
                     take:state.take,
                     dir:dir,
-                    field:field
+                    field:field,
+                    onlySubCategories:onlySubCategories,
+                    onlyCategories:onlyCategories
                 },
             })
             .pipe(
