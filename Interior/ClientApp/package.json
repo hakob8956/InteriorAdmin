@@ -37,7 +37,7 @@
     "@progress/kendo-data-query": "^1.0.0",
     "@progress/kendo-drawing": "^1.0.0",
     "@progress/kendo-theme-default": "latest",
-    "ajv": "^6.9.1",
+    "ajv": "^6.12.3",
     "bootstrap": "^4.3.1",
     "compass-mixins": "^0.12.10",
     "core-js": "^2.5.4",
